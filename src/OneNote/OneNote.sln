@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneNote", "OneNote\OneNote.csproj", "{D15CE60F-1869-4054-A94A-40FECDAE9353}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfServer", "WcfServer\WcfServer.csproj", "{2FC444DA-A6D2-419D-8CCD-56A54AC76F34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{3CBFF456-4FDA-4929-8C67-2D4A8D0B4E1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "Interface\Interface.csproj", "{4372A9C3-3D16-4778-B1C8-35A76E8E1FC6}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://localhost:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = OneNote\\OneNote.csproj
+		SccProjectName1 = OneNote
+		SccLocalPath1 = OneNote
+		SccProjectUniqueName2 = WcfServer\\WcfServer.csproj
+		SccProjectName2 = WcfServer
+		SccLocalPath2 = WcfServer
+		SccProjectUniqueName3 = Model\\Model.csproj
+		SccProjectName3 = Model
+		SccLocalPath3 = Model
+		SccProjectUniqueName4 = Interface\\Interface.csproj
+		SccProjectName4 = Interface
+		SccLocalPath4 = Interface
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D15CE60F-1869-4054-A94A-40FECDAE9353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D15CE60F-1869-4054-A94A-40FECDAE9353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D15CE60F-1869-4054-A94A-40FECDAE9353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D15CE60F-1869-4054-A94A-40FECDAE9353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FC444DA-A6D2-419D-8CCD-56A54AC76F34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FC444DA-A6D2-419D-8CCD-56A54AC76F34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FC444DA-A6D2-419D-8CCD-56A54AC76F34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FC444DA-A6D2-419D-8CCD-56A54AC76F34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CBFF456-4FDA-4929-8C67-2D4A8D0B4E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CBFF456-4FDA-4929-8C67-2D4A8D0B4E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CBFF456-4FDA-4929-8C67-2D4A8D0B4E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CBFF456-4FDA-4929-8C67-2D4A8D0B4E1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4372A9C3-3D16-4778-B1C8-35A76E8E1FC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4372A9C3-3D16-4778-B1C8-35A76E8E1FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4372A9C3-3D16-4778-B1C8-35A76E8E1FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4372A9C3-3D16-4778-B1C8-35A76E8E1FC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

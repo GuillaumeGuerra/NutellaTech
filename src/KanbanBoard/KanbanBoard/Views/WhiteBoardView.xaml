@@ -1,0 +1,255 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:KanbanBoard.Views"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+        xmlns:b="clr-namespace:KanbanBoard.Behaviors"
+        xmlns:f="clr-namespace:Framework;assembly=Framework"
+        xmlns:zoom="clr-namespace:GalaSoft.Utilities.Wpf.Zoom;assembly=GalaSoft.Utilities"
+        x:Class="KanbanBoard.Views.WhiteBoardView"
+        xmlns:vm="clr-namespace:KanbanBoard.ViewModels"
+        xmlns:entities="clr-namespace:KanbanBoard.Entities"
+        xmlns:a="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:g="http://schemas.xceed.com/wpf/xaml/datagrid"
+        Title="WhiteBoard" Height="437" Width="717" WindowState="Maximized"
+        x:Name="myWhiteBoardView">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:UserStoryViewModel}">
+            <f:AdornedControl HorizontalAdornerPlacement="Outside" AdornerOffsetX="25" x:Name="adorner" IsAdornerVisible="{Binding QuickActionsVisible}">                
+                <f:AdornedControl.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1" x:Name="scaleTransform"/>
+                    </TransformGroup>
+                </f:AdornedControl.RenderTransform>                
+                <i:Interaction.Behaviors>
+                    <b:UserStoryAnimationBehavior Stories="{Binding ElementName=myWhiteBoardView,Path=DataContext.Stories}"/>
+                    <b:UserStoryDragDropBehavior Stories="{Binding ElementName=myWhiteBoardView,Path=DataContext.Stories}"/>
+                </i:Interaction.Behaviors>                
+                <f:AdornedControl.AdornerContent>
+                    <views:UserStoryQuickActionsView HorizontalAlignment="Right" Height="250" Width="250"/>
+                </f:AdornedControl.AdornerContent>
+                <views:UserStoryView/>
+            </f:AdornedControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserStoryStackViewModel}">
+            <f:AdornedControl HorizontalAdornerPlacement="Outside" AdornerOffsetX="25" x:Name="adorner" IsAdornerVisible="{Binding QuickActionsVisible}">
+                <f:AdornedControl.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1" ScaleY="1" x:Name="scaleTransform"/>
+                    </TransformGroup>
+                </f:AdornedControl.RenderTransform>
+                <i:Interaction.Behaviors>
+                    <b:UserStoryStackAnimationBehavior Stories="{Binding ElementName=myWhiteBoardView,Path=DataContext.Stories}"/>
+                    <b:UserStoryStackDragDropBehavior Stories="{Binding ElementName=myWhiteBoardView,Path=DataContext.Stories}"/>
+                </i:Interaction.Behaviors>
+                <f:AdornedControl.AdornerContent>
+                    <views:UserStoryQuickActionsView HorizontalAlignment="Right"  Height="250" Width="250"/>
+                </f:AdornedControl.AdornerContent>
+                <views:UserStoryStackView/>
+            </f:AdornedControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AvatarViewModel}">
+            <views:AvatarView Width="70" Margin="0,0,0,3">
+                <i:Interaction.Behaviors>
+                    <vm:ToolboxBehavior AdornerType="{x:Type vm:ToolboxAdorner}"/>
+                </i:Interaction.Behaviors>
+            </views:AvatarView>
+        </DataTemplate>
+        <Storyboard x:Key="enterStoryboard">
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleX" BeginTime="0" From="1" To="{Binding Settings.UserStoryZoomRatio}" Duration="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleY" BeginTime="0" From="1" To="{Binding Settings.UserStoryZoomRatio}" Duration="0:0:0.2"/>
+            <Int32Animation Storyboard.TargetProperty="DataContext.ZIndex" BeginTime="0" From="1" To="2" Duration="0:0:0"/>
+        </Storyboard>
+        <Storyboard x:Key="leaveStoryboard">
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleX"  BeginTime="0" From="{Binding Settings.UserStoryZoomRatio}" To="1" Duration="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleY" BeginTime="0" From="{Binding Settings.UserStoryZoomRatio}" To="1" Duration="0:0:0.2"/>
+            <Int32Animation Storyboard.TargetProperty="DataContext.ZIndex" BeginTime="0" From="2" To="1" Duration="0:0:0"/>
+        </Storyboard>
+        <Storyboard x:Key="fadeStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"  BeginTime="0" From="1" To="{Binding Settings.DragDropOpacity}" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="unfadeStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"  BeginTime="0" From="{Binding Settings.DragDropOpacity}" To="1" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="hideItemStoryboard">
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleX" BeginTime="0" From="1" To="0.7" Duration="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleY" BeginTime="0" From="1" To="0.7" Duration="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"  BeginTime="0" From="1" To="0.2" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="resetItemStoryboard">
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleX" BeginTime="0" From="0.7" To="1" Duration="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleY" BeginTime="0" From="0.7" To="1" Duration="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"  BeginTime="0" From="0.2" To="1" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Style TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <Style TargetType="Border" x:Key="BoardBoarderStyle">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Settings.ShowColumns}" Value="true">
+                    <Setter Property="Background" Value="{Binding Path=(vm:SettingsViewModel.ColumnColor),RelativeSource={RelativeSource Self}}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Settings.ShowColumns}" Value="false">
+                    <Setter Property="Background" Value="Transparent"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Line" x:Key="Line">
+            <Setter Property="StrokeThickness" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Stroke" Value="Black"/>
+            <Setter Property="Stretch" Value="Fill"/>
+        </Style>
+        <Style TargetType="Line" BasedOn="{StaticResource Line}" x:Key="HorizontalLine">
+            <Setter Property="X2" Value="1"/>
+        </Style>
+        <Style TargetType="Line" BasedOn="{StaticResource Line}" x:Key="VerticalLine">
+            <Setter Property="Y2" Value="1"/>
+        </Style>
+    </Window.Resources>
+    <i:Interaction.Behaviors>
+        <zoom:ZoomBehavior x:Name="Zoom" IsVisible="{Binding Settings.ActivateMagnifier}" />
+    </i:Interaction.Behaviors>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <cmd:EventToCommand Command="{Binding WindowLoadedCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <a:DockingManager x:Name="dockingManager">
+        <a:DockingManager.Theme>
+            <!--<a:MetroTheme/>-->
+            <a:AeroTheme/>
+            <!--<a:VS2010Theme/>-->
+
+        </a:DockingManager.Theme>
+        <a:LayoutRoot>
+            <a:LayoutPanel Orientation="Horizontal">
+                <a:LayoutDocumentPane DockWidth="150">
+                    <a:LayoutDocument  Title="Board" CanClose="False">
+                        <Grid x:Name="myGrid" Background="White">
+                            <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" x:Name="scrollViewer" 
+                                          views:WhiteBoardView.RequestedVerticalOffset="{Binding ElementName=boardOverview,Path=RequestedBoardVerticalOffset}"
+                                          views:WhiteBoardView.RequestedHorizontalOffset="{Binding ElementName=boardOverview,Path=RequestedBoardHorizontalOffset}">
+                                <ItemsControl ItemsSource="{Binding Stories.Stories}" Grid.Row="1" x:Name="itemsControl">
+                                    <ItemsControl.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ContentPresenter}">
+                                            <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                                            <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                                            <Setter Property="Panel.ZIndex" Value="{Binding ZIndex}"/>
+                                            <Setter Property="Width" Value="{Binding Width}"/>
+                                            <Setter Property="Height" Value="{Binding Height}"/>
+                                        </Style>
+                                    </ItemsControl.ItemContainerStyle>
+                                    <ItemsControl.Template>
+                                        <ControlTemplate>
+                                            <Grid Width="{Binding Stories.GridWidth}" Height="{Binding Stories.GridHeight}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="100"/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid x:Name="headerGrid" Grid.Row="0"/>
+                                                <Line Grid.Row="0" VerticalAlignment="Bottom" Style="{DynamicResource HorizontalLine}"/>
+
+                                                <Grid x:Name="colorGrid" Grid.Row="1" ShowGridLines="{Binding Settings.ShowGridLines}"/>
+
+                                                <Canvas x:Name="myCanvas" Grid.Row="1" IsItemsHost="True">
+                                                    <f:DataPiping.DataPipes>
+                                                        <f:DataPipeCollection>
+                                                            <f:DataPipe Source="{Binding ActualWidth, ElementName=myCanvas}" Target="{Binding Stories.CanvasWidth, Mode=OneWayToSource}"/>
+                                                            <f:DataPipe Source="{Binding ActualHeight, ElementName=myCanvas}" Target="{Binding Stories.CanvasHeight, Mode=OneWayToSource}"/>
+                                                        </f:DataPipeCollection>
+                                                    </f:DataPiping.DataPipes>
+                                                </Canvas>
+
+                                                <i:Interaction.Behaviors>
+                                                    <b:GridBehavior BoardLayout="{Binding Stories.BoardLayout}" BoarderStyle="{DynamicResource BoardBoarderStyle}" LineStyle="{DynamicResource VerticalLine}"/>
+                                                </i:Interaction.Behaviors>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </ItemsControl.Template>
+                                    <ItemsControl.LayoutTransform>
+                                        <ScaleTransform ScaleX="{Binding BoardDragDrop.BoardZoomRatio}" ScaleY="{Binding BoardDragDrop.BoardZoomRatio}"/>
+                                    </ItemsControl.LayoutTransform>
+                                </ItemsControl>
+                                <f:DataPiping.DataPipes>
+                                    <f:DataPipeCollection>
+                                        <f:DataPipe Source="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}}" Target="{Binding BoardDragDrop.AreaWidth, Mode=OneWayToSource}"/>
+                                        <f:DataPipe Source="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ScrollViewer}}" Target="{Binding BoardDragDrop.AreaHeight, Mode=OneWayToSource}"/>
+                                    </f:DataPipeCollection>
+                                </f:DataPiping.DataPipes>
+                                <i:Interaction.Behaviors>
+                                    <b:BoardDragDropBehavior Stories="{Binding Stories}"/>
+                                </i:Interaction.Behaviors>
+                            </ScrollViewer>
+                            <views:DraggableItemEditView DataContext="{Binding Stories.DraggableItemToEdit}"/>
+                        </Grid>
+                    </a:LayoutDocument>
+                    <a:LayoutDocument  Title="Grid" CanClose="False">
+                        <g:DataGridControl ItemsSource="{Binding Stories.Stories,Mode=TwoWay}">
+                            <g:DataGridControl.View>
+                                <g:TableflowView>
+                                    <g:TableflowView.Theme>
+                                        <g:Windows7Theme/>
+                                    </g:TableflowView.Theme>
+                                </g:TableflowView>
+                            </g:DataGridControl.View>
+                        </g:DataGridControl>
+                    </a:LayoutDocument>
+                </a:LayoutDocumentPane>
+            </a:LayoutPanel>
+            <a:LayoutRoot.LeftSide>
+                <a:LayoutAnchorSide>
+                    <a:LayoutAnchorGroup>
+                        <a:LayoutAnchorable Title="Settings" AutoHideWidth="300">
+                            <views:SettingsView DataContext="{Binding Settings}" VerticalAlignment="Top"/>
+                        </a:LayoutAnchorable>
+                        <a:LayoutAnchorable Title="Actions" AutoHideWidth="50" CanClose="False">
+                            <StackPanel>
+                                <Button Content="Add Story" Command="{Binding Stories.AddStoryCommand}"/>
+                                <Button Content="Reset Data" Command="{Binding Stories.ResetStoriesCommand}"/>
+                                <Button Content="Save Data" Command="{Binding Stories.SaveStoriesCommand}"/>
+                                <Button Content="Load Data" Command="{Binding Stories.LoadStoriesCommand}"/>
+                                <Button Content="Full Screen" Command="{Binding BoardDragDrop.ResizeFullScreenCommand}"/>
+                                <Button Content="Shrink board" Command="{Binding Stories.ShrinkCommand}"/>
+                                <Button Content="Highlight Stop Dev Stories" Command="{Binding Stories.HighlightStopDevCommand}"/>
+                                <Button Content="Reset Highlight" Command="{Binding Stories.ResetHighlightCommand}"/>
+                            </StackPanel>
+                        </a:LayoutAnchorable>
+                    </a:LayoutAnchorGroup>
+                </a:LayoutAnchorSide>
+            </a:LayoutRoot.LeftSide>
+            <a:LayoutRoot.RightSide>
+                <a:LayoutAnchorSide>
+                    <a:LayoutAnchorGroup>
+                        <a:LayoutAnchorable Title="Overview" AutoHideWidth="650" FloatingWidth="430" FloatingHeight="250" >
+                            <views:BoardOverviewView Height="200" Width="400" x:Name="boardOverview"
+                                                 VisualOverview="{Binding ElementName=itemsControl}" VisualOverviewHeight="{Binding Stories.CanvasHeight}"
+                                                 VisualOverviewWidth="{Binding Stories.CanvasWidth}" BoardZoomRatio="{Binding BoardDragDrop.BoardZoomRatio}"
+                                                 BoardHorizontalOffset="{Binding ElementName=scrollViewer,Path=HorizontalOffset}" BoardVerticalOffset="{Binding ElementName=scrollViewer,Path=VerticalOffset}"
+                                                 BoardMaxHorizontalOffset="{Binding ElementName=scrollViewer,Path=ScrollableWidth}" BoardMaxVerticalOffset="{Binding ElementName=scrollViewer,Path=ScrollableHeight}"/>
+                        </a:LayoutAnchorable>
+                    </a:LayoutAnchorGroup>
+                </a:LayoutAnchorSide>
+            </a:LayoutRoot.RightSide>
+            <a:LayoutRoot.BottomSide>
+                <a:LayoutAnchorSide>
+                    <a:LayoutAnchorGroup>
+                        <a:LayoutAnchorable Title="Avatars" CanClose="False">
+                            <ListView Background="AliceBlue" ItemsSource="{Binding Avatars.Avatars}" HorizontalAlignment="Center">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                            </ListView>
+                        </a:LayoutAnchorable>
+                    </a:LayoutAnchorGroup>
+                </a:LayoutAnchorSide>
+            </a:LayoutRoot.BottomSide>
+        </a:LayoutRoot>
+    </a:DockingManager>
+</Window>

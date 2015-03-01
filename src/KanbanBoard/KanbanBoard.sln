@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanbanBoard", "KanbanBoard\KanbanBoard.csproj", "{7EC1885E-36D1-4582-8505-E8C2E692F2DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{D7882A50-FD7F-44E2-9084-385DF9085D35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaSoft.Utilities", "GalaSoft.Utilities\_current\GalaSoft.Utilities\GalaSoft.Utilities.csproj", "{AF217A32-2C62-4EAD-A0C7-46725001EAFB}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://localhost:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = KanbanBoard\\KanbanBoard.csproj
+		SccProjectName1 = KanbanBoard
+		SccLocalPath1 = KanbanBoard
+		SccProjectUniqueName2 = Framework\\Framework.csproj
+		SccProjectName2 = Framework
+		SccLocalPath2 = Framework
+		SccProjectUniqueName3 = GalaSoft.Utilities\\_current\\GalaSoft.Utilities\\GalaSoft.Utilities.csproj
+		SccProjectName3 = GalaSoft.Utilities/_current/GalaSoft.Utilities
+		SccLocalPath3 = GalaSoft.Utilities\\_current\\GalaSoft.Utilities
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EC1885E-36D1-4582-8505-E8C2E692F2DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC1885E-36D1-4582-8505-E8C2E692F2DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC1885E-36D1-4582-8505-E8C2E692F2DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC1885E-36D1-4582-8505-E8C2E692F2DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7882A50-FD7F-44E2-9084-385DF9085D35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7882A50-FD7F-44E2-9084-385DF9085D35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7882A50-FD7F-44E2-9084-385DF9085D35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7882A50-FD7F-44E2-9084-385DF9085D35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF217A32-2C62-4EAD-A0C7-46725001EAFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF217A32-2C62-4EAD-A0C7-46725001EAFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF217A32-2C62-4EAD-A0C7-46725001EAFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF217A32-2C62-4EAD-A0C7-46725001EAFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

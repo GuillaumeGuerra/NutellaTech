@@ -1,0 +1,20 @@
+﻿<UserControl x:Name="userControl" x:Class="KanbanBoard.Views.SliderSettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" d:DesignWidth="264" d:DesignHeight="62">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Header, ElementName=userControl}" Grid.Column="0" Grid.Row="0"/>
+        <TextBox Text="{Binding SliderValue, ElementName=userControl,StringFormat=0.00}" Grid.Column="1" Grid.Row="0"/>
+        <Slider Minimum="{Binding SliderMin, ElementName=userControl}" Maximum="{Binding SliderMax, ElementName=userControl}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Value="{Binding SliderValue, ElementName=userControl}" TickPlacement="Both" TickFrequency="{Binding SliderTickFrequency, ElementName=userControl}" HorizontalAlignment="Stretch"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="OneNote.View.FlatSplitPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             x:Name="flatSplitPanel"
+             d:DesignHeight="300" d:DesignWidth="700">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Background="{StaticResource BlueBackground}" Grid.Column="0" >
+            <Grid x:Name="leftSidePanel" Margin="5"/>
+        </Border>
+        <Border Background="{StaticResource GrayBackground}" Grid.Column="1">
+            <Grid x:Name="rightSidePanel" Margin="5"/>
+        </Border>
+        <!--<Border Background="#FF2686D1" Grid.Column="0"/>-->
+    </Grid>
+</UserControl>

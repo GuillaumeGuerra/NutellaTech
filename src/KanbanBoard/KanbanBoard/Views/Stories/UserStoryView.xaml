@@ -1,0 +1,99 @@
+﻿<v:DraggableItemView x:Class="KanbanBoard.Views.UserStoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:f="clr-namespace:Framework;assembly=Framework"
+             xmlns:v="clr-namespace:KanbanBoard.Views"
+             xmlns:c="clr-namespace:KanbanBoard.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300" MinWidth="20" MinHeight="20" RenderTransformOrigin="0.5,0.5">
+    <v:DraggableItemView.RenderTransform>
+        <TransformGroup>
+            <RotateTransform Angle="{Binding RotateAngle}" CenterX="0.5" CenterY="0.5"/>
+        </TransformGroup>
+    </v:DraggableItemView.RenderTransform>
+    <v:DraggableItemView.Resources>
+        <f:InverseBooleanConverter x:Key="inverseBoolConverter"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource HandWritingFontFamily}"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="{StaticResource HandWritingFontFamily}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}"/>
+            <Setter Property="Focusable"  Value="{Binding IsReadOnly,Converter={StaticResource inverseBoolConverter}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <c:PostItImageConverter x:Key="postItImageConverter"/>
+    </v:DraggableItemView.Resources>
+    <Grid Margin="10,20,20,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <Image Margin="-10,-20,-20,-20" Grid.RowSpan="4" Grid.ColumnSpan="4" Stretch="UniformToFill"
+               Source="{Binding Story.Color,Converter={StaticResource postItImageConverter}}">
+        </Image>
+        <TextBox Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Story.UsId}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="{Binding Story.Epic}">
+            <TextBox.Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Story.IsStopDev}" Value="true">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="Blue"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <TextBox Grid.Column="3" Grid.Row="0" TextWrapping="Wrap" Text="{Binding Story.Project}"/>
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="4">
+            <TextBlock Text="I Want To"/>
+            <TextBox TextWrapping="Wrap" Text="{Binding Story.IWantTo}"/>
+        </StackPanel>
+        <StackPanel  Grid.Row="2" Grid.ColumnSpan="4" Orientation="Vertical">
+            <TextBlock Text="In Order To"/>
+            <TextBox  TextWrapping="Wrap" Text="{Binding Story.InOrderTo}"/>
+        </StackPanel>
+        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Story.StartDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+        <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Story.EndDate, StringFormat={}{0:dd/MM/yyyy}}"/>
+        <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2" 
+                HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="Transparent" 
+                BorderBrush="Transparent" Height="30" Width="30"
+                Command="{Binding SwitchReadOnlyModeCommand}">
+            <Image Source="/KanbanBoard;component/Resources/edit.png"/> 
+        </Button>
+        <v:DeletableItemContainer x:Name="avatar" Grid.Row="2" Grid.Column="3" DeleteCommand="{Binding DeleteAvatarCommand}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <v:AvatarView DataContext="{Binding Avatar}"/>
+            <v:DeletableItemContainer.Style>
+                <Style TargetType="v:DeletableItemContainer" BasedOn="{StaticResource {x:Type v:DeletableItemContainer}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Avatar}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </v:DeletableItemContainer.Style>
+        </v:DeletableItemContainer>
+    </Grid>
+</v:DraggableItemView>

@@ -1,0 +1,75 @@
+﻿<m:MetroWindow x:Class="OneNote.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="clr-namespace:OneNote.View"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:b="clr-namespace:OneNote.Behaviors"
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        ResizeMode="CanResizeWithGrip"
+        xmlns:m="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="OnePush" Height="600" Width="1000"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <v:NotificationTemplateSelector x:Key="notificationTypeDataTemplateSelector">
+            <v:NotificationTemplateSelector.MessageDataTemplate>
+                <DataTemplate>
+                    <v:MessageNotificationView/>
+                </DataTemplate>
+            </v:NotificationTemplateSelector.MessageDataTemplate>
+            <v:NotificationTemplateSelector.VoteDataTemplate>
+                <DataTemplate>
+                    <v:VoteNotificationView/>
+                </DataTemplate>
+            </v:NotificationTemplateSelector.VoteDataTemplate>
+        </v:NotificationTemplateSelector>
+    </Window.Resources>
+    <m:MetroWindow.RightWindowCommands>
+        <m:WindowCommands>
+            <Button Content="Settings" Command="{Binding Settings.OpenSettingsCommand,Source={StaticResource Locator}}"/>
+            <Button Content="I like Star Wars !" Command="{Binding Settings.ILikeStarWarsCommand,Source={StaticResource Locator}}">
+                <!--<StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="I like Star Wars !" />
+                </StackPanel>-->
+            </Button>
+        </m:WindowCommands>
+    </m:MetroWindow.RightWindowCommands>
+    <m:MetroWindow.Flyouts>
+        <m:FlyoutsControl>
+            <m:Flyout Position="Right" Width="400" Theme="Dark" Background="{StaticResource BlueBackground}" Header="Settings" IsOpen="{Binding Settings.AreSettingsVisible,Source={StaticResource Locator}}">
+                <v:SettingsView Margin="20"/>
+            </m:Flyout>
+        </m:FlyoutsControl>
+    </m:MetroWindow.Flyouts>
+    <Grid>
+        <TabControl>
+            <i:Interaction.Behaviors>
+                <b:TabControlBehavior ChosenTopics="{Binding ChosenTopics,Source={StaticResource Locator}}"/>
+            </i:Interaction.Behaviors>
+            <TabItem Header="Topics">
+                <v:FlatSplitPanel>
+                    <v:FlatSplitPanel.LeftControl>
+                        <v:NewTopicView Margin="20"/>
+                    </v:FlatSplitPanel.LeftControl>
+                    <v:FlatSplitPanel.RightControl>
+                        <v:AllTopicsView/>
+                    </v:FlatSplitPanel.RightControl>
+                </v:FlatSplitPanel>
+            </TabItem>
+            <!--<TabItem Header="Notifications">
+                <v:FlatSplitPanel>
+                    <v:FlatSplitPanel.LeftControl>
+                        <v:NewNotificationView/>
+                    </v:FlatSplitPanel.LeftControl>
+                    <v:FlatSplitPanel.RightControl>
+                        <TabControl>
+                        </TabControl>
+                    </v:FlatSplitPanel.RightControl>
+                </v:FlatSplitPanel>
+
+            </TabItem>-->
+        </TabControl>
+    </Grid>
+</m:MetroWindow>
