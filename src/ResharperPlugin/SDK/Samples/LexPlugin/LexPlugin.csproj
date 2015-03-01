@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Props" Condition="Exists('..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{70928A29-A814-4112-A0D6-782F2007451B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JetBrains.ReSharper.LexPlugin</RootNamespace>
+    <AssemblyName>JetBrains.ReSharper.LexPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProductHomeDir>$(MSBuildProjectDirectory)</ProductHomeDir>
+    <PsiLanguageName>Lex</PsiLanguageName>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin</OutputPath>
+    <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="src\Cache\ILexSymbol.cs" />
+    <Compile Include="src\Cache\LexCacheBuilder.cs" />
+    <Compile Include="src\Cache\LexIncludeFileSymbol.cs" />
+    <Compile Include="src\Cache\LexStateSymbol.cs" />
+    <Compile Include="src\Cache\LexTokenSymbol.cs" />
+    <Compile Include="src\CodeInspections\Lex\ErrorElementHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\Highlighting\LexCommentHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\Highlighting\LexErrorElementHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\Highlighting\LexKeywordHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\Highlighting\LexStateHighLighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\Highlighting\LexStringLiteralHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\Highlighting\LexTokenHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\Highlighting\LexUnresolvedStateHighlighting.cs" />
+    <Compile Include="src\CodeInspections\Lex\IdentifierHighlighterProcess.cs" />
+    <Compile Include="src\CodeInspections\Lex\IdentifierHighlightingStage.cs" />
+    <Compile Include="src\CodeInspections\Lex\KeywordHighlightingStage.cs" />
+    <Compile Include="src\CodeInspections\Lex\LexDaemonStageBase.cs" />
+    <Compile Include="src\CodeInspections\Lex\LexDaemonStageProcessBase.cs" />
+    <Compile Include="src\CodeInspections\Lex\LexIncrementalDaemonStageProcessBase.cs" />
+    <Compile Include="src\CodeInspections\Lex\SmartResolverProcess.cs" />
+    <Compile Include="src\CodeInspections\Lex\SmartResolverStage.cs" />
+    <Compile Include="src\Completion\LexAutomaticStrategy.cs" />
+    <Compile Include="src\Completion\LexCodeCompletionContextProvider.cs" />
+    <Compile Include="src\Completion\LexCodeCompletionItemsProvider.cs" />
+    <Compile Include="src\Completion\LexIntellisenseManager.cs" />
+    <Compile Include="src\Completion\LexReparsedCompletionContext.cs" />
+    <Compile Include="src\Completion\LexCodeCompletionContext.cs" />
+    <Compile Include="src\Features\Services\FindUsages\LexReferenceSearcher.cs" />
+    <Compile Include="src\Features\Services\FindUsages\LexReferenceSearcherFactory.cs" />
+    <Compile Include="src\Grammar\LexLanguage.cs" />
+    <Compile Include="src\Grammar\LexLanguageService.cs" />
+    <Compile Include="src\Grammar\LexProjectFileLanguageService.cs" />
+    <Compile Include="src\Grammar\LexProjectFileType.cs" />
+    <Compile Include="src\Cache\LexCache.cs" />
+    <Compile Include="src\Lexer\Lex\FilteringLexLexer.cs" />
+    <Compile Include="src\Lexer\Lex\LexLexerFactory.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\ILexParser.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\LexLexer.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\LexLexerSupplemential.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\LexMissingTokenInserter.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\LexParser.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\LexTokenType.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\LexTokenTypeGenerated.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\lex_lex.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\ParserMessages.cs" />
+    <Compile Include="src\Psi\Lex\Tree\CommentType.cs" />
+    <Compile Include="src\Psi\Lex\Tree\ILexFile.cs" />
+    <Compile Include="src\Psi\Lex\Tree\ILexIdentifier.cs" />
+    <Compile Include="src\Psi\Lex\Tree\ILexTreeNode.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\ChildRole.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\Comment.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\Identifier.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\StateDeclaration.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\StateName.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\TokenTypeName.cs" />
+    <Compile Include="src\Psi\Lex\Tree\IStateDeclaration.cs" />
+    <Compile Include="src\Psi\Lex\Tree\IStateName.cs" />
+    <Compile Include="src\Psi\Lex\Tree\ITokenTypeName.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\LexCompositeElement.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\LexFile.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\LexFileElement.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\LexGenericToken.cs" />
+    <Compile Include="src\Psi\Lex\Parsing\LexResolveUtil.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\LexTokenBase.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\TokenDeclaration.cs" />
+    <Compile Include="src\Psi\Lex\Tree\Impl\Whitespace.cs" />
+    <Compile Include="src\Psi\Lex\Tree\ITokenDeclaration.cs" />
+    <Compile Include="src\Psi\Lex\Tree\IWhitespaceNode.cs" />
+    <Compile Include="src\Psi\Lex\Tree\LexCompositeNodeType.cs" />
+    <Compile Include="src\Refactoring\Rename\LexAtomicRename.cs" />
+    <Compile Include="src\Refactoring\Rename\LexRenamesFactory.cs" />
+    <Compile Include="src\Resolve\InitialStateDeclaredElement.cs" />
+    <Compile Include="src\Resolve\LexDeclaredElementType.cs" />
+    <Compile Include="src\Resolve\LexReferenceBase.cs" />
+    <Compile Include="src\Resolve\LexStateReference.cs" />
+    <Compile Include="src\Resolve\LexTokenReference.cs" />
+    <Compile Include="src\Services\LexDeclaredElementPresenter.cs" />
+    <Compile Include="src\Util\LexTreeUtil.cs" />
+    <Compile Include="src\Gen\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ParserGen Include="src\Grammar\lex.psi" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\Psi\Lex\Parsing\Tokens.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <CsLex Include="src\Psi\Lex\Parsing\lex.lex" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LexPlugin.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="src\Gen\Lex.timestamp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resources\LexPluginSymbolIcons\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(ReSharperSdkTools)\MSBuild\JetBrains.Build.Common.Targets" Condition="Exists('$(ReSharperSdkTools)\MSBuild\JetBrains.Build.Common.Targets')" />
+  <Import Project="$(ReSharperSdkTools)\psiGen\psiGen.Targets" Condition="Exists('$(ReSharperSdkTools)\psiGen\psiGen.Targets')" />
+  <Import Project="$(ReSharperSdkTools)\psiGen\CsLex.Targets" Condition="Exists('$(ReSharperSdkTools)\psiGen\CsLex.Targets')" />
+  <Target Name="BeforeBuild">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\obj" />
+    <Copy SourceFiles="$(ReSharperSdkTools)\psiGen\Unicode.lex" DestinationFolder="$(MSBuildProjectDirectory)\obj" />
+  </Target>
+  <PropertyGroup>
+    <ParserGenOutputBase>$(MSBuildProjectDirectory)\src\Gen</ParserGenOutputBase>
+  </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Props'))" />
+    <Error Condition="!Exists('..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Targets'))" />
+  </Target>
+  <Import Project="..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Targets" Condition="Exists('..\packages\JetBrains.ReSharper.SDK.8.2.1109-EAP\build\JetBrains.ReSharper.SDK.Targets')" />
+</Project>

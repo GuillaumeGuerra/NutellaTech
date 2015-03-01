@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>ReSharper SDK</title>
+  <style type="text/css">
+    h3
+    {
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      color: #7E255B;
+    }
+    a
+    {
+      color: #3358C0;
+    }
+    html, body, #wrapper
+    {
+      font: 11pt Georgia, 'Times New Roman' , Times, serif;
+      color: #333333;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: none;
+      text-align: center;
+      line-height: 1.5em;
+    }
+    code, pre
+    {
+      font-size: 0.9em;
+    }
+    #wrapper
+    {
+      margin: 0 auto;
+      text-align: left;
+      vertical-align: middle;
+      width: 800px;
+    }
+  </style>
+</head>
+<body bgcolor="#cccccc" style="margin-top: 0px">
+  <table align="center" bgcolor="#FFFFFF" cellpadding="20" id="wrapper">
+    <tr>
+      <td>
+        <div>
+          <p align="center">
+            <img src="http://www.jetbrains.com/img/logos/logo_resharper.gif" alt="ReSharper Logo"
+              style="border: 0" /></p>
+          <p>
+            Welcome to the ReSharper SDK! The SDK has been designed to make ReSharper plug-in
+            development and testing easy and enjoyable.</p>
+<p>Please note that this document is provided only as a brief initial guide to plug-in development. For an in-depth look at the challenges of plug-in development, please consult the <a href="http://confluence.jetbrains.net/display/ReSharper/ReSharper+6+Plugin+Development" title="http://confluence.jetbrains.net/display/ReSharper/ReSharper+6+Plugin+Development">ReSharper Plugin Development Guide</a>.</p>
+          <h3>
+            Contents</h3>
+          <ul>
+            <li>
+              <a href="#WhatrsquosintheSDK">What&rsquo;s in the SDK</a></li>
+            <li>
+              <a href="#GettingStarted">Getting Started</a></li>
+            <li>
+              <a href="#Samples">Samples</a></li>
+            <li><a href="#NewLanguageDevelopmentSupport">Tools</a></li>
+            <li>
+              <a href="#ManuallyCreatingProjects">Manually Creating/Porting Existing Projects</a></li>
+            <li>
+              <a href="#DebuggingYourProject">Debugging Your Project</a></li>
+            <li>
+              <a href="#TestingYourProject">Testing Your Project</a></li>
+            <li>
+              <a href="#ContinuousIntegration">Continuous Integration</a></li>
+            <li>
+              <a href="#WheretoGetHelp">Where to Get Help</a></li>
+          </ul>
+          <h3 id="WhatrsquosintheSDK">
+            What&rsquo;s in the SDK</h3>
+          <p>
+            The following list describes all the items that are installed as part of the ReSharper
+            SDK. Let&rsquo;s start with the items installed into the ReSharper SDK folder.</p>
+          <ul>
+            <li>
+              <p>
+                <a href="Bin">Bin</a> &mdash; this folder contains <em>all</em> of ReSharper&rsquo;s
+                assemblies, including assemblies that ReSharper relies on. In addition, this folder
+                contains the PDBs for the ReSharper&rsquo;s assemblies, as well as the full ReSharper
+                test infrastructure.</p>
+            </li>
+            <li>
+              <p>
+                <a href="Samples">Samples</a> &mdash; this folder contains a sample implementation
+                of a ReSharper plug-in, complete with corresponding tests.</p>
+            </li>
+            <li>
+            	<p>
+                	<a href="Tools">Tools</a> &mdash; this folder contains the tools that are
+                    used for developing support for new languages.</p>
+            </li>
+          </ul>
+          <p>
+            In addition to the SDK folders, ReSharper also installs Visual Studio templates
+            for quickly creating projects or individual plug-in items. These items are typically
+            installed into Visual Studio&rsquo;s own <code>\ItemTemplates</code> and <code>\ProjectTemplates</code>
+            folders.</p>
+          <p>
+            There&rsquo;s just one more thing that gets installed: the target files for ReSharper
+            plug-ins and corresponding test projects. Both exist under your <code>&lt;ProgramFiles&gt;\MSBuild</code>
+            directory. These files are used by the project template to quickly add references
+            to all ReSharper assemblies to your project.</p>
+          <p>There are 8 target files overall: four files for plugin development and four files for testing. The test files end with <code>.Tests.Targets</code>. Each group consists of four separate target files as follows:</p>
+          <ul>
+            <li><p>The <code>.Common.Targets</code> file contains the default values for the installation path of the SDK, the location of its binaries as well as tools.</p></li>
+            <li><p>The <code>.References.Targets</code> file contains a link to each of the reference assemblies required for plugin development or testing.</p></li>
+            <li><p>The <code>.NoReferences.Targets</code> file contains only a link to the <code>.Common.Targets</code> files and nothing else.</p></li>
+            <li><p>The &lsquo;main&rsquo; target files (<code>Plugin.Targets</code> and <code>Plugin.Test.Targets</code>) contain links to both the <code>Common</code> files as well as <code>References</code> files. These are the files that are actually used by the templates.</p></li>
+          </ul>
+          <h3 id="GettingStarted">
+            Getting Started</h3>
+          <p>
+            To get a feel for the way in which plug-ins are developed, open up the <a href="Samples/SamplePlugin">
+              sample project</a> in the <a href="Samples">Samples</a> folder. This project illustrates
+            the following ReSharper features:</p>
+          <ul>
+            <li>
+              <p>
+                A code cleanup module</p>
+            </li>
+            <li>
+              <p>
+                A context action</p>
+            </li>
+            <li>
+              <p>
+                A daemon stage</p>
+            </li>
+            <li>
+              <p>
+                An element problem analyzer</p>
+            </li>
+            <li>
+              <p>
+                A quick-fix</p>
+            </li>
+          </ul>
+          <p>
+            Of course, the SDK itself is not limited to just these items: there are many more
+            available.</p>
+          <p>
+            Once you&rsquo;ve familiarized yourself with the sample project, go ahead and create
+            one of your own! The project templates for ReSharper plug-ins are available for
+            both Visual Basic and Visual C#. Corresponding test project templates are also available.</p>
+          <p>
+            <strong>Hint:</strong> ReSharper plug-in development is a lot easier if you use
+            the tools such as the Psi Viewer which are available in ReSharper&rsquo;s Internal
+            Mode. To enable Internal Mode, edit Visual Studio&rsquo;s shortcut, adding the string
+            <code>/ReSharper.Internal</code> to the end. Restart Visual Studio to see an additional
+            Internal menu under the ReSharper top-level menu.</p>
+          <h3 id="Samples">
+            Samples</h3>
+          <p>
+            The SDK comes with three sets of samples, all of which demonstrate the different
+            aspects of ReSharper that can be extended.</p>
+          <p>
+            First, in the <code>SamplePlugin</code> folder, we have a plug-in that shows how
+            a single feature&nbsp;&ndash; the option to convert <code>MaxValue</code> integer
+            literals into correspondingly named constants. The <code>SamplePlugin</code> shows
+            how to implement the following features:</p>
+          <ul>
+            <li>
+              <p>
+                Action</p>
+            </li>
+            <li>
+              <p>
+                Context Action</p>
+            </li>
+            <li>
+              <p>
+                Quick-Fix</p>
+            </li>
+            <li>
+              <p>
+                Daemon Stage</p>
+            </li>
+            <li>
+              <p>
+                Problem Analyzer</p>
+            </li>
+            <li>
+              <p>
+                Code Cleanup</p>
+            </li>
+            <li>
+              <p>
+                Options Page</p>
+            </li>
+            <li>
+              <p>
+                Settings</p>
+            </li>
+          </ul>
+          <p>
+            as well as the associated tests.</p>
+          <p>
+            The second set of examples is the ReSharper PowerToys. The PowerToys contain several
+            projects illustrating different features of ReSharper extensibility, as shown in
+            the table below.</p>
+          <ul>
+            <li>
+              <p>
+                <strong>CyclomaticComplexity:</strong> Daemon Stage, Highlighting, Options Page, Settings</p>
+            </li>
+            <li>
+              <p>
+                <strong>ExploreTypeInterface:</strong> Action, Tool Window</p>
+            </li>
+            <li>
+              <p>
+                <strong>FindText:</strong> Action, Search</p>
+            </li>
+            <li>
+              <p>
+                <strong>GenerateDispose:</strong> Generator</p>
+            </li>
+            <li>
+              <p>
+                <strong>Gist:</strong> Action, Settings, OptionsPage</p>
+            </li>
+            <li>
+              <p>
+                <strong>LiveTemplatesMacro:</strong> Live Template Macro</p>
+            </li>
+            <li>
+              <p>
+                <strong>MakeMethodGeneric:</strong> Refactoring</p>
+            </li>
+            <li>
+              <p>
+                <strong>MenuItem:</strong> Action</p>
+            </li>
+            <li>
+              <p>
+                <strong>OptionsPage:</strong> Settings, Options Page</p>
+            </li>
+            <li>
+              <p>
+                <strong>Xml and Html:</strong> Context Action</p>
+            </li>
+            <li>
+              <p>
+                <strong>ZenCoding:</strong> Action, Options Page</p>
+            </li>
+          </ul>
+          <p>The third set of examples involves the Psi language plugin contained in the <code>PsiPlugin</code> and <code>PsiPluginTest</code> folders. This set of examples illustrate the concepts used in developing support for new languages for ReSharper. Further details are outlined in the following section.</p>
+          <h3 id="NewLanguageDevelopmentSupport">Tools</h3>
+<p>The SDK comes with extensive infrastructure and samples for developing support for new languages. The <code>Tools</code> folder of the SDK contains several tools which can be used for new language development, including:</p>
+<ul>
+  <li><p><strong>CsLex</strong>&nbsp;&mdash; a tool for creating lexical analysers for different languages.</p></li>
+  <li><p><strong>Java</strong>&nbsp;&mdash; contains IKVM infrastructure which permits the running of the Java-based parser generator.</p></li>
+  <li><p><strong>MSBuild</strong>&nbsp;&mdash; contains build tasks that can be used to automate lexer and parser construction.</p></li>
+  <li><p><strong>parserGen</strong>&nbsp;&mdash; a tool for creating ReSharper-compatible parsers.</p></li>
+</ul>
+<p>In addition to the tools, the SDK also comes with a full language plugin example located in the <code>Samples\PsiPlugin</code> folder. This sample is a full implementation of a language plugin for supporting PSI files, which are parser definition files used by parserGen. As a result, plugin developers interested in using parserGen for new language development are advised to compile and install <code>PsiPlugin</code>, which can greatly simplify the process of working with parser definition files.</p>
+          <h3 id="ManuallyCreatingProjects">
+            Manually Creating/Porting Existing Projects</h3>
+          <p>
+            In some cases, you might not want to use a project template &ndash; for example,
+            if you already have a plug-in project for ReSharper 5 and you want it to convert
+            it to ReSharper 6 or 7. In this case, the first thing you need to do is remove all existing
+              references to ReSharper assemblies. Then, simply unload the project and edit
+            it manually. Add the following lines to the end of the project file:</p>
+          <ul>
+            <li>
+              For a plug-in project, add the following line:
+              <pre>
+&lt;PropertyGroup&gt;
+  &lt;ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' "&gt;
+    $(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.0
+  &lt;/ReSharperSdkTargets&gt;
+&lt;/PropertyGroup&gt;
+&lt;Import Project="$(ReSharperSdkTargets)\Plugin.Targets" /&gt;
+</pre>
+            </li>
+            <li>
+              For a plug-in test project, add the following line:
+              <pre>
+&lt;PropertyGroup&gt;
+  &lt;ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' "&gt;
+    $(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.0
+  &lt;/ReSharperSdkTargets&gt;
+&lt;/PropertyGroup&gt;
+&lt;Import Project="$(ReSharperSdkTargets)\Plugin.Tests.Targets" /&gt;
+</pre>
+            </li>
+          </ul>
+          <p>
+            Reload the project for the targets to take affect.</p>
+          <p>
+            In case you&rsquo;re wondering why the MSBuild instructions are so convoluted, this
+            is done in order to make the SDK work well with continuous integration servers.
+            See the <em>Continuous Integration</em> section for more information.</p>
+          <p>
+            <strong>Note:</strong> the above <code>.Targets</code> files do not reference every
+            single assembly that is shipped with the SDK. References to some assemblies, such
+            as DevExpress 8.0, are omitted. If you really need these references in your project,
+            simply edit the project file and use the <code>ReSharperSdkBinaries</code> variable
+            to reference the required assemblies. This variable is defined in the original SDK
+            <code>.Target</code> files.</p>
+          <p>
+            <strong>Important note:</strong> it is highly recommended that you remove all existing
+            project references to ReSharper before adding one of these targets file. Visual
+            Studio is very sensitive to duplicated references and is likely to freeze if those
+            occur.</p>
+          <h3 id="DebuggingYourProject">
+            Debugging Your Project</h3>
+          <p>
+            To debug your project, simply set Visual Studio (<code>devenv.exe</code>) as the
+            debug target. In the parameter string, you will need to specify the key <code>/ReSharper.Plugin
+              "full_path_to_your_plugin"</code>, providing the full path to the location of
+            your plug-in (if you have several plug-ins, you can specify a folder here instead).</p>
+          <h3 id="TestingYourProject">
+            Testing Your Project</h3>
+          <p>
+            ReSharper contains project templates to create test projects. Test projects differ
+            from plug-in projects in that they reference a different target file, which in turn
+            references the assemblies related to ReSharper&rsquo;s test infrastructure.</p>
+          <p>
+            ReSharper&rsquo;s tests follow a &lsquo;convention over configuration&rsquo; approach.
+            The following assumptions are made:</p>
+          <ul>
+            <li>
+              <p>
+                Test data is kept in a folder relative to the folder where the compiled test assembly
+                resides. This location can be specified individually in different fixtures, but
+                the default assumption is that, if the solution files (i.e., the <code>.sln</code>
+                file itself as well as the corresponding projects) are kept in an <code>\src</code>
+                folder, then the test data files are kept in a nearby <code>\test</code> folder.</p>
+            </li>
+            <li>
+              <p>
+                Tests which require the &lsquo;before&rsquo; and &lsquo;after&rsquo; states are
+                always named such that, if the initial state is named <code>SomeName.cs</code>,
+                the final expected state is always named <code>SomeName.gold</code>.</p>
+            </li>
+          </ul>
+          <p>
+            Test files also support control identifiers. For example, to indicate the placement
+            of the caret, one can use the <code>{caret}</code> indentifier right in the input/gold
+            files.</p>
+          <p>
+            <strong>Important note:</strong> in order for tests to run, the version of the SDK
+            must be <em>strictly less</em> than the version of ReSharper that you have installed.
+            This is a technical limitation that will be overcome in future versions of the SDK.</p>
+          <h3 id="ContinuousIntegration">
+            Continuous Integration</h3>
+          <p>
+            Installation of the ReSharper SDK is not required in order to build a ReSharper
+            plug-in. In fact, what you can do is simply keep the ReSharper SDK binaries and
+            target files in the same folder (or nearby) folder as your plug-in in the source
+            control system. Then, all you have to do at compilation time is set the <code>ReSharperSdkTargets</code>
+            and <code>ReSharperSdk</code> properties to point to the location of the <code>.Targets</code>
+            files.</p>
+          <h3 id="WheretoGetHelp">
+            Where to Get Help</h3>
+          <p>
+            If you are interested in learning more about plug-in development, the first place
+            you should check out is the <a href="http://confluence.jetbrains.net/display/ReSharper/ReSharper+6+Plugin+Development"
+              title="http://confluence.jetbrains.net/display/ReSharper/ReSharper+6+Plugin+Development">
+              ReSharper Plug-in Development Confluence Area</a>. This area covers a large number
+            of topics.</p>
+          <p>
+            In addition, you might want to look at more in-depth sample projects that have been
+            written for ReSharper. To do that, take a look at wither the <a href="http://resharperpowertoys.codeplex.com/"
+              title="http://resharperpowertoys.codeplex.com/">ReSharper PowerToys</a>, or some
+            of the ReSharper Plugins (most of them are open-source).</p>
+          <p>
+            Finally, if you have a problem, don&rsquo;t hesitate to contact us &ndash; we are
+            always happy to help! You can write a comment under one of the Confluence pages,
+            write an SDK-related feature requires in our <a href="http://youtrack.jetbrains.net/dashboard"
+              title="http://youtrack.jetbrains.net/dashboard">YouTrack tracker</a>, tweet us
+            <a href="http://twitter.com/jetbrains" title="jetbrains's posts on twitter">@jetbrains</a>
+            or leave a message at the <a href="http://devnet.jetbrains.net/community/resharper/resharper_community?view=discussions"
+              title="http://devnet.jetbrains.net/community/resharper/resharper_community?view=discussions">
+              ReSharper Discussion Forums</a>. The choice is yours!</p>
+          <hr />
+          <p align="right">
+            <em>Develop with Pleasure!</em><br />
+            <small>The ReSharper Team</small><br />
+          </p>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

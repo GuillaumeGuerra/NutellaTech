@@ -1,0 +1,8 @@
+﻿// ${COMPLETE_ITEM:maxint}
+class A
+{
+  void Foo()
+  {
+    int.MaxValue{caret}
+  }
+}
