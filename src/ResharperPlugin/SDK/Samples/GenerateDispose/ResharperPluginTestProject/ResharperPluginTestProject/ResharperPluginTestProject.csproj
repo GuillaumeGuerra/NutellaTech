@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DataContractClass.cs" />
     <Compile Include="IObjectTreeSerializable.cs" />
+    <Compile Include="OrdinaryClass.cs" />
     <Compile Include="PartialClass.cs" />
     <Compile Include="PartialClass.Serialization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

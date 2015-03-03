@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+using System;
 using System.Linq;
+using System.Runtime.Serialization;
 using JetBrains.ReSharper.Feature.Services.CSharp.Generate;
 using JetBrains.ReSharper.Feature.Services.Generate;
 using JetBrains.ReSharper.Psi;
@@ -53,23 +55,44 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
 
             if (!(typeElement is IStruct) && !(typeElement is IClass))
                 return;
-            //var disposableType = TypeFactory.CreateType(GetDisposableInterface(context));
 
-            context.ProvidedElements.AddRange(from member in typeElement.GetMembers().OfType<IField>()
-                                              let memberType = member.Type as IDeclaredType
-                                              where !member.IsStatic
-                                                    && !member.IsConstant && !member.IsSynthetic()
-                                                    && memberType != null
-                                                    && memberType.CanUseExplicitly(context.ClassDeclaration)
-                                              select new GeneratorDeclaredElement<ITypeOwner>(member));
-            context.ProvidedElements.AddRange(from member in typeElement.GetMembers().OfType<IProperty>()
-                                              let memberType = member.Type as IDeclaredType
-                                              where !member.IsStatic
-                                                    && !member.IsSynthetic()
-                                                    && memberType != null
-                                                    && memberType.CanUseExplicitly(context.ClassDeclaration)
-                                              select new GeneratorDeclaredElement<ITypeOwner>(member));
+            if(HasAttribute(context, "System.Runtime.Serialization.DataContractAttribute"))
+                context.ProvidedElements.AddRange(from member in typeElement.GetMembers().OfType<IField>()
+                                                  let memberType = member.Type as IDeclaredType
+                                                  where !member.IsStatic
+                                                        && !member.IsConstant && !member.IsSynthetic()
+                                                        && memberType != null
+                                                        && memberType.CanUseExplicitly(context.ClassDeclaration)
+                                                  select new GeneratorDeclaredElement<ITypeOwner>(member));
+            else if(HasAttribute(context,"System.SerializableAttribute"))
+                context.ProvidedElements.AddRange(from member in typeElement.GetMembers().OfType<IProperty>()
+                                                  let memberType = member.Type as IDeclaredType
+                                                  where !member.IsStatic
+                                                        && !member.IsSynthetic()
+                                                        && memberType != null
+                                                        && memberType.CanUseExplicitly(context.ClassDeclaration)
+                                                  select new GeneratorDeclaredElement<ITypeOwner>(member)
+                                                  {
+                                                      Emphasize = true
+                                                  });
+            else
+            {
+                //TODO : find a way to show error logs to user (message box, or anything else)
+                throw new Exception("No Serializable nor DataContract found on the class");
+            }
+        }
 
+        private static bool HasAttribute(CSharpGeneratorContext context, string attributeType)
+        {
+            var ownTypeElement = context.ClassDeclaration.DeclaredElement;
+            if (ownTypeElement == null)
+                return false;
+            var attributes = ownTypeElement.GetAttributeInstances(false);
+            
+            return attributes.Any(a =>
+            {
+                return a.GetAttributeType().GetClrName().FullName == attributeType;
+            });
         }
 
         #endregion
