@@ -77,6 +77,7 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
                                                   });
             else
             {
+                MessageBox.ShowError("No Serializable nor DataContract found on the class, unable to continue");
                 //TODO : find a way to show error logs to user (message box, or anything else)
                 throw new Exception("No Serializable nor DataContract found on the class");
             }

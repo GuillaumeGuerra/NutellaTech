@@ -45,6 +45,8 @@
     <Compile Include="src\Dispose\CSharpDisposeBuilder.cs" />
     <Compile Include="src\Dispose\GeneratorDisposeItemProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\IObjectTreeSerializable\MergeClassDeclarationsItem.cs" />
+    <Compile Include="src\IObjectTreeSerializable\TypeDeclarationMergingBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GenerateDispose.txt" />

@@ -9,5 +9,10 @@ namespace ResharperPluginTestProject
     public partial class PartialClass
     {
         public DateTime DateTimeProperty { get; set; }
+
+        private void TestMethod()
+        {
+            
+        }
     }
 }

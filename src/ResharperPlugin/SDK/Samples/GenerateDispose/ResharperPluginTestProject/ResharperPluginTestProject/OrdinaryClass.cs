@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResharperPluginTestProject
 {
+    [Serializable]
     public class OrdinaryClass
     {
         public int IntProperty { get; set; }

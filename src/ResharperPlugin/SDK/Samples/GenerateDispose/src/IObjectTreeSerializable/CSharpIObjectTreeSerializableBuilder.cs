@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +23,15 @@ using JetBrains.ReSharper.Feature.Services.CSharp.Generate;
 using JetBrains.ReSharper.Feature.Services.Generate;
 using JetBrains.ReSharper.Feature.Services.Intentions.CreateDeclaration;
 using JetBrains.ReSharper.Feature.Services.Intentions.Impl.DeclarationBuilders;
+using JetBrains.ReSharper.Feature.Services.Util;
+using JetBrains.ReSharper.PowerToys.GenerateDispose.IObjectTreeSerializable;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
+using JetBrains.Util;
 
 namespace JetBrains.ReSharper.PowerToys.GenerateDispose
 {
@@ -51,19 +55,21 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
             if (context.ClassDeclaration == null)
                 return;
 
+            var declaredElement = context.ClassDeclaration.DeclaredElement;
+            IList<IDeclaration> declarations = declaredElement.GetDeclarations();
+            var toto = FileSpecificUtil.GetRelatedAndFilterHidden(Enumerable.OfType<ITypeDeclaration>((IEnumerable)declarations));
+
             var factory = CSharpElementFactory.GetInstance(context.Root.GetPsiModule());
             var typeOwners = context.InputElements.OfType<GeneratorDeclaredElement<ITypeOwner>>().ToList();
 
-            //var file = factory.CreateFile("test.cs");
-            //var tutu = CSharpTypeFactory.CreateType("TestClass", context.Root);
-            //var tata = CSharpTypeFactory.CreateDeclaredType(factory.CreateDeclaredTypeUsageNode("TestClass2"));
-            var test = ClassDeclarationBuilder.CreateClass(new CreateClassDeclarationContext()
-            {
-                ClassName = "MyTest"
-            });
+            var declarationMergingBuilder = new TypeDeclarationMergingBuilder(declaredElement);
+            declarationMergingBuilder.AddClassLikeDeclaration(context.ClassDeclaration);
 
+            IClassLikeDeclaration newDeclaration = declarationMergingBuilder.CreateClassLikeDeclaration(factory);
+
+            var currentContext = CSharpGeneratorContext.CreateContext(context.Kind, newDeclaration, context.Anchor);
             // order is important
-            CreateConstructor(context, factory, typeOwners);
+            CreateConstructor(context, currentContext, factory, typeOwners);
             CreateFillObjectTree(context, factory, typeOwners);
             CreateUpgradeObjectTree(context, factory, typeOwners);
             if (context.GetGlobalOptionValue("ImplementIObjectTreeSerializable") == bool.TrueString)
@@ -71,11 +77,17 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
                 var type = GetIObjectTreeSerializableInterface(context);
                 if (type != null)
                 {
-                    var ownTypeElement = context.ClassDeclaration.DeclaredElement;
+                    var ownTypeElement = declaredElement;
                     if (ownTypeElement != null)
                         context.ClassDeclaration.AddSuperInterface(TypeFactory.CreateType(type), false);
                 }
             }
+
+            var file = TreeNodeExtensions.GetContainingFile((ITreeNode)context.ClassDeclaration) as ICSharpFile;
+            var projectFile = PsiSourceFileExtensions.ToProjectFile(file.GetSourceFile());
+            var cSharpFile = AddNewItemUtil.AddFile(projectFile.ParentFolder, context.ClassDeclaration.DeclaredElement.ShortName + ".Serialization.cs", TreeNodeExtensions.GetContainingFile((ITreeNode)newDeclaration).GetText()).GetPrimaryPsiFile() as ICSharpFile;
+            //IClassLikeDeclaration typeDeclaration = cSharpFile.TypeDeclarations[0] as IClassLikeDeclaration;
+            //Assertion.Assert(typeDeclaration != null, "typeDeclaration != null");
         }
 
         #region UpgradeObjectTree
@@ -135,19 +147,18 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
                 if (context.GetGlobalOptionValue("ChangeFillObjectTree") == "Replace")
                 {
                     declaration = (IMethodDeclaration)existingMethod.GetDeclarations().FirstOrDefault();
-                    GenerateFillObjectTreeBody(context, declaration, typeOwners, factory);
+                    GenerateFillObjectTreeBody(declaration, typeOwners, factory);
                     return;
                 }
             }
             declaration = (IMethodDeclaration)factory.CreateTypeMemberDeclaration(
                 "public void FillObjectTree(IObjectTree tree);");
-            GenerateFillObjectTreeBody(context, declaration, typeOwners, factory);
+            GenerateFillObjectTreeBody(declaration, typeOwners, factory);
             context.PutMemberDeclaration(declaration, null,
                 newDeclaration => new GeneratorDeclarationElement(newDeclaration));
         }
 
-        private static void GenerateFillObjectTreeBody(CSharpGeneratorContext context,
-            ICSharpFunctionDeclaration methodDeclaration, ICollection<GeneratorDeclaredElement<ITypeOwner>> elements,
+        private static void GenerateFillObjectTreeBody(ICSharpFunctionDeclaration methodDeclaration, ICollection<GeneratorDeclaredElement<ITypeOwner>> elements,
             CSharpElementFactory factory)
         {
             var builder = new StringBuilder();
@@ -180,10 +191,9 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
 
         #region ObjectTree Constructor
 
-        private static void CreateConstructor(CSharpGeneratorContext context, CSharpElementFactory factory,
-              ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        private static void CreateConstructor(CSharpGeneratorContext context, CSharpGeneratorContext currentContext, CSharpElementFactory factory, ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
         {
-            var existingConstructor = FindConstructor(context);
+            var existingConstructor = FindConstructor(currentContext.ClassDeclaration);
             IConstructorDeclaration declaration;
             if (existingConstructor != null)
             {
@@ -192,18 +202,18 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
                 if (context.GetGlobalOptionValue("ChangeFillObjectTree") == "Replace")
                 {
                     declaration = (IConstructorDeclaration)existingConstructor.GetDeclarations().FirstOrDefault();
-                    GenerateFillObjectTreeBody(context, declaration, typeOwners, factory);
+                    GenerateFillObjectTreeBody(declaration, typeOwners, factory);
                     return;
                 }
             }
             var constructorDeclaration = factory.CreateConstructorDeclaration();
 
-            var iObjectTreeInterface = GetIObjectTreeInterface(context);
+            var iObjectTreeInterface = GetIObjectTreeInterface(currentContext);
             var parameter = factory.CreateParameterDeclaration(ParameterKind.UNKNOWN, false, false, iObjectTreeInterface, "tree", null);
             constructorDeclaration.AddParameterDeclarationAfter(parameter, null);
             declaration = (IConstructorDeclaration)constructorDeclaration.DeclaredElement.GetDeclarations().FirstOrDefault();
-            GenerateConstructorBody(context, declaration, typeOwners, factory);
-            context.PutMemberDeclaration(declaration, null,
+            GenerateConstructorBody(currentContext, declaration, typeOwners, factory);
+            currentContext.PutMemberDeclaration(declaration, null,
                 newDeclaration => new GeneratorDeclarationElement(newDeclaration));
         }
 
@@ -226,12 +236,12 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
             methodDeclaration.SetBody(factory.CreateBlock("{" + builder + "}"));
         }
 
-        private static IConstructor FindConstructor(CSharpGeneratorContext context)
+        private static IConstructor FindConstructor(IClassLikeDeclaration classDeclaration)
         {
-            if (context.ClassDeclaration.DeclaredElement == null)
+            if (classDeclaration.DeclaredElement == null)
                 return null;
 
-            return context.ClassDeclaration.DeclaredElement.Constructors
+            return classDeclaration.DeclaredElement.Constructors
                 .FirstOrDefault(constructor => constructor.Parameters.Count == 1);
         }
 
