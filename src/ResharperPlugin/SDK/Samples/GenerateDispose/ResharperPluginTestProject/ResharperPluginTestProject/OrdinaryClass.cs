@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ResharperPluginTestProject
 {
     [Serializable]
-    public class OrdinaryClass
+    public partial class OrdinaryClass
     {
         public int IntProperty { get; set; }
 

@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.CSharp.Generate;
 using JetBrains.ReSharper.Feature.Services.Generate;
 using JetBrains.ReSharper.Feature.Services.Intentions.CreateDeclaration;
@@ -31,6 +32,7 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
+using JetBrains.ReSharper.Refactorings.Move.Common;
 using JetBrains.Util;
 
 namespace JetBrains.ReSharper.PowerToys.GenerateDispose
@@ -55,9 +57,10 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
             if (context.ClassDeclaration == null)
                 return;
 
+            var projectFile = context.ClassDeclaration.GetProject().ProjectFile;
+
             var declaredElement = context.ClassDeclaration.DeclaredElement;
-            IList<IDeclaration> declarations = declaredElement.GetDeclarations();
-            var toto = FileSpecificUtil.GetRelatedAndFilterHidden(Enumerable.OfType<ITypeDeclaration>((IEnumerable)declarations));
+            context.ClassDeclaration.SetPartial(true);
 
             var factory = CSharpElementFactory.GetInstance(context.Root.GetPsiModule());
             var typeOwners = context.InputElements.OfType<GeneratorDeclaredElement<ITypeOwner>>().ToList();
@@ -70,40 +73,40 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
             var currentContext = CSharpGeneratorContext.CreateContext(context.Kind, newDeclaration, context.Anchor);
             // order is important
             CreateConstructor(context, currentContext, factory, typeOwners);
-            CreateFillObjectTree(context, factory, typeOwners);
-            CreateUpgradeObjectTree(context, factory, typeOwners);
+            CreateFillObjectTree(context, currentContext, factory, typeOwners);
+            CreateUpgradeObjectTree(context, currentContext, factory, typeOwners);
             if (context.GetGlobalOptionValue("ImplementIObjectTreeSerializable") == bool.TrueString)
             {
-                var type = GetIObjectTreeSerializableInterface(context);
+                var type = GetIObjectTreeSerializableInterface(currentContext);
                 if (type != null)
                 {
                     var ownTypeElement = declaredElement;
                     if (ownTypeElement != null)
-                        context.ClassDeclaration.AddSuperInterface(TypeFactory.CreateType(type), false);
+                        currentContext.ClassDeclaration.AddSuperInterface(TypeFactory.CreateType(type), false);
                 }
             }
 
             var file = TreeNodeExtensions.GetContainingFile((ITreeNode)context.ClassDeclaration) as ICSharpFile;
-            var projectFile = PsiSourceFileExtensions.ToProjectFile(file.GetSourceFile());
+            PsiExtensions.GetPsiServices(file.GetSolution()).Files.CommitAllDocuments();
+            //var projectFile = PsiSourceFileExtensions.ToProjectFile(file.GetSourceFile());
             var cSharpFile = AddNewItemUtil.AddFile(projectFile.ParentFolder, context.ClassDeclaration.DeclaredElement.ShortName + ".Serialization.cs", TreeNodeExtensions.GetContainingFile((ITreeNode)newDeclaration).GetText()).GetPrimaryPsiFile() as ICSharpFile;
-            //IClassLikeDeclaration typeDeclaration = cSharpFile.TypeDeclarations[0] as IClassLikeDeclaration;
-            //Assertion.Assert(typeDeclaration != null, "typeDeclaration != null");
+
+            PsiExtensions.GetPsiServices(file.GetSolution()).Files.CommitAllDocuments();
         }
 
         #region UpgradeObjectTree
 
-        private void CreateUpgradeObjectTree(CSharpGeneratorContext context, CSharpElementFactory factory,
-            List<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        private void CreateUpgradeObjectTree(CSharpGeneratorContext context, CSharpGeneratorContext currentContext, CSharpElementFactory factory, List<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
         {
-            var existingMethod = FindUpgradeObjectTree(context);
+            var existingMethod = FindUpgradeObjectTree(currentContext);
             if (existingMethod != null)
             {
                 return;
             }
             var declaration = (IMethodDeclaration)factory.CreateTypeMemberDeclaration(
                 "public void UpgradeObjectTree(IObjectTree tree);");
-            GenerateUpgradeObjectTreeBody(context, declaration, typeOwners, factory);
-            context.PutMemberDeclaration(declaration, null,
+            GenerateUpgradeObjectTreeBody(currentContext, declaration, typeOwners, factory);
+            currentContext.PutMemberDeclaration(declaration, null,
                 newDeclaration => new GeneratorDeclarationElement(newDeclaration));
         }
 
@@ -135,10 +138,9 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
 
         #region FillObjectTree
 
-        private static void CreateFillObjectTree(CSharpGeneratorContext context, CSharpElementFactory factory,
-              ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        private static void CreateFillObjectTree(CSharpGeneratorContext context, CSharpGeneratorContext currentContext, CSharpElementFactory factory, ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
         {
-            var existingMethod = FindFillObjectTree(context);
+            var existingMethod = FindFillObjectTree(currentContext);
             IMethodDeclaration declaration;
             if (existingMethod != null)
             {
@@ -154,7 +156,7 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
             declaration = (IMethodDeclaration)factory.CreateTypeMemberDeclaration(
                 "public void FillObjectTree(IObjectTree tree);");
             GenerateFillObjectTreeBody(declaration, typeOwners, factory);
-            context.PutMemberDeclaration(declaration, null,
+            currentContext.PutMemberDeclaration(declaration, null,
                 newDeclaration => new GeneratorDeclarationElement(newDeclaration));
         }
 

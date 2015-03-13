@@ -29,6 +29,8 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose.IObjectTreeSerializable
         private bool myIsStatic;
         private bool myIsUnsafe;
         private string myStructureType;
+        private List<IUsingDirective> myUsings = new List<IUsingDirective>();
+        private INamespace myNamespace;
 
         public TypeDeclarationMergingBuilder(ITypeElement element)
         {
@@ -101,6 +103,8 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose.IObjectTreeSerializable
                     this.myStructureType = " interface ";
             }
             this.myAttributes.AddRange((IEnumerable<IAttribute>)declaration.Attributes);
+            this.myUsings.AddRange((declaration.DeclaredElement.GetSourceFiles().First().GetTheOnlyPsiFile(CSharpLanguage.Instance) as ICSharpFile).Imports);
+            this.myNamespace = declaration.DeclaredElement.GetContainingNamespace();
         }
 
         private void GenerateTypeParametersDeclaration()
@@ -162,7 +166,10 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose.IObjectTreeSerializable
 
         private void CreateFactoryParams()
         {
-            this.GenerateAttributeUsages((IEnumerable<IAttribute>)this.myAttributes);
+            myGeneratedCode.Append("namespace ");
+            this.AppendParameter(myNamespace.ShortName);
+            myGeneratedCode.AppendLine(" { ");
+            //this.GenerateAttributeUsages((IEnumerable<IAttribute>)this.myAttributes);
             this.myGeneratedCode.Append(this.myStructureType);
             this.AppendParameter((object)this.myName);
             this.GenerateTypeParametersDeclaration();
@@ -175,12 +182,11 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose.IObjectTreeSerializable
             this.myGeneratedCode = new StringBuilder();
             this.myGeneratedParams = new List<object>();
             this.CreateFactoryParams();
-            this.myGeneratedCode.Append("{}");
+            this.myGeneratedCode.Append("{} }");
             var file = factory.CreateFile(((object)this.myGeneratedCode).ToString(), this.myGeneratedParams.ToArray());
-            //var cSharpFile = AddNewItemUtil.AddFile(projectFolder, "test.cs", file.GetText()).GetPrimaryPsiFile() as ICSharpFile;
-            //IClassLikeDeclaration typeDeclaration = cSharpFile.TypeDeclarations[0] as IClassLikeDeclaration;
-            //Assertion.Assert(typeDeclaration != null, "typeDeclaration != null");
-            IClassLikeDeclaration typeDeclaration = file.TypeDeclarations[0] as IClassLikeDeclaration;
+            myUsings.ForEach(u => file.AddImport(u));
+            IClassLikeDeclaration typeDeclaration = file.NamespaceDeclarations[0].TypeDeclarations[0] as IClassLikeDeclaration;
+            typeDeclaration.GetContainingNamespaceDeclaration().SetQualifiedName(myNamespace.ShortName);
             typeDeclaration.SetAbstract(this.myIsAbstract);
             typeDeclaration.SetUnsafe(this.myIsUnsafe);
             typeDeclaration.SetSealed(this.myIsSealed);

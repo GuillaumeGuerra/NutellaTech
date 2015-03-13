@@ -8,7 +8,7 @@ namespace ResharperPluginTestProject
         public string StringProperty { get; set; }
     }
 
-    public  partial class PartialClass
+    public partial class PartialClass
     {
         public double MyAssProperty { get; set; } 
     }
