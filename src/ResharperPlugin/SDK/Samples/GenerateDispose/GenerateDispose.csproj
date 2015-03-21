@@ -47,6 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\IObjectTreeSerializable\MergeClassDeclarationsItem.cs" />
     <Compile Include="src\IObjectTreeSerializable\TypeDeclarationMergingBuilder.cs" />
+    <Compile Include="src\IObjectTreeSerializable\XOneTypesHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GenerateDispose.txt" />

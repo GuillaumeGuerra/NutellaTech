@@ -17,6 +17,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using JetBrains.ProjectModel;
@@ -32,6 +33,7 @@ using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
+using JetBrains.ReSharper.Psi.VB.Util;
 using JetBrains.ReSharper.Refactorings.Move.Common;
 using JetBrains.Util;
 
@@ -40,11 +42,11 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
     [GeneratorBuilder("IObjectTreeSerializable", typeof(CSharpLanguage))]
     internal class CSharpIObjectTreeSerializableBuilder : GeneratorBuilderBase<CSharpGeneratorContext>
     {
-        private readonly CodeAnnotationsCache myCodeAnnotationsCache;
+        private readonly CodeAnnotationsCache _myCodeAnnotationsCache;
 
         public CSharpIObjectTreeSerializableBuilder(CodeAnnotationsCache codeAnnotationsCache)
         {
-            myCodeAnnotationsCache = codeAnnotationsCache;
+            _myCodeAnnotationsCache = codeAnnotationsCache;
         }
 
         public override double Priority
@@ -52,65 +54,131 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
             get { return 0; }
         }
 
-        protected override void Process(CSharpGeneratorContext context)
+        protected override void Process(CSharpGeneratorContext currentClassContext)
         {
-            if (context.ClassDeclaration == null)
+            // TODO : implement the interface if the base class doesn't do it
+            // TODO : find associated classes which have to be made serizalizable as well
+            // TODO : try to provide a template for the newly generated fields
+            // DONE : create the default constructor in the partial class if it doesn't exist
+            // DONE : find the partial class if it already exists, instead of creating it
+            // DONE : make sure to create the class in the same directory than the real class
+
+            var factory = CSharpElementFactory.GetInstance(currentClassContext.Root.GetPsiModule());
+
+            // Create the serialization partial class, or retrieve it if it does already exist
+            bool partialClassCreated = false;
+            var partialClassContext = GetPartialClassContext(currentClassContext, factory, out partialClassCreated);
+
+            // Make sure the current class is partial
+            currentClassContext.ClassDeclaration.SetPartial(true);
+
+            var typeOwners = currentClassContext.InputElements.OfType<GeneratorDeclaredElement<ITypeOwner>>().ToList();
+
+            CreateDefaultConstructor(currentClassContext, partialClassContext, factory, typeOwners);
+            CreateObjectTreeConstructor(currentClassContext, partialClassContext, factory, typeOwners);
+            CreateFillObjectTree(currentClassContext, partialClassContext, factory, typeOwners);
+            CreateUpgradeObjectTree(currentClassContext, partialClassContext, factory, typeOwners);
+
+            if (partialClassCreated)
+            {
+                WriteClassFile(currentClassContext, partialClassContext);
+            }
+        }
+
+        #region Default Constructor
+
+        private void CreateDefaultConstructor(CSharpGeneratorContext currentClassContext,
+            CSharpGeneratorContext partialClassContext, CSharpElementFactory factory,
+            List<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        {
+            var classType = currentClassContext.ClassDeclaration.DeclaredElement as IClass;
+            if (classType != null && !classType.Constructors.Any(constructor => constructor.IsDefault && !constructor.IsPredefined))
+            {
+                var constructorDeclaration = factory.CreateConstructorDeclaration();
+                partialClassContext.PutMemberDeclaration(constructorDeclaration, null,
+                    newDeclaration => new GeneratorDeclarationElement(newDeclaration));
+            }
+        }
+
+        #endregion
+
+        #region ObjectTree Constructor
+
+        private static void CreateObjectTreeConstructor(CSharpGeneratorContext currentClassContext, CSharpGeneratorContext partialClassContext, CSharpElementFactory factory, ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        {
+            var existingConstructor = FindObjectTreeConstructor(partialClassContext);
+            if (existingConstructor != null)
+            {
+                var declaration = (IConstructorDeclaration)existingConstructor.GetDeclarations().FirstOrDefault();
+                GenerateFillObjectTreeBody(declaration, typeOwners, factory);
+            }
+            else
+            {
+                var declaration = factory.CreateConstructorDeclaration();
+
+                var parameter = factory.CreateParameterDeclaration(ParameterKind.UNKNOWN, false, false,
+                    XOneTypesHelper.GetIObjectTreeInterface(partialClassContext), "tree", null);
+                declaration.AddParameterDeclarationAfter(parameter, null);
+                GenerateObjectTreeConstructorBody(declaration, typeOwners, factory);
+                partialClassContext.PutMemberDeclaration(declaration, null,
+                    newDeclaration => new GeneratorDeclarationElement(newDeclaration));
+            }
+        }
+
+        private static void GenerateObjectTreeConstructorBody(ICSharpFunctionDeclaration methodDeclaration, IEnumerable<GeneratorDeclaredElement<ITypeOwner>> elements,
+            CSharpElementFactory factory)
+        {
+            var builder = new StringBuilder();
+            var owner = (IParametersOwner)methodDeclaration.DeclaredElement;
+            if (owner == null)
                 return;
 
-            var projectFile = context.ClassDeclaration.GetProject().ProjectFile;
-
-            var declaredElement = context.ClassDeclaration.DeclaredElement;
-            context.ClassDeclaration.SetPartial(true);
-
-            var factory = CSharpElementFactory.GetInstance(context.Root.GetPsiModule());
-            var typeOwners = context.InputElements.OfType<GeneratorDeclaredElement<ITypeOwner>>().ToList();
-
-            var declarationMergingBuilder = new TypeDeclarationMergingBuilder(declaredElement);
-            declarationMergingBuilder.AddClassLikeDeclaration(context.ClassDeclaration);
-
-            IClassLikeDeclaration newDeclaration = declarationMergingBuilder.CreateClassLikeDeclaration(factory);
-
-            var currentContext = CSharpGeneratorContext.CreateContext(context.Kind, newDeclaration, context.Anchor);
-            // order is important
-            CreateConstructor(context, currentContext, factory, typeOwners);
-            CreateFillObjectTree(context, currentContext, factory, typeOwners);
-            CreateUpgradeObjectTree(context, currentContext, factory, typeOwners);
-            if (context.GetGlobalOptionValue("ImplementIObjectTreeSerializable") == bool.TrueString)
+            foreach (var element in elements)
             {
-                var type = GetIObjectTreeSerializableInterface(currentContext);
-                if (type != null)
-                {
-                    var ownTypeElement = declaredElement;
-                    if (ownTypeElement != null)
-                        currentContext.ClassDeclaration.AddSuperInterface(TypeFactory.CreateType(type), false);
-                }
+                var typeOwner = element.DeclaredElement;
+                var type = typeOwner.Type;
+
+                builder.Append(string.Format("{0}=tree.Get<{1}>(\"{0}\");", element.DeclaredElement.ShortName, type.GetPresentableName(CSharpLanguage.Instance)));
             }
-
-            var file = TreeNodeExtensions.GetContainingFile((ITreeNode)context.ClassDeclaration) as ICSharpFile;
-            PsiExtensions.GetPsiServices(file.GetSolution()).Files.CommitAllDocuments();
-            //var projectFile = PsiSourceFileExtensions.ToProjectFile(file.GetSourceFile());
-            var cSharpFile = AddNewItemUtil.AddFile(projectFile.ParentFolder, context.ClassDeclaration.DeclaredElement.ShortName + ".Serialization.cs", TreeNodeExtensions.GetContainingFile((ITreeNode)newDeclaration).GetText()).GetPrimaryPsiFile() as ICSharpFile;
-
-            PsiExtensions.GetPsiServices(file.GetSolution()).Files.CommitAllDocuments();
+            methodDeclaration.SetBody(factory.CreateBlock("{" + builder + "}"));
         }
+
+        private static IConstructor FindObjectTreeConstructor(CSharpGeneratorContext partialClassContext)
+        {
+            if (partialClassContext.ClassDeclaration.DeclaredElement == null)
+                return null;
+
+            return partialClassContext.ClassDeclaration.DeclaredElement.Constructors
+                .FirstOrDefault(constructor =>
+                {
+                    if (constructor.Parameters.Count != 1)
+                        return false;
+
+                    var parameterTypeName = constructor.Parameters[0].Type.GetPresentableName(CSharpLanguage.Instance);
+                    var iObjectTreeTypeName = XOneTypesHelper.GetIObjectTreeInterface(partialClassContext).GetPresentableName(CSharpLanguage.Instance);
+                    return parameterTypeName == iObjectTreeTypeName;
+                });
+        }
+
+        #endregion
 
         #region UpgradeObjectTree
 
-        private void CreateUpgradeObjectTree(CSharpGeneratorContext context, CSharpGeneratorContext currentContext, CSharpElementFactory factory, List<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        private void CreateUpgradeObjectTree(CSharpGeneratorContext currentClassContext, CSharpGeneratorContext partialClassContext, CSharpElementFactory factory, List<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
         {
-            var existingMethod = FindUpgradeObjectTree(currentContext);
+            var existingMethod = FindUpgradeObjectTree(partialClassContext);
             if (existingMethod != null)
             {
                 return;
             }
             var declaration = (IMethodDeclaration)factory.CreateTypeMemberDeclaration(
                 "public void UpgradeObjectTree(IObjectTree tree);");
-            GenerateUpgradeObjectTreeBody(currentContext, declaration, typeOwners, factory);
-            currentContext.PutMemberDeclaration(declaration, null,
+            GenerateUpgradeObjectTreeBody(partialClassContext, declaration, typeOwners, factory);
+            partialClassContext.PutMemberDeclaration(declaration, null,
                 newDeclaration => new GeneratorDeclarationElement(newDeclaration));
         }
 
-        private static void GenerateUpgradeObjectTreeBody(CSharpGeneratorContext context,
+        private static void GenerateUpgradeObjectTreeBody(CSharpGeneratorContext currentClassContext,
             ICSharpFunctionDeclaration methodDeclaration, ICollection<GeneratorDeclaredElement<ITypeOwner>> elements,
             CSharpElementFactory factory)
         {
@@ -138,26 +206,22 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
 
         #region FillObjectTree
 
-        private static void CreateFillObjectTree(CSharpGeneratorContext context, CSharpGeneratorContext currentContext, CSharpElementFactory factory, ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        private static void CreateFillObjectTree(CSharpGeneratorContext currentClassContext, CSharpGeneratorContext partialClassContext, CSharpElementFactory factory, ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
         {
-            var existingMethod = FindFillObjectTree(currentContext);
-            IMethodDeclaration declaration;
+            var existingMethod = FindFillObjectTree(partialClassContext);
             if (existingMethod != null)
             {
-                if (context.GetGlobalOptionValue("ChangeFillObjectTree") == "Skip")
-                    return;
-                if (context.GetGlobalOptionValue("ChangeFillObjectTree") == "Replace")
-                {
-                    declaration = (IMethodDeclaration)existingMethod.GetDeclarations().FirstOrDefault();
-                    GenerateFillObjectTreeBody(declaration, typeOwners, factory);
-                    return;
-                }
+                var declaration = (IMethodDeclaration)existingMethod.GetDeclarations().FirstOrDefault();
+                GenerateFillObjectTreeBody(declaration, typeOwners, factory);
             }
-            declaration = (IMethodDeclaration)factory.CreateTypeMemberDeclaration(
-                "public void FillObjectTree(IObjectTree tree);");
-            GenerateFillObjectTreeBody(declaration, typeOwners, factory);
-            currentContext.PutMemberDeclaration(declaration, null,
-                newDeclaration => new GeneratorDeclarationElement(newDeclaration));
+            else
+            {
+                var declaration = (IMethodDeclaration)factory.CreateTypeMemberDeclaration(
+                    "public void FillObjectTree(IObjectTree tree);");
+                GenerateFillObjectTreeBody(declaration, typeOwners, factory);
+                partialClassContext.PutMemberDeclaration(declaration, null,
+                    newDeclaration => new GeneratorDeclarationElement(newDeclaration));
+            }
         }
 
         private static void GenerateFillObjectTreeBody(ICSharpFunctionDeclaration methodDeclaration, ICollection<GeneratorDeclaredElement<ITypeOwner>> elements,
@@ -191,129 +255,56 @@ namespace JetBrains.ReSharper.PowerToys.GenerateDispose
 
         #endregion
 
-        #region ObjectTree Constructor
+        #region Partial Class Management
 
-        private static void CreateConstructor(CSharpGeneratorContext context, CSharpGeneratorContext currentContext, CSharpElementFactory factory, ICollection<GeneratorDeclaredElement<ITypeOwner>> typeOwners)
+        private CSharpGeneratorContext GetPartialClassContext(CSharpGeneratorContext currentClassContext,
+            CSharpElementFactory factory, out bool partialClassCreated)
         {
-            var existingConstructor = FindConstructor(currentContext.ClassDeclaration);
-            IConstructorDeclaration declaration;
-            if (existingConstructor != null)
+            if (currentClassContext.ClassDeclaration.IsPartial)
             {
-                if (context.GetGlobalOptionValue("ChangeFillObjectTree") == "Skip")
-                    return;
-                if (context.GetGlobalOptionValue("ChangeFillObjectTree") == "Replace")
+                IClass currentClass = currentClassContext.ClassDeclaration.DeclaredElement as IClass;
+                var partialDeclarations = currentClass.GetDeclarations();
+                var match = partialDeclarations.FirstOrDefault(declaration => declaration.GetSourceFile().Name == currentClass.ShortName + ".Serialization.cs");
+                if (match != null && match is IClassDeclaration)
                 {
-                    declaration = (IConstructorDeclaration)existingConstructor.GetDeclarations().FirstOrDefault();
-                    GenerateFillObjectTreeBody(declaration, typeOwners, factory);
-                    return;
+                    partialClassCreated = false;
+                    return CSharpGeneratorContext.CreateContext(currentClassContext.Kind, match as IClassLikeDeclaration, currentClassContext.Anchor);
                 }
             }
-            var constructorDeclaration = factory.CreateConstructorDeclaration();
 
-            var iObjectTreeInterface = GetIObjectTreeInterface(currentContext);
-            var parameter = factory.CreateParameterDeclaration(ParameterKind.UNKNOWN, false, false, iObjectTreeInterface, "tree", null);
-            constructorDeclaration.AddParameterDeclarationAfter(parameter, null);
-            declaration = (IConstructorDeclaration)constructorDeclaration.DeclaredElement.GetDeclarations().FirstOrDefault();
-            GenerateConstructorBody(currentContext, declaration, typeOwners, factory);
-            currentContext.PutMemberDeclaration(declaration, null,
-                newDeclaration => new GeneratorDeclarationElement(newDeclaration));
+            partialClassCreated = true;
+
+            var declarationMergingBuilder =
+                new TypeDeclarationMergingBuilder(currentClassContext.ClassDeclaration.DeclaredElement);
+            declarationMergingBuilder.AddClassLikeDeclaration(currentClassContext.ClassDeclaration);
+
+            IClassLikeDeclaration newDeclaration = declarationMergingBuilder.CreateClassLikeDeclaration(factory);
+
+            var partialClassContext = CSharpGeneratorContext.CreateContext(currentClassContext.Kind, newDeclaration,
+                currentClassContext.Anchor);
+
+            // TODO : make this implementation only if the base class doesn't yet do it
+            partialClassContext.ClassDeclaration.AddSuperInterface(
+                TypeFactory.CreateType(XOneTypesHelper.GetIObjectTreeSerializableInterface(partialClassContext)), false);
+
+            return partialClassContext;
         }
 
-        private static void GenerateConstructorBody(CSharpGeneratorContext context,
-            ICSharpFunctionDeclaration methodDeclaration, ICollection<GeneratorDeclaredElement<ITypeOwner>> elements,
-            CSharpElementFactory factory)
+        private void WriteClassFile(CSharpGeneratorContext currentClassContext, CSharpGeneratorContext partialClassContext)
         {
-            var builder = new StringBuilder();
-            var owner = (IParametersOwner)methodDeclaration.DeclaredElement;
-            if (owner == null)
-                return;
+            var file = TreeNodeExtensions.GetContainingFile(currentClassContext.ClassDeclaration);
 
-            foreach (var element in elements)
-            {
-                var typeOwner = element.DeclaredElement;
-                var type = typeOwner.Type;
+            PsiExtensions.GetPsiServices(file.GetSolution()).Files.CommitAllDocuments();
 
-                builder.Append(string.Format("{0}=tree.Get<{1}>(\"{0}\");", element.DeclaredElement.ShortName, type.GetPresentableName(CSharpLanguage.Instance)));
-            }
-            methodDeclaration.SetBody(factory.CreateBlock("{" + builder + "}"));
-        }
+            var partialClassFileName = currentClassContext.ClassDeclaration.DeclaredElement.ShortName + ".Serialization.cs";
+            var partialClassFolder = currentClassContext.ClassDeclaration.GetProject().ProjectFile.ParentFolder.GetOrCreateProjectFolder(file.GetSourceFile().GetLocation().Directory);
+            var partialClassContent = partialClassContext.ClassDeclaration.GetContainingFile().GetText();
 
-        private static IConstructor FindConstructor(IClassLikeDeclaration classDeclaration)
-        {
-            if (classDeclaration.DeclaredElement == null)
-                return null;
+            AddNewItemUtil.AddFile(partialClassFolder, partialClassFileName, partialClassContent);
 
-            return classDeclaration.DeclaredElement.Constructors
-                .FirstOrDefault(constructor => constructor.Parameters.Count == 1);
+            PsiExtensions.GetPsiServices(file.GetSolution()).Files.CommitAllDocuments();
         }
 
         #endregion
-
-        protected override IList<IGeneratorOption> GetGlobalOptions(CSharpGeneratorContext context)
-        {
-            var hasReferenceFields = context.ProvidedElements
-              .OfType<GeneratorDeclaredElement<ITypeOwner>>()
-              .Any(field => field.DeclaredElement.Type.IsReferenceType());
-
-            var options = new List<IGeneratorOption>();
-            if (!HasIObjectTreeSerializable(context))
-                options.Add(new GeneratorOptionBoolean("ImplementIObjectTreeSerializable", "Implement IObjectTreeSerializable interface", true) { Persist = true });
-            if (FindFillObjectTree(context) != null)
-                options.Add(new GeneratorOptionSelector("ChangeFillObjectTree", "FillObjectTree already exists", "Replace", new[] { "Replace", "Skip", "Side by side" }) { Persist = true });
-
-            return options;
-        }
-
-        private static bool HasIObjectTreeSerializable(CSharpGeneratorContext context)
-        {
-            var type = GetIObjectTreeSerializableInterface(context);
-            if (type == null)
-                return false;
-            var ownTypeElement = context.ClassDeclaration.DeclaredElement;
-            if (ownTypeElement == null)
-                return false;
-            var ownType = TypeFactory.CreateType(ownTypeElement);
-            var disposableType = TypeFactory.CreateType(type);
-            return ownType.IsSubtypeOf(disposableType);
-        }
-
-        private static ITypeElement GetIObjectTreeSerializableInterface(IGeneratorContext context)
-        {
-            //TODO : change namespace
-            return TypeFactory.CreateTypeByCLRName("ResharperPluginTestProject.IObjectTreeSerializable", context.PsiModule, context.Anchor.GetResolveContext()).GetTypeElement();
-        }
-
-        private static IType GetIObjectTreeInterface(IGeneratorContext context)
-        {
-            //TODO : change namespace
-            return TypeFactory.CreateTypeByCLRName("ResharperPluginTestProject.IObjectTree", context.PsiModule, context.Anchor.GetResolveContext()).ToIType();
-        }
-
-        protected override IList<IGeneratorOption> GetInputElementOptions(IGeneratorElement inputElement,
-                                                                          CSharpGeneratorContext context)
-        {
-            var declaredElement = inputElement as GeneratorDeclaredElement<ITypeOwner>;
-            if (declaredElement != null)
-            {
-                var typeOwner = declaredElement.DeclaredElement;
-                if (typeOwner.Type.IsReferenceType())
-                {
-                    var attributesOwner = typeOwner as IAttributesOwner;
-                    var mark = myCodeAnnotationsCache.GetNullableAttribute(attributesOwner);
-                    return new IGeneratorOption[]
-          {
-            new GeneratorOptionBoolean(CSharpBuilderOptions.CanBeNull, "Can be &null",
-                                       mark != CodeAnnotationNullableValue.NOT_NULL)
-              { OverridesGlobalOption = mark == CodeAnnotationNullableValue.NOT_NULL }
-          };
-                }
-            }
-            return base.GetInputElementOptions(inputElement, context);
-        }
-
-        protected override bool HasProcessableElements(CSharpGeneratorContext context, IEnumerable<IGeneratorElement> elements)
-        {
-            return true;
-        }
     }
 }
