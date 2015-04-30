@@ -1,4 +1,5 @@
 <p>This is the partial for view 1.</p>
+<button type="button" id="swapData" class="btn btn-success" ng-click="swapData()">Swap Data</button>
 <h1>selected name : {{selectedJediName}}</h1>
 <h1>selected rank : {{selectedJediRank}}</h1>
 <!--<ul>-->
@@ -8,4 +9,4 @@
         <!--<button ng-click="selectJedi(jedi)">Choose this jedi</button>-->
     <!--</li>-->
 <!--</ul>-->
-<div ui-grid="gridOptions" class="myGrid"/>
+<div ui-grid="gridOptions" class="myGrid" ui-grid-exporter ui-grid-selection/>
