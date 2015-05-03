@@ -6,6 +6,7 @@ angular.module('myApp', [
     'ui.grid',
     'ui.grid.exporter',
     'ui.grid.selection',
+    'winjs',
     'myApp.view1',
     'myApp.view2',
     'myApp.version'

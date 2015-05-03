@@ -3,10 +3,46 @@
 <h1>selected name : {{selectedJediName}}</h1>
 <h1>selected rank : {{selectedJediRank}}</h1>
 <!--<ul>-->
-    <!--<li ng-repeat="jedi in jediMembers">-->
-        <!--<p>name : {{jedi.name}}</p>-->
-        <!--<span>rank : {{jedi.rank}}</span>-->
-        <!--<button ng-click="selectJedi(jedi)">Choose this jedi</button>-->
-    <!--</li>-->
+<!--<li ng-repeat="jedi in jediMembers">-->
+<!--<p>name : {{jedi.name}}</p>-->
+<!--<span>rank : {{jedi.rank}}</span>-->
+<!--<button ng-click="selectJedi(jedi)">Choose this jedi</button>-->
+<!--</li>-->
 <!--</ul>-->
+<div>
+    <win-rating max-rating="maxRating" user-rating="rating"></win-rating>
+    <div>
+        <h2>Rating: {{rating}}</h2>
+        <input type="range" min="1" max="{{maxRating}}" ng-model="rating"/>
+    </div>
+    <div>
+        <h2>Maximum Rating: {{maxRating}}</h2>
+        <input type="range" min="1" max="50" ng-model="maxRating"/>
+    </div>
+</div>
+<div>
+    <button ng-click="toggleEditMode()">Toggle <span>Mode: </span><span>{{mode.text}}</span></button>
+    <span ng-show="mode.text === 'edit'">
+        <button ng-click="addItem()">Add Item</button>
+        <button ng-click="removeItem()">Remove Item(s)</button>
+    </span>
+    <win-list-view class="listView win-selectionstylefilled"
+                   item-data-source="jediMembers"
+                   selection-mode="mode.selectionMode"
+                   tap-behavior="mode.tapBehavior"
+                   header="select('.header')"
+                   selection="selection">
+        <win-item-template>
+            <div class="smallListIconTextItem">
+                <img src="{{item.data.picture}}" class="smallListIconTextItem-Image" />
+                <!--<img src="{{item.data.picture}}" style="object-fit: fill" />-->
+                <div class="smallListIconTextItem-Detail">
+                    <h4>{{item.data.name}}</h4>
+                    <h6>{{item.data.rank}}</h6>
+                </div>
+            </div>
+        </win-item-template>
+        <win-grid-layout></win-grid-layout>
+    </win-list-view>
+</div>
 <div ui-grid="gridOptions" class="myGrid" ui-grid-exporter ui-grid-selection/>
