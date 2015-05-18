@@ -25,90 +25,62 @@
 <div flex layout="row">
 
     <md-sidenav md-is-locked-open="false" class="md-whiteframe-z2" md-component-id="left">
-        <!--<md-list>-->
-            <!--<md-list-item ng-repeat="it in ul.users">-->
-                <!--<md-button ng-click="ul.selectUser(it)" ng-class="{'selected' : it === ul.selected }">-->
-                    <!--<md-icon md-svg-icon="{{it.avatar}}" class="avatar"></md-icon>-->
-                    <!--{{it.name}}-->
-                <!--</md-button>-->
-            <!--</md-list-item>-->
-        <!--</md-list>-->
+        <md-list>
+            <md-subheader class="md-no-sticky">Let us Know About Your Activity</md-subheader>
+            <md-list-item ng-repeat="profile in profiles">
+                <p>{{ profile.name }}</p>
+                <md-checkbox class="md-secondary" ng-model="profile.selected"></md-checkbox>
+            </md-list-item>
+            <md-list-item ng-repeat="currency in currencies">
+                <p>{{ currency.header }}</p>
+                <md-select placeholder="Expenses" ng-model="currency.currency">
+                    <md-option value="EUR">EUR</md-option>
+                    <md-option value="USD">USD</md-option>
+                    <md-option value="JPY">JPY</md-option>
+                    <md-option value="CHF">CHF</md-option>
+                </md-select>
+            </md-list-item>
+            <md-divider/>
 
-        <div class="gridListdemoBasicUsage">
-            <md-grid-list
-                    md-cols-sm="1" md-cols-md="1" md-cols-gt-md="1"
-                    md-row-height-gt-md="1:1" md-row-height="2:2"
-                    md-gutter="12px" md-gutter-gt-sm="8px">
+            <md-subheader class="md-no-sticky">Your Hedging Strategy</md-subheader>
+            <md-list-item ng-repeat="strategy in strategies" ng-click="goToPerson(person.name, $event)">
+                <img alt="{{ strategy.name }}" ng-src="{{ strategy.img }}" class="md-avatar" />
+                <p>{{ strategy.name }}</p>
+                <md-icon md-svg-icon="communication:messenger" ng-click="doSecondaryAction($event)" aria-label="Open Chat" class="md-secondary md-hue-3" ng-class="{'md-primary': person.newMessage}"></md-icon>
+            </md-list-item>
+            <md-divider/>
 
-                <md-grid-tile class="green"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-
-                    <md-radio-group ng-model="data.group1">
-                        <md-radio-button value="Exporter" class="md-primary">Exporter</md-radio-button>
-                        <md-radio-button value="Importer">Importer</md-radio-button>
-                    </md-radio-group>
-
-                    <md-grid-tile-footer>
-                        <h3>Your Profile</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
-
-                <md-grid-tile class="green"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-
-                    <div layout="column" layout-align="center">
-                        <!--<div layout="row" layout-align="center">-->
-                        <!--<h5>Your Currencies</h5>-->
-                        <md-select placeholder="Expenses" ng-model="expenseCcy">
-                            <md-option value="EUR">EUR</md-option>
-                            <md-option value="USD">USD</md-option>
-                            <md-option value="JPY">JPY</md-option>
-                            <md-option value="CHF">CHF</md-option>
-                        </md-select>
-                        <!--</div>-->
-
-                        <md-select placeholder="Incomes" ng-model="IncomeCcy">
-                            <md-option value="EUR">EUR</md-option>
-                            <md-option value="USD">USD</md-option>
-                            <md-option value="JPY">JPY</md-option>
-                            <md-option value="CHF">CHF</md-option>
-                        </md-select>
-                    </div>
-
-                    <md-grid-tile-footer>
-                        <h3>Your Currencies</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
-
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-                    <md-grid-tile-footer>
-                        <h3>None</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
-
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-                    <md-grid-tile-footer>
-                        <h3>Lock</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
-
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-                    <md-grid-tile-footer>
-                        <h3>Agreed Rate</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
-
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-                    <md-grid-tile-footer>
-                        <h3>Optional</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
-            </md-grid-list>
-        </div>
+            <md-subheader class="md-no-sticky">Single Action Checkboxes</md-subheader>
+            <md-list-item ng-repeat="topping in toppings">
+                <p> {{ topping.name }} </p>
+                <md-checkbox class="md-secondary" ng-model="topping.wanted"></md-checkbox>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-subheader class="md-no-sticky">Clickable Items with Secondary Controls</md-subheader>
+            <md-list-item ng-click="navigateTo(setting.extraScreen, $event)" ng-repeat="setting in settings">
+                <md-icon md-svg-icon="{{setting.icon}}"></md-icon>
+                <p> {{ setting.name }} </p>
+                <md-switch class="md-secondary" ng-model="setting.enabled"></md-switch>
+            </md-list-item>
+            <md-list-item ng-click="navigateTo('data usage', $event)">
+                <md-icon md-svg-icon="cached"></md-icon>
+                <p>Data Usage</p>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-subheader class="md-no-sticky">Checkbox with Secondary Action</md-subheader>
+            <md-list-item ng-repeat="message in messages">
+                <md-checkbox ng-model="message.selected"></md-checkbox>
+                <p>{{message.title}}</p>
+                <md-icon class="md-secondary" ng-click="doSecondaryAction($event)" aria-label="Chat" md-svg-icon="communication:message"></md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-subheader class="md-no-sticky">Avatar with Secondary Action Icon</md-subheader>
+            <md-list-item ng-repeat="person in people" ng-click="goToPerson(person.name, $event)">
+                <img alt="{{ person.name }}" ng-src="{{ person.img }}" class="md-avatar" />
+                <p>{{ person.name }}</p>
+                <md-icon md-svg-icon="communication:messenger" ng-click="doSecondaryAction($event)" aria-label="Open Chat" class="md-secondary md-hue-3" ng-class="{'md-primary': person.newMessage}"></md-icon>
+            </md-list-item>
+        </md-list>
     </md-sidenav>
 
     <md-content flex id="content">
@@ -128,80 +100,115 @@
                     md-row-height-gt-md="1:1" md-row-height="2:2"
                     md-gutter="12px" md-gutter-gt-sm="8px">
 
-                <md-grid-tile class="green"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                <!--<md-grid-tile class="green"-->
+                              <!--md-rowspan="1" md-colspan="1" md-colspan-sm="1">-->
 
-                    <md-radio-group ng-model="data.group1">
-                        <md-radio-button value="Exporter" class="md-primary">Exporter</md-radio-button>
-                        <md-radio-button value="Importer">Importer</md-radio-button>
-                    </md-radio-group>
+                    <!--<md-radio-group ng-model="data.group1">-->
+                        <!--<md-radio-button value="Exporter" class="md-primary">Exporter</md-radio-button>-->
+                        <!--<md-radio-button value="Importer">Importer</md-radio-button>-->
+                    <!--</md-radio-group>-->
 
-                    <md-grid-tile-footer>
-                        <h3>Your Profile</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
+                    <!--<md-grid-tile-footer>-->
+                        <!--<h3>Your Profile</h3>-->
+                    <!--</md-grid-tile-footer>-->
+                <!--</md-grid-tile>-->
 
-                <md-grid-tile class="green"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                <!--<md-grid-tile class="green"-->
+                              <!--md-rowspan="1" md-colspan="1" md-colspan-sm="1">-->
 
-                    <div layout="column" layout-align="center">
-                        <!--<div layout="row" layout-align="center">-->
-                        <!--<h5>Your Currencies</h5>-->
-                        <md-select placeholder="Expenses" ng-model="expenseCcy">
-                            <md-option value="EUR">EUR</md-option>
-                            <md-option value="USD">USD</md-option>
-                            <md-option value="JPY">JPY</md-option>
-                            <md-option value="CHF">CHF</md-option>
-                        </md-select>
-                        <!--</div>-->
+                    <!--<div layout="column" layout-align="center">-->
+                        <!--&lt;!&ndash;<div layout="row" layout-align="center">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<h5>Your Currencies</h5>&ndash;&gt;-->
+                        <!--<md-select placeholder="Expenses" ng-model="expenseCcy">-->
+                            <!--<md-option value="EUR">EUR</md-option>-->
+                            <!--<md-option value="USD">USD</md-option>-->
+                            <!--<md-option value="JPY">JPY</md-option>-->
+                            <!--<md-option value="CHF">CHF</md-option>-->
+                        <!--</md-select>-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-                        <md-select placeholder="Incomes" ng-model="IncomeCcy">
-                            <md-option value="EUR">EUR</md-option>
-                            <md-option value="USD">USD</md-option>
-                            <md-option value="JPY">JPY</md-option>
-                            <md-option value="CHF">CHF</md-option>
-                        </md-select>
-                    </div>
+                        <!--<md-select placeholder="Incomes" ng-model="IncomeCcy">-->
+                            <!--<md-option value="EUR">EUR</md-option>-->
+                            <!--<md-option value="USD">USD</md-option>-->
+                            <!--<md-option value="JPY">JPY</md-option>-->
+                            <!--<md-option value="CHF">CHF</md-option>-->
+                        <!--</md-select>-->
+                    <!--</div>-->
 
-                    <md-grid-tile-footer>
-                        <h3>Your Currencies</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
+                    <!--<md-grid-tile-footer>-->
+                        <!--<h3>Your Currencies</h3>-->
+                    <!--</md-grid-tile-footer>-->
+                <!--</md-grid-tile>-->
 
                 <md-grid-tile class="gray"
-                              md-rowspan="3" md-colspan="4" md-colspan-sm="4">
+                              md-rowspan="2" md-colspan="4" md-colspan-sm="4">
                     <md-grid-tile-footer>
                         <h3>The Graph !!!</h3>
                     </md-grid-tile-footer>
                 </md-grid-tile>
 
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                <md-grid-tile class="blue"
+                              md-rowspan="3" md-colspan="2" md-colspan-sm="4">
                     <md-grid-tile-footer>
-                        <h3>None</h3>
+                        <h3>The products to buy</h3>
                     </md-grid-tile-footer>
                 </md-grid-tile>
 
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="4">
                     <md-grid-tile-footer>
-                        <h3>Lock</h3>
+                        <h3>The KPI</h3>
                     </md-grid-tile-footer>
                 </md-grid-tile>
 
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="4">
                     <md-grid-tile-footer>
-                        <h3>Agreed Rate</h3>
+                        <h3>The KPI</h3>
                     </md-grid-tile-footer>
                 </md-grid-tile>
 
-                <md-grid-tile class="yellow"
-                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="4">
                     <md-grid-tile-footer>
-                        <h3>Optional</h3>
+                        <h3>The KPI</h3>
                     </md-grid-tile-footer>
                 </md-grid-tile>
+
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="4">
+                    <md-grid-tile-footer>
+                        <h3>The KPI</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <!--<md-grid-tile class="yellow"-->
+                              <!--md-rowspan="1" md-colspan="1" md-colspan-sm="1">-->
+                    <!--<md-grid-tile-footer>-->
+                        <!--<h3>None</h3>-->
+                    <!--</md-grid-tile-footer>-->
+                <!--</md-grid-tile>-->
+
+                <!--<md-grid-tile class="yellow"-->
+                              <!--md-rowspan="1" md-colspan="1" md-colspan-sm="1">-->
+                    <!--<md-grid-tile-footer>-->
+                        <!--<h3>Lock</h3>-->
+                    <!--</md-grid-tile-footer>-->
+                <!--</md-grid-tile>-->
+
+                <!--<md-grid-tile class="yellow"-->
+                              <!--md-rowspan="1" md-colspan="1" md-colspan-sm="1">-->
+                    <!--<md-grid-tile-footer>-->
+                        <!--<h3>Agreed Rate</h3>-->
+                    <!--</md-grid-tile-footer>-->
+                <!--</md-grid-tile>-->
+
+                <!--<md-grid-tile class="yellow"-->
+                              <!--md-rowspan="1" md-colspan="1" md-colspan-sm="1">-->
+                    <!--<md-grid-tile-footer>-->
+                        <!--<h3>Optional</h3>-->
+                    <!--</md-grid-tile-footer>-->
+                <!--</md-grid-tile>-->
             </md-grid-list>
         </div>
     </md-content>
