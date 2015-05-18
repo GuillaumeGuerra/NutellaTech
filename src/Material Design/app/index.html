@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Another proposal for MyFxHedge, in material design</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="assets/app.css"/>
+</head>
+
+<body ng-app="starterApp" layout="column" ng-controller="UserController as ul">
+
+<md-toolbar layout="row">
+    <md-button class="menu" ng-click="ul.toggleList()" aria-label="Show User List">
+        <md-icon md-svg-icon="menu"></md-icon>
+    </md-button>
+    <h1>Angular Material - Starter App</h1>
+</md-toolbar>
+
+<div flex layout="row">
+
+    <md-sidenav md-is-locked-open="false" class="md-whiteframe-z2" md-component-id="left">
+        <!--<md-list>-->
+            <!--<md-list-item ng-repeat="it in ul.users">-->
+                <!--<md-button ng-click="ul.selectUser(it)" ng-class="{'selected' : it === ul.selected }">-->
+                    <!--<md-icon md-svg-icon="{{it.avatar}}" class="avatar"></md-icon>-->
+                    <!--{{it.name}}-->
+                <!--</md-button>-->
+            <!--</md-list-item>-->
+        <!--</md-list>-->
+
+        <div class="gridListdemoBasicUsage">
+            <md-grid-list
+                    md-cols-sm="1" md-cols-md="1" md-cols-gt-md="1"
+                    md-row-height-gt-md="1:1" md-row-height="2:2"
+                    md-gutter="12px" md-gutter-gt-sm="8px">
+
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+
+                    <md-radio-group ng-model="data.group1">
+                        <md-radio-button value="Exporter" class="md-primary">Exporter</md-radio-button>
+                        <md-radio-button value="Importer">Importer</md-radio-button>
+                    </md-radio-group>
+
+                    <md-grid-tile-footer>
+                        <h3>Your Profile</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+
+                    <div layout="column" layout-align="center">
+                        <!--<div layout="row" layout-align="center">-->
+                        <!--<h5>Your Currencies</h5>-->
+                        <md-select placeholder="Expenses" ng-model="expenseCcy">
+                            <md-option value="EUR">EUR</md-option>
+                            <md-option value="USD">USD</md-option>
+                            <md-option value="JPY">JPY</md-option>
+                            <md-option value="CHF">CHF</md-option>
+                        </md-select>
+                        <!--</div>-->
+
+                        <md-select placeholder="Incomes" ng-model="IncomeCcy">
+                            <md-option value="EUR">EUR</md-option>
+                            <md-option value="USD">USD</md-option>
+                            <md-option value="JPY">JPY</md-option>
+                            <md-option value="CHF">CHF</md-option>
+                        </md-select>
+                    </div>
+
+                    <md-grid-tile-footer>
+                        <h3>Your Currencies</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>None</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>Lock</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>Agreed Rate</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>Optional</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+            </md-grid-list>
+        </div>
+    </md-sidenav>
+
+    <md-content flex id="content">
+        <!--<md-icon md-svg-icon="{{ul.selected.avatar}}" class="avatar"></md-icon>-->
+        <!--<h2>{{ul.selected.name}}</h2>-->
+
+        <!--<p>{{ul.selected.content}}</p>-->
+
+        <!--<md-button class="contact" md-no-ink ng-click="ul.showContactOptions($event)" aria-label="Contact User">-->
+            <!--<md-tooltip>Contact {{ ul.selected.name }}</md-tooltip>-->
+            <!--<md-icon md-svg-icon="share"></md-icon>-->
+        <!--</md-button>-->
+
+        <div class="gridListdemoBasicUsage">
+            <md-grid-list
+                    md-cols-sm="1" md-cols-md="2" md-cols-gt-md="6"
+                    md-row-height-gt-md="1:1" md-row-height="2:2"
+                    md-gutter="12px" md-gutter-gt-sm="8px">
+
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+
+                    <md-radio-group ng-model="data.group1">
+                        <md-radio-button value="Exporter" class="md-primary">Exporter</md-radio-button>
+                        <md-radio-button value="Importer">Importer</md-radio-button>
+                    </md-radio-group>
+
+                    <md-grid-tile-footer>
+                        <h3>Your Profile</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="green"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+
+                    <div layout="column" layout-align="center">
+                        <!--<div layout="row" layout-align="center">-->
+                        <!--<h5>Your Currencies</h5>-->
+                        <md-select placeholder="Expenses" ng-model="expenseCcy">
+                            <md-option value="EUR">EUR</md-option>
+                            <md-option value="USD">USD</md-option>
+                            <md-option value="JPY">JPY</md-option>
+                            <md-option value="CHF">CHF</md-option>
+                        </md-select>
+                        <!--</div>-->
+
+                        <md-select placeholder="Incomes" ng-model="IncomeCcy">
+                            <md-option value="EUR">EUR</md-option>
+                            <md-option value="USD">USD</md-option>
+                            <md-option value="JPY">JPY</md-option>
+                            <md-option value="CHF">CHF</md-option>
+                        </md-select>
+                    </div>
+
+                    <md-grid-tile-footer>
+                        <h3>Your Currencies</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="gray"
+                              md-rowspan="3" md-colspan="4" md-colspan-sm="4">
+                    <md-grid-tile-footer>
+                        <h3>The Graph !!!</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>None</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>Lock</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>Agreed Rate</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+
+                <md-grid-tile class="yellow"
+                              md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                    <md-grid-tile-footer>
+                        <h3>Optional</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+            </md-grid-list>
+        </div>
+    </md-content>
+
+
+
+    <!--<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">-->
+        <!--<md-toolbar class="md-theme-light">-->
+            <!--<h1 class="md-toolbar-tools">Sidenav Right</h1>-->
+        <!--</md-toolbar>-->
+        <!--<md-content ng-controller="RightCtrl" layout-padding>-->
+            <!--<form>-->
+                <!--<md-input-container>-->
+                    <!--<label for="testInput">Test input</label>-->
+                    <!--<input type="text" id="testInput"-->
+                           <!--ng-model="data" md-sidenav-focus>-->
+                <!--</md-input-container>-->
+            <!--</form>-->
+            <!--<md-button ng-click="close()" class="md-primary">-->
+                <!--Close Sidenav Right-->
+            <!--</md-button>-->
+        <!--</md-content>-->
+    <!--</md-sidenav>-->
+
+</div>
+
+<script src="./bower_components/angular/angular.js"></script>
+<script src="./bower_components/angular-animate/angular-animate.js"></script>
+<script src="./bower_components/angular-aria/angular-aria.js"></script>
+<script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
+
+<script src="./src/users/Users.js"></script>
+<script src="./src/users/UserController.js"></script>
+<script src="./src/users/UserService.js"></script>
+
+<script type="text/javascript">
+
+    angular
+            .module('starterApp', ['ngMaterial', 'users'])
+            .config(function ($mdThemingProvider, $mdIconProvider) {
+
+                $mdIconProvider
+                        .defaultIconSet("./assets/svg/avatars.svg", 128)
+                        .icon("menu", "./assets/svg/menu.svg", 24)
+                        .icon("share", "./assets/svg/share.svg", 24)
+                        .icon("google_plus", "./assets/svg/google_plus.svg", 512)
+                        .icon("hangouts", "./assets/svg/hangouts.svg", 512)
+                        .icon("twitter", "./assets/svg/twitter.svg", 512)
+                        .icon("phone", "./assets/svg/phone.svg", 512);
+
+                $mdThemingProvider.theme('default')
+                        .primaryPalette('brown')
+                        .accentPalette('red');
+
+            });
+
+</script>
+
+</body>
+</html>
