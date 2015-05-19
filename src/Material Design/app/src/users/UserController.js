@@ -1,11 +1,50 @@
 (function () {
 
     angular
-        .module('users')
+        .module('users', ['n3-charts.linechart'])
+        .config(function ($mdIconProvider) {
+            $mdIconProvider
+                .icon('share-arrow', 'img/icons/share-arrow.svg', 24)
+                .icon('upload', 'img/icons/upload.svg', 24)
+                .icon('copy', 'img/icons/copy.svg', 24)
+                .icon('print', 'img/icons/print.svg', 24)
+                .icon('hangout', 'img/icons/hangout.svg', 24)
+                .icon('mail', 'img/icons/mail.svg', 24)
+                .icon('message', 'img/icons/message.svg', 24)
+                .icon('copy2', 'img/icons/copy2.svg', 24)
+                .icon('facebook', 'img/icons/facebook.svg', 24)
+                .icon('twitter', 'img/icons/twitter.svg', 24);
+        })
         .controller('UserController', [
             'userService', '$scope', '$mdSidenav', '$mdBottomSheet', '$log', '$q',
             UserController
-        ]);
+        ])
+        .controller('ListBottomSheetCtrl', function ($scope, $mdBottomSheet) {
+            $scope.items = [
+                {name: 'Share', icon: 'share-arrow'},
+                {name: 'Upload', icon: 'upload'},
+                {name: 'Copy', icon: 'copy'},
+                {name: 'Print this page', icon: 'print'},
+            ];
+            $scope.listItemClick = function ($index) {
+                var clickedItem = $scope.items[$index];
+                $mdBottomSheet.hide(clickedItem);
+            };
+        })
+        .controller('GridBottomSheetCtrl', function ($scope, $mdBottomSheet) {
+            $scope.items = [
+                {name: 'Hangout', icon: 'hangout'},
+                {name: 'Mail', icon: 'mail'},
+                {name: 'Message', icon: 'message'},
+                {name: 'Copy', icon: 'copy2'},
+                {name: 'Facebook', icon: 'facebook'},
+                {name: 'Twitter', icon: 'twitter'},
+            ];
+            $scope.listItemClick = function ($index) {
+                var clickedItem = $scope.items[$index];
+                $mdBottomSheet.hide(clickedItem);
+            };
+        });
 
     /**
      * Main Controller for the Angular Material Starter App
@@ -32,32 +71,62 @@
         ];
 
         $scope.strategies = [
-            { name: 'None', img: 'https://material.angularjs.org/img/100-0.jpeg', newMessage: true },
-            { name: 'Lock', img: 'https://material.angularjs.org/img/100-1.jpeg', newMessage: false },
-            { name: 'Agreed Rate', img: 'https://material.angularjs.org/img/100-2.jpeg', newMessage: false },
-            { name: 'Optional', img: 'https://material.angularjs.org/img/100-2.jpeg', newMessage: false }
+            {name: 'None', img: 'https://material.angularjs.org/img/100-0.jpeg', newMessage: true},
+            {name: 'Lock', img: 'https://material.angularjs.org/img/100-1.jpeg', newMessage: false},
+            {name: 'Agreed Rate', img: 'https://material.angularjs.org/img/100-2.jpeg', newMessage: false},
+            {name: 'Optional', img: 'https://material.angularjs.org/img/100-2.jpeg', newMessage: false}
         ];
 
-        $scope.toppings = [
-            {name: 'Pepperoni', wanted: true},
-            {name: 'Sausage', wanted: false},
-            {name: 'Black Olives', wanted: true},
-            {name: 'Green Peppers', wanted: false}
+        $scope.data = [
+            {x: 0, y: 0, other_y: 0, val_2: 0, val_3: 0},
+            {x: 1, y: 0.993, other_y: 3.894, val_2: 8.47, val_3: 14.347},
+            {x: 2, y: 1.947, other_y: 7.174, val_2: 13.981, val_3: 19.991},
+            {x: 3, y: 2.823, other_y: 9.32, val_2: 14.608, val_3: 13.509},
+            {x: 4, y: 3.587, other_y: 9.996, val_2: 10.132, val_3: -1.167},
+            {x: 5, y: 4.207, other_y: 9.093, val_2: 2.117, val_3: -15.136},
+            {x: 6, y: 4.66, other_y: 6.755, val_2: -6.638, val_3: -19.923},
+            {x: 7, y: 4.927, other_y: 3.35, val_2: -13.074, val_3: -12.625},
+            {x: 8, y: 4.998, other_y: -0.584, val_2: -14.942, val_3: 2.331},
+            {x: 9, y: 4.869, other_y: -4.425, val_2: -11.591, val_3: 15.873},
+            {x: 10, y: 4.546, other_y: -7.568, val_2: -4.191, val_3: 19.787},
+            {x: 11, y: 4.042, other_y: -9.516, val_2: 4.673, val_3: 11.698},
+            {x: 12, y: 3.377, other_y: -9.962, val_2: 11.905, val_3: -3.487},
+            {x: 13, y: 2.578, other_y: -8.835, val_2: 14.978, val_3: -16.557}
         ];
-        $scope.settings = [
-            { name: 'Wi-Fi', extraScreen: 'Wi-fi menu', icon: 'device:network-wifi', enabled: true },
-            { name: 'Bluetooth', extraScreen: 'Bluetooth menu', icon: 'device:bluetooth', enabled: false }
-        ];
-        $scope.messages = [
-            {id: 1, title: "Message A", selected: false},
-            {id: 2, title: "Message B", selected: true},
-            {id: 3, title: "Message C", selected: true},
-        ];
-        $scope.people = [
-            { name: 'Janet Perkins', img: 'https://material.angularjs.org/img/100-0.jpeg', newMessage: true },
-            { name: 'Mary Johnson', img: 'https://material.angularjs.org/img/100-1.jpeg', newMessage: false },
-            { name: 'Peter Carlsson', img: 'https://material.angularjs.org/img/100-2.jpeg', newMessage: false }
-        ];
+
+        $scope.options = {
+            axes: {y2: {min: -15, max: 15}}, series: [
+                {y: 'val_2', label: 'One', type: 'area', striped: true},
+                {y: 'y', type: 'area', striped: true, label: 'Two'},
+                {y: 'other_y', type: 'area', label: 'Three', striped: true, axis: 'y2'}
+            ],
+            lineMode: 'cardinal',
+            tooltip: {mode: 'scrubber'},
+            margin: {
+                bottom: 100
+            }
+        };
+
+        $scope.showListBottomSheet = function ($event) {
+            $scope.alert = '';
+            $mdBottomSheet.show({
+                templateUrl: 'src/users/bottom-sheet-list-template.html',
+                controller: 'ListBottomSheetCtrl',
+                targetEvent: $event
+            }).then(function (clickedItem) {
+                $scope.alert = clickedItem.name + ' clicked!';
+            });
+        };
+        $scope.showGridBottomSheet = function ($event) {
+            $scope.alert = '';
+            $mdBottomSheet.show({
+                templateUrl: 'src/users/bottom-sheet-grid-template.html',
+                controller: 'GridBottomSheetCtrl',
+                targetEvent: $event
+            }).then(function (clickedItem) {
+                $scope.alert = clickedItem.name + ' clicked!';
+            });
+        };
 
         // Load all registered users
 
