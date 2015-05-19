@@ -8,20 +8,20 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Material Design", "http://l
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_63268"
-		Debug.AspNetCompiler.PhysicalPath = "D:\Programmes\GitHub\NutellaTech\src\Material Design\"
+		Debug.AspNetCompiler.PhysicalPath = "..\Material Design\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63268\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_63268"
-		Release.AspNetCompiler.PhysicalPath = "D:\Programmes\GitHub\NutellaTech\src\Material Design\"
+		Release.AspNetCompiler.PhysicalPath = "..\Material Design\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63268\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "D:\Programmes\GitHub\NutellaTech\src\Material Design\"
+		SlnRelativePath = "..\Material Design\"
 	EndProjectSection
 EndProject
 Global
