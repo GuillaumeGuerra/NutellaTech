@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="OneDbgClient.Views.DebugProcessView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:OneDbgClient.ViewModels"
+             xmlns:lib="clr-namespace:OneDbgLibrary;assembly=OneDbgLibrary"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="900"
+             d:DataContext="{d:DesignInstance Type=vm:DebugProcessViewModel, IsDesignTimeCreatable=True}">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <GroupBox Header="Process Summary">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <Label Content="PID" />
+                        <Label Content="{Binding Process.PID}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                        <Label Content="Process Name" />
+                        <Label Content="{Binding Process.Name}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                        <Label Content="Virtual Memory" />
+                        <Label Content="TODO" />
+                    </StackPanel>
+                </Grid>
+
+            </GroupBox>
+
+            <GroupBox Header="Threads Stacks">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="{Binding ThreadsSummary}"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+                        <CheckBox Content="Filter Waiting Threads" IsChecked="{Binding FilterWaitingThreads}" Visibility="{Binding FiltersVisibility}"/>
+                        <CheckBox Content="Filter Similar Threads" IsChecked="{Binding FilterSimilarThreads}" Visibility="{Binding FiltersVisibility}"/>
+                        <Button Content="Get Stacks" Command="{Binding LoadStacksCommand}" />
+                    </StackPanel>
+                    <TreeView ItemsSource="{Binding ThreadStacks}" Grid.Row="1">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type lib:RunningThread}" ItemsSource="{Binding Stack}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding ThreadId}" />
+                                    <TextBlock Text="{Binding LockCount}" />
+                                </StackPanel>
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding DisplayString}" />
+                                            <TextBlock Text=" - " />
+                                            <TextBlock Text="{Binding StackPointer}" />
+                                            <TextBlock Text=" - " />
+                                            <TextBlock Text="{Binding InstructionPointer}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Grid>
+            </GroupBox>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -10,6 +10,7 @@ namespace OneDbgClient.ViewModels
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<ProcessesViewModel>();
+            SimpleIoc.Default.Register<MainWindowViewModel>();
         }
 
         public ProcessesViewModel Processes
@@ -17,6 +18,14 @@ namespace OneDbgClient.ViewModels
             get
             {
                 return ServiceLocator.Current.GetInstance<ProcessesViewModel>();
+            }
+        }
+
+        public MainWindowViewModel MainWindow
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MainWindowViewModel>();
             }
         }
 

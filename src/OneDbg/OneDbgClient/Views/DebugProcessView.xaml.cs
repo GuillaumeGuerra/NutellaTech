@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OneDbgClient.Processes
+namespace OneDbgClient.Views
 {
     /// <summary>
-    /// Interaction logic for ProcessesView.xaml
+    /// Interaction logic for DebugProcessView.xaml
     /// </summary>
-    public partial class ProcessesView : UserControl
+    public partial class DebugProcessView : UserControl
     {
-        public ProcessesView()
+        public DebugProcessView()
         {
             InitializeComponent();
         }

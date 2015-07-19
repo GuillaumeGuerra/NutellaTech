@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -10,6 +12,7 @@ namespace OneDbgClient.ViewModels
     {
         private string _header = "";
         private ObservableCollection<ProcessViewModel> _allProcesses = new ObservableCollection<ProcessViewModel>();
+        private string _selectedProcess;
 
         public ObservableCollection<ProcessViewModel> AllProcesses
         {
@@ -31,6 +34,16 @@ namespace OneDbgClient.ViewModels
             }
         }
 
+        public string SelectedProcess
+        {
+            get { return _selectedProcess; }
+            set
+            {
+                _selectedProcess = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ICommand RefreshProcessesCommand
         {
             get
@@ -38,6 +51,16 @@ namespace OneDbgClient.ViewModels
                 return new RelayCommand(RefreshProcesses);
             }
         }
+
+        public ICommand DebugProcessCommand
+        {
+            get
+            {
+                return new RelayCommand(DebugProcess);
+            }
+        }
+
+        public event Action<ProcessViewModel> OnProcessSelected;
 
         private void RefreshProcesses()
         {
@@ -49,6 +72,19 @@ namespace OneDbgClient.ViewModels
                     PID = process.Id,
                     Name = process.ProcessName
                 });
+            }
+
+            Header = string.Format("{0} process(es) available for debug", AllProcesses.Count);
+        }
+
+        private void DebugProcess()
+        {
+            int selectedProcessPID = 0;
+            if (OnProcessSelected != null && Int32.TryParse(SelectedProcess, out selectedProcessPID))
+            {
+                var selectedProcess = AllProcesses.SingleOrDefault(process => process.PID == selectedProcessPID);
+                if (selectedProcess != null)
+                    OnProcessSelected(selectedProcess);
             }
         }
     }
