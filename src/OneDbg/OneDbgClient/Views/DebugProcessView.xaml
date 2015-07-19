@@ -9,8 +9,13 @@
              d:DesignHeight="900" d:DesignWidth="900"
              d:DataContext="{d:DesignInstance Type=vm:DebugProcessViewModel, IsDesignTimeCreatable=True}">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <GroupBox Header="Process Summary">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <GroupBox Header="Process Summary" Grid.Row="0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -37,12 +42,12 @@
 
             </GroupBox>
 
-            <GroupBox Header="Threads Stacks">
+            <GroupBox Header="Threads Stacks" Grid.Row="1">
 
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
                     <Label Content="{Binding ThreadsSummary}"/>
@@ -51,30 +56,44 @@
                         <CheckBox Content="Filter Similar Threads" IsChecked="{Binding FilterSimilarThreads}" Visibility="{Binding FiltersVisibility}"/>
                         <Button Content="Get Stacks" Command="{Binding LoadStacksCommand}" />
                     </StackPanel>
-                    <TreeView ItemsSource="{Binding ThreadStacks}" Grid.Row="1">
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type lib:RunningThread}" ItemsSource="{Binding Stack}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding ThreadId}" />
-                                    <TextBlock Text="{Binding LockCount}" />
-                                </StackPanel>
-                                <HierarchicalDataTemplate.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding DisplayString}" />
-                                            <TextBlock Text=" - " />
-                                            <TextBlock Text="{Binding StackPointer}" />
-                                            <TextBlock Text=" - " />
-                                            <TextBlock Text="{Binding InstructionPointer}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </HierarchicalDataTemplate.ItemTemplate>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
+                    <ScrollViewer Grid.Row="1">
+                        <TreeView ItemsSource="{Binding ThreadStacks}">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="{x:Type lib:RunningThread}"
+                                                          ItemsSource="{Binding Stack}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="200" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Thread Id :" Grid.Column="0" />
+                                        <TextBlock Text="{Binding ThreadId}" Grid.Column="1" />
+                                        <TextBlock Text="Lock Count :" Grid.Column="2" />
+                                        <TextBlock Text="{Binding LockCount}" Grid.Column="3" />
+                                    </Grid>
+                                    <HierarchicalDataTemplate.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="150" />
+                                                    <ColumnDefinition Width="150" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="{Binding StackPointer}" Grid.Column="0" />
+                                                <TextBlock Text="{Binding InstructionPointer}" Grid.Column="1" />
+                                                <TextBlock Text="{Binding DisplayString}" Grid.Column="2" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </HierarchicalDataTemplate.ItemTemplate>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView></ScrollViewer>
                 </Grid>
             </GroupBox>
 
-        </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
