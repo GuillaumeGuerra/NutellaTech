@@ -96,22 +96,12 @@ namespace OneDbgClient.ViewModels
         private async void RefreshProcesses()
         {
             AllProcesses.Clear();
-            var tempProcesses = new List<ProcessViewModel>();
             Header = "Refresh in progress ...";
             IsRefreshAvailable = false;
 
-            await Task.Run(() =>
-            {
-                foreach (var process in Process.GetProcesses())
-                {
-                    tempProcesses.Add(new ProcessViewModel(process));
-                }
-            });
+            var allProcesses = await Task.Run(() => Process.GetProcesses().Select(process => new ProcessViewModel(process)).ToList());
+            AllProcesses = new ObservableCollection<ProcessViewModel>(allProcesses);
 
-            foreach (var tempProcess in tempProcesses)
-            {
-                AllProcesses.Add(tempProcess);
-            }
             Header = string.Format("{0} processes available for debug", AllProcesses.Count);
             IsRefreshAvailable = true;
         }

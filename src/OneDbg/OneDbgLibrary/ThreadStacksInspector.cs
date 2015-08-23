@@ -20,61 +20,16 @@ namespace OneDbgLibrary
 
         public List<RunningThread> LoadStacks()
         {
-            var threads = new List<RunningThread>();
-
             using (DataTarget dataTarget = DataTarget.AttachToProcess(ProcessPID, 5000))
             {
                 string dacLocation = dataTarget.ClrVersions[0].TryGetDacLocation();
-                ClrRuntime runtime = dataTarget.CreateRuntimeHack(dacLocation, 4, 5);
+                var runtime = dataTarget.CreateRuntimeHack(dacLocation, 4, 5);
 
-                foreach (ClrThread thread in runtime.Threads)
-                {
-                    if (thread.StackTrace == null || thread.StackTrace.Count == 0)
-                        continue;
-
-                    int frameIndex = 0;
-                    var runningThread = new RunningThread
-                    {
-                        ThreadId = thread.OSThreadId,
-                        LockCount = thread.LockCount,
-                        IsWaiting = IsThreadWaiting(thread),
-                        Stack = thread.StackTrace.Select(frame => new StackFrame()
-                        {
-                            FrameIndex = frameIndex++,
-                            InstructionPointer = frame.InstructionPointer,
-                            StackPointer = frame.StackPointer,
-                            DisplayString = frame.ToString()
-                        }).ToList()
-                    };
-
-                    if (runningThread.Stack.Count > 0)
-                    {
-                        runningThread.CurrentFrame = runningThread.Stack.First().DisplayString;
-                        runningThread.StackHashCode = string.Join("---", runningThread.Stack).GetHashCode();
-                    }
-
-                    threads.Add(runningThread);
-                }
+                return 
+                    (from thread in runtime.Threads
+                    where thread.StackTrace != null && thread.StackTrace.Count != 0
+                    select new RunningThread(thread)).ToList();
             }
-
-            return threads;
-        }
-
-        private bool IsThreadWaiting(ClrThread thread)
-        {
-            if (thread.StackTrace.Count > 1)
-            {
-                var frame = thread.StackTrace[1].DisplayString.ToUpper();
-                return frame.Contains("WAIT") || frame.Contains("SLEEP");
-            }
-
-            if (thread.StackTrace.Count > 0)
-            {
-                var frame = thread.StackTrace[0].DisplayString.ToUpper();
-                return frame.Contains("WAIT") || frame.Contains("SLEEP");
-            }
-
-            return false;
         }
     }
 

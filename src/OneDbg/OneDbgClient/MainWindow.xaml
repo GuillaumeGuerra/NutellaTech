@@ -11,10 +11,18 @@
     
     <mahApps:MetroWindow.RightWindowCommands>
         <mahApps:WindowCommands>
-            <Button Content="Settings" />
+            <Button Content="Settings" Command="{Binding Settings.OpenSettingsCommand,Source={StaticResource Locator}}"/>
+            <Button Content="I like Star Wars !" Command="{Binding Settings.ILikeStarWarsCommand,Source={StaticResource Locator}}"/>
         </mahApps:WindowCommands>
     </mahApps:MetroWindow.RightWindowCommands>
-    
+
+    <mahApps:MetroWindow.Flyouts>
+        <mahApps:FlyoutsControl>
+            <mahApps:Flyout Position="Right" Width="400" Theme="Dark" Header="Settings" Background="{StaticResource BlueBackground}" IsOpen="{Binding Settings.AreSettingsVisible,Source={StaticResource Locator}}">
+            </mahApps:Flyout>
+        </mahApps:FlyoutsControl>
+    </mahApps:MetroWindow.Flyouts>
+
     <Grid>
         <TabControl>
             <i:Interaction.Behaviors>

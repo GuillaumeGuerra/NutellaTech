@@ -51,8 +51,8 @@
                     <Label Content="{Binding ThreadsSummary}"/>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
                         <Button Content="Refresh Stacks" Command="{Binding LoadStacksCommand}" Margin="10,0,10,0"/>
-                        <Button Content="To Excel" Command="{Binding ExportToExcelCommand}" CommandParameter="{Binding ElementName=XamDataGrid}" Margin="10,0,10,0"/>
-                        <Button Content="To Clipboard" Command="{Binding ExportToClipboardCommand}" Margin="10,0,10,0"/>
+                        <Button Content="To Excel" Command="{Binding ExportToExcelCommand}" CommandParameter="{Binding ElementName=XamDataGrid}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
+                        <Button Content="To Clipboard" Command="{Binding ExportToClipboardCommand}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                     </StackPanel>
                     <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding ThreadStacks}" IsNestedDataDisplayEnabled="True" Theme="Office2010Blue" x:Name="XamDataGrid">
                         <igWPF:XamDataGrid.ViewSettings>

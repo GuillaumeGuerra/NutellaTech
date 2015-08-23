@@ -11,6 +11,7 @@ namespace OneDbgClient.ViewModels
 
             SimpleIoc.Default.Register<ProcessesViewModel>();
             SimpleIoc.Default.Register<MainWindowViewModel>();
+            SimpleIoc.Default.Register<SettingsViewModel>();
         }
 
         public ProcessesViewModel Processes
@@ -29,9 +30,12 @@ namespace OneDbgClient.ViewModels
             }
         }
 
-        public static void Cleanup()
+        public SettingsViewModel Settings
         {
-            // TODO Clear the ViewModels
+            get
+            {
+                return ServiceLocator.Current.GetInstance<SettingsViewModel>();
+            }
         }
     }
 }

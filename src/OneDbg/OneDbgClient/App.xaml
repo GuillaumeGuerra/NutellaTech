@@ -14,6 +14,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <viewModels:ViewModelLocator x:Key="Locator"/>
+            <SolidColorBrush Color="#41B1E1" x:Key="BlueBackground"/>
+            <SolidColorBrush Color="#FFF7F7F7" x:Key="GrayBackground"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -24,6 +24,7 @@ namespace OneDbgClient.ViewModels
         private ProcessViewModel _process;
         private List<RunningThread> _threadStacks;
         private string _threadsSummary = "Please load the thread stacks";
+        private bool _areThreadLoaded = false;
 
         public ProcessViewModel Process
         {
@@ -34,7 +35,6 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-
         public List<RunningThread> ThreadStacks
         {
             get { return _threadStacks; }
@@ -45,7 +45,6 @@ namespace OneDbgClient.ViewModels
 
             }
         }
-
         public string ThreadsSummary
         {
             get { return _threadsSummary; }
@@ -55,17 +54,24 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public bool AreThreadLoaded
+        {
+            get { return _areThreadLoaded; }
+            set
+            {
+                _areThreadLoaded = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public ICommand LoadStacksCommand
         {
             get { return new RelayCommand(LoadStacks); }
         }
-
         public ICommand ExportToExcelCommand
         {
             get { return new RelayCommand<XamDataGrid>(ExportToExcel); }
         }
-
         public ICommand ExportToClipboardCommand
         {
             get { return new RelayCommand(ExportToClipboard); }
@@ -112,13 +118,12 @@ namespace OneDbgClient.ViewModels
         private async void LoadStacks()
         {
             ThreadsSummary = string.Format("Getting threads ...");
+            AreThreadLoaded = false;
 
-            await Task.Run(() =>
-            {
-                var inspector = new ThreadStacksInspector(Process.PID);
-                ThreadStacks = inspector.LoadStacks();
-                ThreadsSummary = string.Format("{0} thread(s) found", ThreadStacks.Count);
-            });
+            ThreadStacks = await Task.Run(() => new ThreadStacksInspector(Process.PID).LoadStacks());
+
+            ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
+            AreThreadLoaded = true;
         }
     }
 }

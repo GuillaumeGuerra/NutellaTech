@@ -16,8 +16,8 @@
         </Grid.RowDefinitions>
         <Label Content="{Binding Header}" Grid.Row="0" HorizontalAlignment="Left"/>
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
-            <Button Content="Refresh Processes" Command="{Binding RefreshProcessesCommand}" IsEnabled="{Binding IsRefreshAvailable}" HorizontalAlignment="Right"/>
-            <Button Content="Debug Selected Processes" Command="{Binding DebugProcessCommand}" IsEnabled="{Binding IsDebugAvailable}" HorizontalAlignment="Right"/>
+            <Button Content="Refresh Processes" Command="{Binding RefreshProcessesCommand}" IsEnabled="{Binding IsRefreshAvailable}" HorizontalAlignment="Right" Margin="10,0,10,0"/>
+            <Button Content="Debug Selected Processes" Command="{Binding DebugProcessCommand}" IsEnabled="{Binding IsDebugAvailable}" HorizontalAlignment="Right" Margin="10,0,10,0"/>
         </StackPanel>
         <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding AllProcesses}" IsGroupByAreaExpanded="True" BindToSampleData="True" IsNestedDataDisplayEnabled="False" Theme="Office2010Blue">
             <igWPF:XamDataGrid.ViewSettings>
