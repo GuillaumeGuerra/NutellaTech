@@ -14,6 +14,17 @@ namespace OneDbgClient
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show("UnhandledException caught : " + Environment.NewLine + e.ExceptionObject.ToString(),
+                "UnhandledException", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     public static class AppExtensions

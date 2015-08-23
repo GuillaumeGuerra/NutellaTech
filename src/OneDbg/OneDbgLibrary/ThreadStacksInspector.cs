@@ -32,6 +32,7 @@ namespace OneDbgLibrary
                     if (thread.StackTrace == null || thread.StackTrace.Count == 0)
                         continue;
 
+                    int frameIndex = 0;
                     var runningThread = new RunningThread
                     {
                         ThreadId = thread.OSThreadId,
@@ -39,6 +40,7 @@ namespace OneDbgLibrary
                         IsWaiting = IsThreadWaiting(thread),
                         Stack = thread.StackTrace.Select(frame => new StackFrame()
                         {
+                            FrameIndex = frameIndex++,
                             InstructionPointer = frame.InstructionPointer,
                             StackPointer = frame.StackPointer,
                             DisplayString = frame.ToString()
