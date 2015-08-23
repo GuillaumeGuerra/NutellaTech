@@ -3,23 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviors="clr-namespace:OneDbgClient.Behaviors"
              x:Class="OneDbgClient.Views.ProcessesView" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600" DataContext="{Binding Processes, Mode=OneWay, Source={StaticResource Locator}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Content="{Binding Header}" Grid.Row="0" HorizontalAlignment="Left"/>
-        <Button Content="Refresh Processes" Command="{Binding RefreshProcessesCommand}" Grid.Row="0" HorizontalAlignment="Right"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Content="Selected Process"  />
-            <TextBox Text="{Binding SelectedProcess}" Width="100" Background="Aqua"/>
-            <Button Content="Debug Process" Command="{Binding DebugProcessCommand}" HorizontalAlignment="Right"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+            <Button Content="Refresh Processes" Command="{Binding RefreshProcessesCommand}" IsEnabled="{Binding IsRefreshAvailable}" HorizontalAlignment="Right"/>
+            <Button Content="Debug Selected Processes" Command="{Binding DebugProcessCommand}" IsEnabled="{Binding IsDebugAvailable}" HorizontalAlignment="Right"/>
         </StackPanel>
-        <DataGrid ItemsSource="{Binding AllProcesses}" Grid.Row="2"/>
+        <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding AllProcesses}" IsGroupByAreaExpanded="True" BindToSampleData="True" IsNestedDataDisplayEnabled="False" Theme="Office2010Blue">
+            <igWPF:XamDataGrid.ViewSettings>
+                <igWPF:GridViewSettings/>
+            </igWPF:XamDataGrid.ViewSettings>
+            <igWPF:XamDataGrid.FieldSettings>
+                <igWPF:FieldSettings AllowEdit="False" CellClickAction="SelectCell" AllowRecordFiltering="True"/>
+            </igWPF:XamDataGrid.FieldSettings>
+            <igWPF:XamDataGrid.FieldLayoutSettings>
+                <igWPF:FieldLayoutSettings HighlightAlternateRecords="True" AllowAddNew="False" AllowDelete="False" FilterRecordLocation="OnTop" FilterUIType="Default" HeaderPrefixAreaDisplayMode="FieldChooserButton" FilterAction="Default"/>
+            </igWPF:XamDataGrid.FieldLayoutSettings>
+            <i:Interaction.Behaviors>
+                <behaviors:XamDataGridBehavior SelectedDataItems="{Binding SelectedProcesses}"/>
+            </i:Interaction.Behaviors>
+        </igWPF:XamDataGrid>
+
+
 
     </Grid>
 </UserControl>

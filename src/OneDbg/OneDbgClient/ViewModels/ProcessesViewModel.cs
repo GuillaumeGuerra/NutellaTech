@@ -1,18 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Infragistics.Windows.DataPresenter;
 
 namespace OneDbgClient.ViewModels
 {
     public class ProcessesViewModel : ViewModelBase
     {
+        #region Properties
+
         private string _header = "";
         private ObservableCollection<ProcessViewModel> _allProcesses = new ObservableCollection<ProcessViewModel>();
-        private string _selectedProcess;
+        private bool _isRefreshAvailable = true;
+        private ObservableCollection<DataRecord> _selectedProcesses = new ObservableCollection<DataRecord>();
+        private bool _isDebugAvailable = false;
 
         public ObservableCollection<ProcessViewModel> AllProcesses
         {
@@ -23,7 +32,6 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-
         public string Header
         {
             get { return _header; }
@@ -33,58 +41,89 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-
-        public string SelectedProcess
+        public bool IsRefreshAvailable
         {
-            get { return _selectedProcess; }
+            get { return _isRefreshAvailable; }
             set
             {
-                _selectedProcess = value;
+                _isRefreshAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool IsDebugAvailable
+        {
+            get { return _isDebugAvailable; }
+            set
+            {
+                _isDebugAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+        public ObservableCollection<DataRecord> SelectedProcesses
+        {
+            get { return _selectedProcesses; }
+            set
+            {
+                _selectedProcesses = value;
                 RaisePropertyChanged();
             }
         }
 
         public ICommand RefreshProcessesCommand
         {
-            get
-            {
-                return new RelayCommand(RefreshProcesses);
-            }
+            get { return new RelayCommand(RefreshProcesses); }
         }
-
         public ICommand DebugProcessCommand
         {
-            get
-            {
-                return new RelayCommand(DebugProcess);
-            }
+            get { return new RelayCommand(DebugProcess); }
         }
+
+        #endregion
 
         public event Action<ProcessViewModel> OnProcessSelected;
 
-        private void RefreshProcesses()
+        public ProcessesViewModel()
+        {
+            SelectedProcesses.CollectionChanged += SelectedProcesses_CollectionChanged;
+            RefreshProcesses();
+        }
+
+        private void SelectedProcesses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            IsDebugAvailable = SelectedProcesses.Count > 0;
+        }
+
+        private async void RefreshProcesses()
         {
             AllProcesses.Clear();
-            foreach (var process in Process.GetProcesses())
-            {
-                AllProcesses.Add(new ProcessViewModel()
-                {
-                    PID = process.Id,
-                    Name = process.ProcessName
-                });
-            }
+            var tempProcesses = new List<ProcessViewModel>();
+            Header = "Refresh in progress ...";
+            IsRefreshAvailable = false;
 
-            Header = string.Format("{0} process(es) available for debug", AllProcesses.Count);
+            await Task.Run(() =>
+            {
+                foreach (var process in Process.GetProcesses())
+                {
+                    tempProcesses.Add(new ProcessViewModel(process));
+                }
+            });
+
+            foreach (var tempProcess in tempProcesses)
+            {
+                AllProcesses.Add(tempProcess);
+            }
+            Header = string.Format("{0} processes available for debug", AllProcesses.Count);
+            IsRefreshAvailable = true;
         }
 
         private void DebugProcess()
         {
-            int selectedProcessPID = 0;
-            if (OnProcessSelected != null && Int32.TryParse(SelectedProcess, out selectedProcessPID))
+            foreach (var process in SelectedProcesses)
             {
-                var selectedProcess = AllProcesses.SingleOrDefault(process => process.PID == selectedProcessPID);
-                if (selectedProcess != null)
-                    OnProcessSelected(selectedProcess);
+                var processViewModel = process.DataItem as ProcessViewModel;
+
+                if (processViewModel != null && OnProcessSelected != null)
+                    OnProcessSelected(processViewModel);
             }
         }
     }

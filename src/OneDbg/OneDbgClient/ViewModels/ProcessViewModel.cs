@@ -1,4 +1,7 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using GalaSoft.MvvmLight;
 
 namespace OneDbgClient.ViewModels
 {
@@ -25,6 +28,17 @@ namespace OneDbgClient.ViewModels
                 _name = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public ProcessViewModel(Process process)
+        {
+            ReadProcess(process);
+        }
+
+        private void ReadProcess(Process process)
+        {
+            PID = process.Id;
+            Name = process.ProcessName;
         }
     }
 }

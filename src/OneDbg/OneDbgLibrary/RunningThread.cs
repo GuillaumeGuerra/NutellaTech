@@ -8,6 +8,7 @@ namespace OneDbgLibrary
         public List<StackFrame> Stack { get; set; }
         public uint LockCount { get; set; }
         public bool IsWaiting { get; set; }
-        public string Name { get; set; }
+        public string CurrentFrame { get; set; }
+        public int StackHashCode { get; set; }
     }
 }

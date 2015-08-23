@@ -14,12 +14,8 @@ namespace OneDbgClient.ViewModels
     public class DebugProcessViewModel : ViewModelBase
     {
         private ProcessViewModel _process;
-        private IEnumerable<RunningThread> _threadStacks;
-        private List<RunningThread> _allThreadsStacks;
+        private List<RunningThread> _threadStacks;
         private string _threadsSummary = "Please load the thread stacks";
-        private bool _filterWaitingThreads = false;
-        private bool _filterSimilarThreads = false;
-        private Visibility _filtersVisibility = Visibility.Collapsed;
 
         public ProcessViewModel Process
         {
@@ -30,17 +26,7 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public List<RunningThread> AllThreadStacks
-        {
-            get { return _allThreadsStacks; }
-            set
-            {
-                _allThreadsStacks = value;
-                RaisePropertyChanged();
-
-            }
-        }
-        public IEnumerable<RunningThread> ThreadStacks
+        public List<RunningThread> ThreadStacks
         {
             get { return _threadStacks; }
             set
@@ -59,35 +45,6 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public bool FilterWaitingThreads
-        {
-            get { return _filterWaitingThreads; }
-            set
-            {
-                _filterWaitingThreads = value;
-                RaisePropertyChanged();
-                ApplyThreadStacksFilters();
-            }
-        }
-        public bool FilterSimilarThreads
-        {
-            get { return _filterSimilarThreads; }
-            set
-            {
-                _filterSimilarThreads = value;
-                RaisePropertyChanged();
-                ApplyThreadStacksFilters();
-            }
-        }
-        public Visibility FiltersVisibility
-        {
-            get { return _filtersVisibility; }
-            set
-            {
-                _filtersVisibility = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public ICommand LoadStacksCommand
         {
@@ -96,23 +53,14 @@ namespace OneDbgClient.ViewModels
 
         private async void LoadStacks()
         {
-            await Task.Run((Action)(() =>
+            ThreadsSummary = string.Format("Getting threads ...");
+
+            await Task.Run(() =>
             {
                 var inspector = new ThreadStacksInspector(Process.PID);
-                AllThreadStacks = inspector.LoadStacks();
-                ApplyThreadStacksFilters();
-                ThreadsSummary = string.Format("{0} thread(s) found", AllThreadStacks.Count);
-                FiltersVisibility = Visibility.Visible;
-            }));
-        }
-
-        private void ApplyThreadStacksFilters()
-        {
-            ThreadStacks = AllThreadStacks;
-            //if (FilterSimilarThreads)
-            //    ThreadStacks = ThreadStacks.Where(t => );
-            if (FilterWaitingThreads)
-                ThreadStacks = ThreadStacks.Where(t => !t.IsWaiting);
+                ThreadStacks = inspector.LoadStacks();
+                ThreadsSummary = string.Format("{0} thread(s) found", ThreadStacks.Count);
+            });
         }
     }
 }
