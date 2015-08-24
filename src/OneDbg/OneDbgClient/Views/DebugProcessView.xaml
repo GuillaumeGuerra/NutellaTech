@@ -54,7 +54,7 @@
                         <Button Content="To Excel" Command="{Binding ExportToExcelCommand}" CommandParameter="{Binding ElementName=XamDataGrid}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                         <Button Content="To Clipboard" Command="{Binding ExportToClipboardCommand}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                     </StackPanel>
-                    <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding ThreadStacks}" IsNestedDataDisplayEnabled="True" Theme="Office2010Blue" x:Name="XamDataGrid">
+                    <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding ThreadStacks}" IsNestedDataDisplayEnabled="True" Theme="Office2010Blue" x:Name="XamDataGrid" BindToSampleData="True">
                         <igWPF:XamDataGrid.ViewSettings>
                             <igWPF:GridViewSettings/>
                         </igWPF:XamDataGrid.ViewSettings>
@@ -64,6 +64,61 @@
                         <igWPF:XamDataGrid.FieldLayoutSettings>
                             <igWPF:FieldLayoutSettings HighlightAlternateRecords="True" AllowAddNew="False" AllowDelete="False" FilterRecordLocation="OnTop" FilterUIType="Default" HeaderPrefixAreaDisplayMode="FieldChooserButton" FilterAction="Default"/>
                         </igWPF:XamDataGrid.FieldLayoutSettings>
+                        <igWPF:XamDataGrid.FieldLayouts>
+                            <igWPF:FieldLayout>
+                                <igWPF:FieldLayout.Fields>
+                                    <igWPF:Field Name="ThreadId"  Label="Id">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="30"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="CurrentFrame"  Label="Current Frame">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="500"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="LockCount"  Label="Locks">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="30"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="IsWaiting"  Label="Is Waiting">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="30"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="StackHashCode"  Label="HashCode">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="50"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                </igWPF:FieldLayout.Fields>
+                            </igWPF:FieldLayout>
+                            <igWPF:FieldLayout ParentFieldName="Stack">
+                                <igWPF:FieldLayout.Fields>
+                                    <igWPF:Field Name="FrameIndex" Label="#">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="10"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="DisplayString" Label="Frame">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="500"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="StackPointer" Label="Stack Pointer">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="50"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="InstructionPointer" Label="Instruction Pointer">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="50"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                </igWPF:FieldLayout.Fields>
+                            </igWPF:FieldLayout>
+                        </igWPF:XamDataGrid.FieldLayouts>
                     </igWPF:XamDataGrid>
                 </Grid>
             </GroupBox>

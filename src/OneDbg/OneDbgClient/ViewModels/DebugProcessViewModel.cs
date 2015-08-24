@@ -99,7 +99,7 @@ namespace OneDbgClient.ViewModels
         {
             if (!Directory.Exists("Exports"))
                 Directory.CreateDirectory("Exports");
-            string fileName = string.Format("Exports/{0}.xlsx", Process.PID);
+            string fileName = Path.GetFullPath(string.Format("Exports/{0}.xlsx", Process.PID));
 
             try
             {
@@ -113,6 +113,12 @@ namespace OneDbgClient.ViewModels
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);
             }
+
+            var uncFileName = string.Format(@"\\{0}\{1}", Environment.MachineName, fileName.Replace(":", "$"));
+
+            Clipboard.SetText(uncFileName);
+            MessageBox.Show(string.Format("Export to excel is successful, the UNC path has been copied into your clipboard ({0})", uncFileName),
+                "Export completed", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async void LoadStacks()

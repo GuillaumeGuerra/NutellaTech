@@ -31,7 +31,7 @@ namespace OneDbgLibrary
             if (Stack.Count > 0)
             {
                 CurrentFrame = Stack.First().DisplayString;
-                StackHashCode = string.Join("---", Stack).GetHashCode();
+                StackHashCode = string.Join("---", Stack.Select(frame => frame.DisplayString)).GetHashCode();
             }
         }
 

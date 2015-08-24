@@ -8,7 +8,8 @@
              xmlns:behaviors="clr-namespace:OneDbgClient.Behaviors"
              x:Class="OneDbgClient.Views.ProcessesView" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="600" DataContext="{Binding Processes, Mode=OneWay, Source={StaticResource Locator}}">
+             d:DesignHeight="600" d:DesignWidth="600" 
+             DataContext="{Binding Processes, Mode=OneWay, Source={StaticResource Locator}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -20,21 +21,31 @@
             <Button Content="Debug Selected Processes" Command="{Binding DebugProcessCommand}" IsEnabled="{Binding IsDebugAvailable}" HorizontalAlignment="Right" Margin="10,0,10,0"/>
         </StackPanel>
         <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding AllProcesses}" IsGroupByAreaExpanded="True" BindToSampleData="True" IsNestedDataDisplayEnabled="False" Theme="Office2010Blue">
+            <i:Interaction.Behaviors>
+                <behaviors:XamDataGridBehavior SelectedDataItems="{Binding SelectedProcesses}"/>
+            </i:Interaction.Behaviors>
             <igWPF:XamDataGrid.ViewSettings>
                 <igWPF:GridViewSettings/>
             </igWPF:XamDataGrid.ViewSettings>
             <igWPF:XamDataGrid.FieldSettings>
-                <igWPF:FieldSettings AllowEdit="False" CellClickAction="SelectCell" AllowRecordFiltering="True"/>
+                <igWPF:FieldSettings AllowEdit="False" CellClickAction="SelectRecord" AllowRecordFiltering="True"/>
             </igWPF:XamDataGrid.FieldSettings>
             <igWPF:XamDataGrid.FieldLayoutSettings>
                 <igWPF:FieldLayoutSettings HighlightAlternateRecords="True" AllowAddNew="False" AllowDelete="False" FilterRecordLocation="OnTop" FilterUIType="Default" HeaderPrefixAreaDisplayMode="FieldChooserButton" FilterAction="Default"/>
             </igWPF:XamDataGrid.FieldLayoutSettings>
-            <i:Interaction.Behaviors>
-                <behaviors:XamDataGridBehavior SelectedDataItems="{Binding SelectedProcesses}"/>
-            </i:Interaction.Behaviors>
+            <igWPF:XamDataGrid.FieldLayouts>
+                <igWPF:FieldLayout>
+                    <igWPF:FieldLayout.Fields>
+                        <igWPF:Field Name="PID" />
+                        <igWPF:Field Name="Name"  Label="Process Name">
+                            <igWPF:Field.Settings>
+                                <igWPF:FieldSettings CellWidth="400"/>
+                            </igWPF:Field.Settings>
+                        </igWPF:Field>
+                        <igWPF:Field Name="IsInDesignMode" Visibility="Collapsed" />
+                    </igWPF:FieldLayout.Fields>
+                </igWPF:FieldLayout>
+            </igWPF:XamDataGrid.FieldLayouts>
         </igWPF:XamDataGrid>
-
-
-
     </Grid>
 </UserControl>
