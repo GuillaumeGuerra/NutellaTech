@@ -19,6 +19,7 @@
     <mahApps:MetroWindow.Flyouts>
         <mahApps:FlyoutsControl>
             <mahApps:Flyout Position="Right" Width="400" Theme="Dark" Header="Settings" Background="{StaticResource BlueBackground}" IsOpen="{Binding Settings.AreSettingsVisible,Source={StaticResource Locator}}">
+                <views:SettingsView Margin="30"/>
             </mahApps:Flyout>
         </mahApps:FlyoutsControl>
     </mahApps:MetroWindow.Flyouts>

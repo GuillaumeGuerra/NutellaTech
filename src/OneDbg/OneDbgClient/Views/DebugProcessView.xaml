@@ -3,9 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" x:Class="OneDbgClient.Views.DebugProcessView"
+             xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
+             xmlns:converters="clr-namespace:OneDbgClient.Converters"
+             x:Class="OneDbgClient.Views.DebugProcessView"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="900">
+    <UserControl.Resources>
+        <converters:IsWaitingToBackgroundConverter x:Key="IsWaitingToBackgroundConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -59,7 +64,7 @@
                             <igWPF:GridViewSettings/>
                         </igWPF:XamDataGrid.ViewSettings>
                         <igWPF:XamDataGrid.FieldSettings>
-                            <igWPF:FieldSettings AllowEdit="False" CellClickAction="SelectCell" AllowRecordFiltering="True"/>
+                            <igWPF:FieldSettings AllowEdit="False" CellClickAction="SelectCell" AllowRecordFiltering="True" FilterOperatorDefaultValue="Contains" FilterStringComparisonType="CaseInsensitive"/>
                         </igWPF:XamDataGrid.FieldSettings>
                         <igWPF:XamDataGrid.FieldLayoutSettings>
                             <igWPF:FieldLayoutSettings HighlightAlternateRecords="True" AllowAddNew="False" AllowDelete="False" FilterRecordLocation="OnTop" FilterUIType="Default" HeaderPrefixAreaDisplayMode="FieldChooserButton" FilterAction="Default"/>
@@ -69,7 +74,7 @@
                                 <igWPF:FieldLayout.Fields>
                                     <igWPF:Field Name="ThreadId"  Label="Id">
                                         <igWPF:Field.Settings>
-                                            <igWPF:FieldSettings CellWidth="30"/>
+                                            <igWPF:FieldSettings CellWidth="40"/>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
                                     <igWPF:Field Name="CurrentFrame"  Label="Current Frame">
@@ -84,10 +89,22 @@
                                     </igWPF:Field>
                                     <igWPF:Field Name="IsWaiting"  Label="Is Waiting">
                                         <igWPF:Field.Settings>
-                                            <igWPF:FieldSettings CellWidth="30"/>
+                                            <igWPF:FieldSettings CellWidth="30">
+                                                <!--<igWPF:FieldSettings.CellValuePresenterStyle>
+                                                    <Style TargetType="{x:Type igWPF:CellValuePresenter}">
+                                                        <Setter Property="Background" Value="{Binding Path=Cells[IsWaiting].Value, Converter={StaticResource IsWaitingToBackgroundConverter}}">
+                                                        </Setter>
+                                                    </Style>
+                                                </igWPF:FieldSettings.CellValuePresenterStyle>-->
+                                            </igWPF:FieldSettings>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
-                                    <igWPF:Field Name="StackHashCode"  Label="HashCode">
+                                    <igWPF:Field Name="FullStackString"  Label="Full Stack">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="50"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="StackHashCode"  Label="Hash Code">
                                         <igWPF:Field.Settings>
                                             <igWPF:FieldSettings CellWidth="50"/>
                                         </igWPF:Field.Settings>
@@ -98,7 +115,7 @@
                                 <igWPF:FieldLayout.Fields>
                                     <igWPF:Field Name="FrameIndex" Label="#">
                                         <igWPF:Field.Settings>
-                                            <igWPF:FieldSettings CellWidth="10"/>
+                                            <igWPF:FieldSettings CellWidth="20" CellMaxWidth="20"/>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
                                     <igWPF:Field Name="DisplayString" Label="Frame">

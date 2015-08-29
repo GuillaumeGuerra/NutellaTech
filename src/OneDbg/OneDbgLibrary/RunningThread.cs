@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Diagnostics.Runtime;
@@ -11,6 +12,7 @@ namespace OneDbgLibrary
         public uint LockCount { get; set; }
         public bool IsWaiting { get; set; }
         public string CurrentFrame { get; set; }
+        public string FullStackString { get; set; }
         public int StackHashCode { get; set; }
 
         public RunningThread(ClrThread thread)
@@ -31,7 +33,8 @@ namespace OneDbgLibrary
             if (Stack.Count > 0)
             {
                 CurrentFrame = Stack.First().DisplayString;
-                StackHashCode = string.Join("---", Stack.Select(frame => frame.DisplayString)).GetHashCode();
+                FullStackString = string.Join(Environment.NewLine, Stack.Select(frame => frame.DisplayString));
+                StackHashCode = FullStackString.GetHashCode();
             }
         }
 

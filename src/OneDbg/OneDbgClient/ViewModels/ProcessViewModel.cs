@@ -19,7 +19,6 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-
         public string Name
         {
             get { return _name; }
@@ -29,6 +28,7 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public string ProcessType { get; set; }
 
         public ProcessViewModel(Process process)
         {
@@ -39,6 +39,7 @@ namespace OneDbgClient.ViewModels
         {
             PID = process.Id;
             Name = process.ProcessName;
+            ProcessType = process.VirtualMemorySize == process.VirtualMemorySize64 ? "x86" : "x64";
         }
     }
 }

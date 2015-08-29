@@ -36,10 +36,19 @@
             <igWPF:XamDataGrid.FieldLayouts>
                 <igWPF:FieldLayout>
                     <igWPF:FieldLayout.Fields>
-                        <igWPF:Field Name="PID" />
+                        <igWPF:Field Name="PID">
+                            <igWPF:Field.Settings>
+                                <igWPF:FieldSettings CellWidth="100" CellMaxWidth="100" FilterOperatorDefaultValue="StartsWith"/>
+                            </igWPF:Field.Settings>
+                        </igWPF:Field>
                         <igWPF:Field Name="Name"  Label="Process Name">
                             <igWPF:Field.Settings>
-                                <igWPF:FieldSettings CellWidth="400"/>
+                                <igWPF:FieldSettings CellWidth="400" FilterOperatorDefaultValue="Contains"/>
+                            </igWPF:Field.Settings>
+                        </igWPF:Field>
+                        <igWPF:Field Name="ProcessType"  Label="Type">
+                            <igWPF:Field.Settings>
+                                <igWPF:FieldSettings CellWidth="100" CellMaxWidth="100"/>
                             </igWPF:Field.Settings>
                         </igWPF:Field>
                         <igWPF:Field Name="IsInDesignMode" Visibility="Collapsed" />

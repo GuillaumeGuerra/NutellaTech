@@ -13,6 +13,8 @@ namespace OneDbgClient.ViewModels
     public class SettingsViewModel : ViewModelBase
     {
         private bool _areSettingsVisible;
+        private string _gridTheme;
+
         public bool AreSettingsVisible
         {
             get { return _areSettingsVisible; }
@@ -23,11 +25,20 @@ namespace OneDbgClient.ViewModels
             }
         }
 
+        public string GridTheme
+        {
+            get { return _gridTheme; }
+            set
+            {
+                _gridTheme = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ICommand OpenSettingsCommand
         {
             get { return new RelayCommand(OpenSettings); }
         }
-
         public ICommand ILikeStarWarsCommand
         {
             get { return new RelayCommand(ILikeStarWars); }
