@@ -18,9 +18,19 @@ namespace TestApp
 
             Task.Factory.StartNew(() => InfiniteLoop1(1));
             Task.Factory.StartNew(() => InfiniteLoop1(2));
+            Task.Factory.StartNew(() => LogAliveInfiniteLoop());
 
             Parallel.ForEach(Enumerable.Range(1, 10), i => Wait1(i));
             Console.ReadLine();
+        }
+
+        private static void LogAliveInfiniteLoop()
+        {
+            while (true)
+            {
+                Console.WriteLine("{0} => I am alive !", DateTime.Now.ToString("HH:mm:ss"));
+                Thread.Sleep(1000);
+            }
         }
 
         private static void InfiniteLoop1(int i)
