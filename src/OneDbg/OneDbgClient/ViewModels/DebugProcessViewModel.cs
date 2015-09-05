@@ -68,6 +68,10 @@ namespace OneDbgClient.ViewModels
         {
             get { return new RelayCommand(LoadStacks); }
         }
+        public ICommand GetDeltaStacksCommand
+        {
+            get { return new RelayCommand(GetDeltaStacks); }
+        }
         public ICommand ExportToExcelCommand
         {
             get { return new RelayCommand<XamDataGrid>(ExportToExcel); }
@@ -78,6 +82,28 @@ namespace OneDbgClient.ViewModels
         }
 
         #endregion
+
+        private async void LoadStacks()
+        {
+            ThreadsSummary = string.Format("Getting threads ...");
+            AreThreadLoaded = false;
+
+            ThreadStacks = await GetStacks();
+
+            ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
+            AreThreadLoaded = true;
+        }
+
+        private async void GetDeltaStacks()
+        {
+            var previous = ThreadStacks;
+            var current = await GetStacks();
+        }
+
+        private async Task<List<RunningThread>> GetStacks()
+        {
+            return await Task.Run(() => new ThreadStacksInspector(Process.PID).LoadStacks());
+        }
 
         private void ExportToClipboard()
         {
@@ -119,17 +145,6 @@ namespace OneDbgClient.ViewModels
             Clipboard.SetText(uncFileName);
             MessageBox.Show(string.Format("Export to excel is successful, the UNC path has been copied into your clipboard ({0})", uncFileName),
                 "Export completed", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private async void LoadStacks()
-        {
-            ThreadsSummary = string.Format("Getting threads ...");
-            AreThreadLoaded = false;
-
-            ThreadStacks = await Task.Run(() => new ThreadStacksInspector(Process.PID).LoadStacks());
-
-            ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
-            AreThreadLoaded = true;
         }
     }
 }
