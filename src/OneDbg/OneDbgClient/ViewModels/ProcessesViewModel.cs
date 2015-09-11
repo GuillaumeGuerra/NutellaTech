@@ -96,7 +96,7 @@ namespace OneDbgClient.ViewModels
 
         private async void RefreshProcesses()
         {
-            AllProcesses.Clear();
+            //AllProcesses.Clear();
             Header = "Refresh in progress ...";
             IsRefreshAvailable = false;
 

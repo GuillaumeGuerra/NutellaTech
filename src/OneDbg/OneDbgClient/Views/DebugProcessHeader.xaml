@@ -5,6 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="20,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -16,20 +22,20 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Content="PID" />
-            <Label Content="{Binding Process.PID}" />
+            <TextBlock Text="PID" />
+            <TextBlock Text="{Binding Process.PID}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-            <Label Content="Process Name" />
-            <Label Content="{Binding Process.Name}" />
+            <TextBlock Text="Process Name" />
+            <TextBlock Text="{Binding Process.Name}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-            <Label Content="Virtual Memory" />
-            <Label Content="{Binding Process.InnerProcess.VirtualMemorySize64, StringFormat=\{0:N\}}" />
+            <TextBlock Text="Virtual Memory" />
+            <TextBlock Text="{Binding Process.InnerProcess.VirtualMemorySize64, StringFormat=#\,#}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-            <Label Content="Working Set" />
-            <Label Content="{Binding Process.InnerProcess.WorkingSet64, StringFormat=#\,#}" />
+            <TextBlock Text="Working Set" />
+            <TextBlock Text="{Binding Process.InnerProcess.WorkingSet64, StringFormat=#\,#}" />
         </StackPanel>
     </Grid>
 </UserControl>

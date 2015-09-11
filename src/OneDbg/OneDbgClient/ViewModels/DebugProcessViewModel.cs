@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,8 @@ namespace OneDbgClient.ViewModels
         private string _threadsSummary = "Please load the thread stacks";
         private bool _areThreadLoaded = false;
         private List<RunningThread> _previousThreadsSnapshot;
-        private Visibility _deltaStateVisibility;
+        private ObservableCollection<FieldSortDescription> _sortedFields = new ObservableCollection<FieldSortDescription>();
+        private Visibility _deltaStateVisibility = Visibility.Hidden;
 
         public ProcessViewModel Process
         {
@@ -66,12 +68,21 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public ObservableCollection<FieldSortDescription> SortedFields
+        {
+            get { return _sortedFields; }
+            set
+            {
+                _sortedFields = value;
+                RaisePropertyChanged();
+            }
+        }
         public Visibility DeltaStateVisibility
         {
             get { return _deltaStateVisibility; }
             set
             {
-                _deltaStateVisibility = value;
+                _deltaStateVisibility = value; 
                 RaisePropertyChanged();
             }
         }
@@ -95,20 +106,18 @@ namespace OneDbgClient.ViewModels
 
         #endregion
 
-        public DebugProcessViewModel()
-        {
-            DeltaStateVisibility = Visibility.Collapsed;
-        }
-
         private async void LoadStacks()
         {
             try
             {
                 ThreadsSummary = string.Format("Getting threads ...");
                 AreThreadLoaded = false;
+                DeltaStateVisibility=Visibility.Collapsed;
 
                 ThreadStacks = await GetStacks();
                 _previousThreadsSnapshot = ThreadStacks;
+
+                SortedFields.Clear();
 
                 ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
                 AreThreadLoaded = true;
@@ -141,6 +150,9 @@ namespace OneDbgClient.ViewModels
                     delta.NewThreads.Count,
                     delta.TerminatedThreads.Count);
 
+                SortedFields.Clear();
+                SortedFields.Add(new FieldSortDescription("DeltaState", ListSortDirection.Ascending, true));
+
                 AreThreadLoaded = true;
                 DeltaStateVisibility = Visibility.Visible;
             }
@@ -148,7 +160,6 @@ namespace OneDbgClient.ViewModels
             {
                 PopupService.ShowError("Unable to compute delta stacks", e);
                 AreThreadLoaded = false;
-                DeltaStateVisibility = Visibility.Collapsed;
             }
         }
 

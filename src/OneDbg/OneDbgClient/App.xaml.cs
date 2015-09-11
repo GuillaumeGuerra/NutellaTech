@@ -19,7 +19,6 @@ namespace OneDbgClient
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<ProcessesViewModel>();
@@ -27,14 +26,14 @@ namespace OneDbgClient
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<IPopupService, PopupService>();
 
-            base.OnStartup(e);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            base.OnStartup(e);
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("UnhandledException caught : " + Environment.NewLine + e.ExceptionObject.ToString(),
-                "UnhandledException", MessageBoxButton.OK, MessageBoxImage.Error);
+            ServiceLocator.Current.GetInstance<IPopupService>().ShowError("Unhandled Exception", "UnhandledException caught !!!", e.ExceptionObject as Exception);
         }
     }
 

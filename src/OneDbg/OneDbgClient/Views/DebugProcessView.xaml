@@ -4,14 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:converters="clr-namespace:OneDbgClient.Converters"
              x:Class="OneDbgClient.Views.DebugProcessView"
              xmlns:views="clr-namespace:OneDbgClient.Views"
+             xmlns:behaviors="clr-namespace:OneDbgClient.Behaviors"
              x:Name="DebugProcessUserControl"
+             Loaded="DebugProcessView_OnLoaded"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="900">
     <UserControl.Resources>
         <converters:IsWaitingToBackgroundConverter x:Key="IsWaitingToBackgroundConverter" />
+        
+        <!--Awful trick to make binding work on the fields-->
+        <ObjectDataProvider x:Key="ViewModel" />
     </UserControl.Resources>
     <Grid>
         <Grid>
@@ -39,7 +45,10 @@
                         <Button Content="To Excel" Command="{Binding ExportToExcelCommand}" CommandParameter="{Binding ElementName=XamDataGrid}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                         <Button Content="To Clipboard" Command="{Binding ExportToClipboardCommand}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                     </StackPanel>
-                    <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding ThreadStacks}" IsNestedDataDisplayEnabled="True" Theme="Office2010Blue" x:Name="XamDataGrid" BindToSampleData="True">
+                    <igWPF:XamDataGrid Grid.Row="1"  DataSource="{Binding ThreadStacks}" IsGroupByAreaExpanded="True" IsNestedDataDisplayEnabled="True" Theme="Office2010Blue" x:Name="XamDataGrid" BindToSampleData="True">
+                        <i:Interaction.Behaviors>
+                            <behaviors:XamDataGridBehavior SortedFields="{Binding SortedFields}"/>
+                        </i:Interaction.Behaviors>
                         <igWPF:XamDataGrid.ViewSettings>
                             <igWPF:GridViewSettings/>
                         </igWPF:XamDataGrid.ViewSettings>
@@ -67,7 +76,7 @@
                                             <igWPF:FieldSettings CellWidth="80"/>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
-                                    <igWPF:Field Name="DeltaState"  Label="Delta State">
+                                    <igWPF:Field Name="DeltaState"  Label="Delta State" Visibility="{Binding DeltaStateVisibility,Source={StaticResource ViewModel}}">
                                         <igWPF:Field.Settings>
                                             <igWPF:FieldSettings CellWidth="80"/>
                                         </igWPF:Field.Settings>

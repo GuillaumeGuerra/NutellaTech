@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +19,22 @@ namespace OneDbgClient.Behaviors
                 typeof(ObservableCollection<DataRecord>),
                 typeof(XamDataGridBehavior),
                 new PropertyMetadata());
+        public static readonly DependencyProperty SortedFieldsProperty =
+            DependencyProperty.Register(
+            "SortedFields",
+            typeof(ObservableCollection<FieldSortDescription>),
+            typeof(XamDataGridBehavior),
+            new PropertyMetadata(SortedFieldsPropertyChanged));
 
         public ObservableCollection<DataRecord> SelectedDataItems
         {
             get { return (ObservableCollection<DataRecord>)GetValue(SelectedDataItemsProperty); }
             set { SetValue(SelectedDataItemsProperty, value); }
+        }
+        public ObservableCollection<FieldSortDescription> SortedFields
+        {
+            get { return (ObservableCollection<FieldSortDescription>)GetValue(SortedFieldsProperty); }
+            set { SetValue(SortedFieldsProperty, value); }
         }
 
         protected override void OnAttached()
@@ -47,6 +59,22 @@ namespace OneDbgClient.Behaviors
                 {
                     SelectedDataItems.Add(selectedDataItem);
                 }
+            }
+        }
+
+        private static void SortedFieldsPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue != null)
+                (e.OldValue as ObservableCollection<FieldSortDescription>).CollectionChanged -= (dependencyObject as XamDataGridBehavior).OnSortedPropertiesChanged;
+            (e.NewValue as ObservableCollection<FieldSortDescription>).CollectionChanged += (dependencyObject as XamDataGridBehavior).OnSortedPropertiesChanged;
+        }
+
+        private void OnSortedPropertiesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            AssociatedObject.FieldLayouts[0].SortedFields.Clear();
+            foreach (var sortedField in SortedFields)
+            {
+                AssociatedObject.FieldLayouts[0].SortedFields.Add(sortedField);
             }
         }
     }

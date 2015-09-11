@@ -25,9 +25,10 @@ namespace OneDbgClient.Views
             InitializeComponent();
         }
 
-        public Visibility DeltaStateVisibility
+        private void DebugProcessView_OnLoaded(object sender, RoutedEventArgs e)
         {
-            get { return Visibility.Collapsed; }
+            // Awful trick to make binding work on the fields
+            (this.Resources["ViewModel"] as ObjectDataProvider).ObjectInstance = this.DataContext;
         }
     }
 }
