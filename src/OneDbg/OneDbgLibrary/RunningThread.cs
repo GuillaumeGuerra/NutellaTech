@@ -14,12 +14,20 @@ namespace OneDbgLibrary
         public string CurrentFrame { get; set; }
         public string FullStackString { get; set; }
         public int StackHashCode { get; set; }
+        public DeltaState DeltaState { get; set; }
+        public TimeSpan CpuTime { get; set; }
+        public TimeSpan KernelTime { get; set; }
 
         public RunningThread(ClrThread thread)
         {
             ThreadId = thread.OSThreadId;
             LockCount = thread.LockCount;
             IsWaiting = IsThreadWaiting(thread);
+            DeltaState=DeltaState.None;
+            
+            //TODO : find the right values for that
+            CpuTime = DateTime.Now - DateTime.Today;
+            KernelTime = CpuTime;
 
             int frameIndex = 0;
             Stack = thread.StackTrace.Select(frame => new StackFrame()

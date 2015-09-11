@@ -76,9 +76,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeltaState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunningThread.cs" />
     <Compile Include="StackFrame.cs" />
+    <Compile Include="ThreadStackDeltaComputation.cs" />
+    <Compile Include="ThreadStackDeltaComputer.cs" />
     <Compile Include="ThreadStacksInspector.cs" />
   </ItemGroup>
   <ItemGroup>

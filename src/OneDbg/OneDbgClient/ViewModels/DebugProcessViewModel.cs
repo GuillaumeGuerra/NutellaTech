@@ -13,11 +13,12 @@ using GalaSoft.MvvmLight.Command;
 using Infragistics.Documents.Excel;
 using Infragistics.Windows.DataPresenter;
 using Infragistics.Windows.DataPresenter.ExcelExporter;
+using OneDbgClient.Framework;
 using OneDbgLibrary;
 
 namespace OneDbgClient.ViewModels
 {
-    public class DebugProcessViewModel : ViewModelBase
+    public class DebugProcessViewModel : CommonViewModel
     {
         #region Properties
 
@@ -25,6 +26,8 @@ namespace OneDbgClient.ViewModels
         private List<RunningThread> _threadStacks;
         private string _threadsSummary = "Please load the thread stacks";
         private bool _areThreadLoaded = false;
+        private List<RunningThread> _previousThreadsSnapshot;
+        private Visibility _deltaStateVisibility;
 
         public ProcessViewModel Process
         {
@@ -63,6 +66,15 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public Visibility DeltaStateVisibility
+        {
+            get { return _deltaStateVisibility; }
+            set
+            {
+                _deltaStateVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public ICommand LoadStacksCommand
         {
@@ -83,68 +95,132 @@ namespace OneDbgClient.ViewModels
 
         #endregion
 
+        public DebugProcessViewModel()
+        {
+            DeltaStateVisibility = Visibility.Collapsed;
+        }
+
         private async void LoadStacks()
         {
-            ThreadsSummary = string.Format("Getting threads ...");
-            AreThreadLoaded = false;
+            try
+            {
+                ThreadsSummary = string.Format("Getting threads ...");
+                AreThreadLoaded = false;
 
-            ThreadStacks = await GetStacks();
+                ThreadStacks = await GetStacks();
+                _previousThreadsSnapshot = ThreadStacks;
 
-            ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
-            AreThreadLoaded = true;
+                ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
+                AreThreadLoaded = true;
+            }
+            catch (Exception e)
+            {
+                PopupService.ShowError("Unable to get stacks", "Make sure the process type (x64/x86) matches the current one", e);
+                AreThreadLoaded = false;
+            }
         }
 
         private async void GetDeltaStacks()
         {
-            var previous = ThreadStacks;
-            var current = await GetStacks();
+            try
+            {
+                ThreadsSummary = "Getting new snapshot of threads ...";
+                AreThreadLoaded = false;
+
+                var previous = _previousThreadsSnapshot;
+                var current = await GetStacks();
+                _previousThreadsSnapshot = previous;
+
+                ThreadsSummary = "Computing delta between the two snapshots ...";
+
+                var delta = await Task.Run(() => new ThreadStackDeltaComputer().Compare(previous, current));
+                ThreadStacks = delta.StillAliveThreads.Union(delta.NewThreads).Union(delta.TerminatedThreads).ToList();
+
+                ThreadsSummary = string.Format("{0} threads still running, {1} new, {2} terminated ...",
+                    delta.StillAliveThreads.Count,
+                    delta.NewThreads.Count,
+                    delta.TerminatedThreads.Count);
+
+                AreThreadLoaded = true;
+                DeltaStateVisibility = Visibility.Visible;
+            }
+            catch (Exception e)
+            {
+                PopupService.ShowError("Unable to compute delta stacks", e);
+                AreThreadLoaded = false;
+                DeltaStateVisibility = Visibility.Collapsed;
+            }
         }
 
-        private async Task<List<RunningThread>> GetStacks()
+        private Task<List<RunningThread>> GetStacks()
         {
-            return await Task.Run(() => new ThreadStacksInspector(Process.PID).LoadStacks());
+            return Task.Run(() => new ThreadStacksInspector(Process.PID).LoadStacks());
         }
 
         private void ExportToClipboard()
         {
-            var builder = new StringBuilder();
-            builder.AppendLine("PID-" + Process.PID + "\tProcess Name-" + Process.Name);
-            foreach (var thread in ThreadStacks)
+            try
             {
-                builder.AppendLine("ThreadId-" + thread.ThreadId + "\tLockCount-" + thread.LockCount);
-                foreach (var frame in thread.Stack)
+                var builder = new StringBuilder();
+                builder.AppendLine("PID-" + Process.PID + "\tProcess Name-" + Process.Name);
+                foreach (var thread in ThreadStacks)
                 {
-                    builder.AppendLine("\t" + frame.DisplayString);
+                    builder.AppendLine("ThreadId-" + thread.ThreadId + "\tLockCount-" + thread.LockCount);
+                    foreach (var frame in thread.Stack)
+                    {
+                        builder.AppendLine("\t" + frame.DisplayString);
+                    }
                 }
-            }
 
-            Clipboard.SetText(builder.ToString());
+                Clipboard.SetText(builder.ToString());
+            }
+            catch (Exception e)
+            {
+                PopupService.ShowError("Unable to export to clipboad", "It's possible that access to the clipboard is restricted", e);
+            }
         }
 
         private void ExportToExcel(XamDataGrid dataGrid)
         {
-            if (!Directory.Exists("Exports"))
-                Directory.CreateDirectory("Exports");
-            string fileName = Path.GetFullPath(string.Format("Exports/{0}.xlsx", Process.PID));
+            string uncFileName = null;
+            try
+            {
+                if (!Directory.Exists("Exports"))
+                    Directory.CreateDirectory("Exports");
+
+                string fileName = Path.GetFullPath(string.Format("Exports/{0}.xlsx", Process.PID));
+
+                try
+                {
+                    DataPresenterExcelExporter exporter = new DataPresenterExcelExporter();
+                    exporter.Export(dataGrid, fileName, WorkbookFormat.Excel2007, new ExportOptions());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Received exception : " + Environment.NewLine + ex.ToString(),
+                        "Unable to export to excel",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+
+                uncFileName = string.Format(@"\\{0}\{1}", Environment.MachineName, fileName.Replace(":", "$"));
+
+                PopupService.ShowInformation("Export completed", string.Format(
+                        "Export to excel is successful, the UNC path will be stored into your clipboard ({0})", uncFileName));
+            }
+            catch (Exception e)
+            {
+                PopupService.ShowError("Unable to export to excel", e);
+            }
 
             try
             {
-                DataPresenterExcelExporter exporter = new DataPresenterExcelExporter();
-                exporter.Export(dataGrid, fileName, WorkbookFormat.Excel2007, new ExportOptions());
+                Clipboard.SetText(uncFileName);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                MessageBox.Show("Received exception : " + Environment.NewLine + ex.ToString(),
-                                "Unable to export to excel",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                PopupService.ShowError("Unable to export to the clipboard", "It's possible that access to the clipboard is restricted", e);
             }
-
-            var uncFileName = string.Format(@"\\{0}\{1}", Environment.MachineName, fileName.Replace(":", "$"));
-
-            Clipboard.SetText(uncFileName);
-            MessageBox.Show(string.Format("Export to excel is successful, the UNC path has been copied into your clipboard ({0})", uncFileName),
-                "Export completed", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

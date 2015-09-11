@@ -19,9 +19,27 @@ namespace TestApp
             Task.Factory.StartNew(() => InfiniteLoop1(1));
             Task.Factory.StartNew(() => InfiniteLoop1(2));
             Task.Factory.StartNew(() => LogAliveInfiniteLoop());
+            Task.Factory.StartNew(() => NewThreadsLoop());
 
             Parallel.ForEach(Enumerable.Range(1, 10), i => Wait1(i));
             Console.ReadLine();
+        }
+
+        private static void NewThreadsLoop()
+        {
+            while (true)
+            {
+                Task.Factory.StartNew(() => ShortLifeThread(1));
+                Task.Factory.StartNew(() => ShortLifeThread(2));
+
+                Thread.Sleep(5000);
+            }
+        }
+
+        private static void ShortLifeThread(int i)
+        {
+            Thread.CurrentThread.Name = string.Format("ShortLifeThread - {0}", i);
+            Thread.Sleep(5000);
         }
 
         private static void LogAliveInfiniteLoop()

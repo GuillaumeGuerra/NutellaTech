@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using GalaSoft.MvvmLight;
+using OneDbgClient.Framework;
 
 namespace OneDbgClient.ViewModels
 {
-    public class ProcessViewModel : ViewModelBase
+    public class ProcessViewModel : CommonViewModel
     {
         private int _pid;
         private string _name;
@@ -29,6 +30,7 @@ namespace OneDbgClient.ViewModels
             }
         }
         public string ProcessType { get; set; }
+        public Process InnerProcess { get; set; }
 
         public ProcessViewModel(Process process)
         {
@@ -40,6 +42,7 @@ namespace OneDbgClient.ViewModels
             PID = process.Id;
             Name = process.ProcessName;
             ProcessType = process.VirtualMemorySize == process.VirtualMemorySize64 ? "x86" : "x64";
+            InnerProcess = process;
         }
     }
 }

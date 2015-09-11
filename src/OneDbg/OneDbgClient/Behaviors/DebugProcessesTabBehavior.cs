@@ -29,11 +29,6 @@ namespace OneDbgClient.Behaviors
             set { SetValue(DebugProcessesProperty, value); }
         }
 
-        protected override void OnAttached()
-        {
-            base.OnAttached();
-        }
-
         private void DebugProcesses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -55,7 +50,8 @@ namespace OneDbgClient.Behaviors
             {
                 Header = string.Format("{0} - {1}", process.Process.PID, process.Process.Name),
                 DataContext = process,
-                Content = new DebugProcessView()
+                Content = new DebugProcessView(),
+                IsSelected = true
             };
         }
     }

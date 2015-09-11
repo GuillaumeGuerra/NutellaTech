@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using OneDbgClient.Framework;
 
 namespace OneDbgClient.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : CommonViewModel
     {
         private bool _areSettingsVisible;
         private string _gridTheme;

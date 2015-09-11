@@ -10,10 +10,11 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Infragistics.Windows.DataPresenter;
+using OneDbgClient.Framework;
 
 namespace OneDbgClient.ViewModels
 {
-    public class ProcessesViewModel : ViewModelBase
+    public class ProcessesViewModel : CommonViewModel
     {
         #region Properties
 

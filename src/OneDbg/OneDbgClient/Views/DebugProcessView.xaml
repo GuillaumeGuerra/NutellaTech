@@ -6,6 +6,8 @@
              xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
              xmlns:converters="clr-namespace:OneDbgClient.Converters"
              x:Class="OneDbgClient.Views.DebugProcessView"
+             xmlns:views="clr-namespace:OneDbgClient.Views"
+             x:Name="DebugProcessUserControl"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="900">
     <UserControl.Resources>
@@ -19,30 +21,7 @@
             </Grid.RowDefinitions>
 
             <GroupBox Header="Process Summary" Grid.Row="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <Label Content="PID" />
-                        <Label Content="{Binding Process.PID}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                        <Label Content="Process Name" />
-                        <Label Content="{Binding Process.Name}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                        <Label Content="Virtual Memory" />
-                        <Label Content="TODO" />
-                    </StackPanel>
-                </Grid>
-
+                <views:DebugProcessHeader/>
             </GroupBox>
 
             <GroupBox Header="Threads Stacks" Grid.Row="1">
@@ -56,7 +35,7 @@
                     <Label Content="{Binding ThreadsSummary}"/>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
                         <Button Content="Refresh Stacks" Command="{Binding LoadStacksCommand}" Margin="10,0,10,0"/>
-                        <Button Content="Get Delta" Command="{Binding GetDeltaStacksCommand}" Margin="10,0,10,0"/>
+                        <Button Content="Get Delta" Command="{Binding GetDeltaStacksCommand}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                         <Button Content="To Excel" Command="{Binding ExportToExcelCommand}" CommandParameter="{Binding ElementName=XamDataGrid}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                         <Button Content="To Clipboard" Command="{Binding ExportToClipboardCommand}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                     </StackPanel>
@@ -78,14 +57,24 @@
                                             <igWPF:FieldSettings CellWidth="40"/>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
+                                    <igWPF:Field Name="CpuTime"  Label="Cpu Time">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="80"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="KernelTime"  Label="Kernel Time">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="80"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="DeltaState"  Label="Delta State">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="80"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
                                     <igWPF:Field Name="CurrentFrame"  Label="Current Frame">
                                         <igWPF:Field.Settings>
                                             <igWPF:FieldSettings CellWidth="500"/>
-                                        </igWPF:Field.Settings>
-                                    </igWPF:Field>
-                                    <igWPF:Field Name="LockCount"  Label="Locks">
-                                        <igWPF:Field.Settings>
-                                            <igWPF:FieldSettings CellWidth="30"/>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
                                     <igWPF:Field Name="IsWaiting"  Label="Is Waiting">
@@ -108,6 +97,11 @@
                                     <igWPF:Field Name="StackHashCode"  Label="Hash Code">
                                         <igWPF:Field.Settings>
                                             <igWPF:FieldSettings CellWidth="50"/>
+                                        </igWPF:Field.Settings>
+                                    </igWPF:Field>
+                                    <igWPF:Field Name="LockCount"  Label="Locks">
+                                        <igWPF:Field.Settings>
+                                            <igWPF:FieldSettings CellWidth="30"/>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
                                 </igWPF:FieldLayout.Fields>

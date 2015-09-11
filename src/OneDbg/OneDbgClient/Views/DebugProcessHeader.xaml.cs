@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace OneDbgClient.Views
 {
     /// <summary>
-    /// Interaction logic for DebugProcessView.xaml
+    /// Interaction logic for DebugProcessHeader.xaml
     /// </summary>
-    public partial class DebugProcessView : UserControl
+    public partial class DebugProcessHeader : UserControl
     {
-        public DebugProcessView()
+        public DebugProcessHeader()
         {
             InitializeComponent();
-        }
-
-        public Visibility DeltaStateVisibility
-        {
-            get { return Visibility.Collapsed; }
         }
     }
 }

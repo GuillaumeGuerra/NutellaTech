@@ -5,15 +5,6 @@ namespace OneDbgClient.ViewModels
 {
     public class ViewModelLocator
     {
-        public ViewModelLocator()
-        {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
-            SimpleIoc.Default.Register<ProcessesViewModel>();
-            SimpleIoc.Default.Register<MainWindowViewModel>();
-            SimpleIoc.Default.Register<SettingsViewModel>();
-        }
-
         public ProcessesViewModel Processes
         {
             get

@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
+using OneDbgClient.Framework;
 
 namespace OneDbgClient.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : CommonViewModel
     {
         private ObservableCollection<DebugProcessViewModel> _debugProcesses = new ObservableCollection<DebugProcessViewModel>();
 
