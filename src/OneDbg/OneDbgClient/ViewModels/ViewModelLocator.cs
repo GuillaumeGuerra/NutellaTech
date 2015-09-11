@@ -13,11 +13,11 @@ namespace OneDbgClient.ViewModels
             }
         }
 
-        public MainWindowViewModel MainWindow
+        public OneDbgMainViewModel OneDbgMain
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainWindowViewModel>();
+                return ServiceLocator.Current.GetInstance<OneDbgMainViewModel>();
             }
         }
 

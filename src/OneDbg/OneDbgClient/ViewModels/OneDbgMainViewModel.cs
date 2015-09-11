@@ -11,11 +11,11 @@ using OneDbgClient.Framework;
 
 namespace OneDbgClient.ViewModels
 {
-    public class MainWindowViewModel : CommonViewModel
+    public class OneDbgMainViewModel : CommonViewModel
     {
         private ObservableCollection<DebugProcessViewModel> _debugProcesses = new ObservableCollection<DebugProcessViewModel>();
 
-        public MainWindowViewModel()
+        public OneDbgMainViewModel()
         {
             App.Current.ViewModelLocator().Processes.OnProcessSelected += OnProcessSelected;
         }

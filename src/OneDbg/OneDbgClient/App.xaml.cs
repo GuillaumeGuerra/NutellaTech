@@ -23,7 +23,7 @@ namespace OneDbgClient
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<ProcessesViewModel>();
-            SimpleIoc.Default.Register<MainWindowViewModel>();
+            SimpleIoc.Default.Register<OneDbgMainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<IPopupService, PopupService>();
 
