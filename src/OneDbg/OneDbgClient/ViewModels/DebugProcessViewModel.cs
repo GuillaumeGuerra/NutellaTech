@@ -82,7 +82,7 @@ namespace OneDbgClient.ViewModels
             get { return _deltaStateVisibility; }
             set
             {
-                _deltaStateVisibility = value; 
+                _deltaStateVisibility = value;
                 RaisePropertyChanged();
             }
         }
@@ -112,7 +112,7 @@ namespace OneDbgClient.ViewModels
             {
                 ThreadsSummary = string.Format("Getting threads ...");
                 AreThreadLoaded = false;
-                DeltaStateVisibility=Visibility.Collapsed;
+                DeltaStateVisibility = Visibility.Collapsed;
 
                 ThreadStacks = await GetStacks();
                 _previousThreadsSnapshot = ThreadStacks;
@@ -217,7 +217,7 @@ namespace OneDbgClient.ViewModels
                 uncFileName = string.Format(@"\\{0}\{1}", Environment.MachineName, fileName.Replace(":", "$"));
 
                 PopupService.ShowInformation("Export completed", string.Format(
-                        "Export to excel is successful, the UNC path will be stored into your clipboard ({0})", uncFileName));
+                        "Export to excel is successful{0}The UNC path will be stored into your clipboard ({1})", Environment.NewLine, uncFileName));
             }
             catch (Exception e)
             {

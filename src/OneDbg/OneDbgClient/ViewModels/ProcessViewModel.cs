@@ -10,6 +10,8 @@ namespace OneDbgClient.ViewModels
     {
         private int _pid;
         private string _name;
+        private string _processType;
+        private Process _innerProcess;
 
         public int PID
         {
@@ -29,8 +31,24 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public string ProcessType { get; set; }
-        public Process InnerProcess { get; set; }
+        public string ProcessType
+        {
+            get { return _processType; }
+            set
+            {
+                _processType = value; 
+                RaisePropertyChanged();
+            }
+        }
+        public Process InnerProcess
+        {
+            get { return _innerProcess; }
+            set
+            {
+                _innerProcess = value; 
+                RaisePropertyChanged();
+            }
+        }
 
         public ProcessViewModel(Process process)
         {

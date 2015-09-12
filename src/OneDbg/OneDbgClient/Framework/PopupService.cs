@@ -1,28 +1,37 @@
 using System;
 using System.Windows;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace OneDbgClient.Framework
 {
     public class PopupService : IPopupService
     {
-        public void ShowError(string title, string explanation, Exception exception = null)
+        public async void ShowError(string title, string explanation, Exception exception = null)
         {
             string exceptionText = "";
             if (exception != null)
                 exceptionText = Environment.NewLine + Environment.NewLine + "Exception : " + Environment.NewLine + exception;
 
-            MessageBox.Show(App.Current.MainWindow, explanation + exceptionText, title, MessageBoxButton.OK, MessageBoxImage.Error);
+            await GetMetroWindow().ShowMessageAsync(title, explanation + exceptionText, MessageDialogStyle.Affirmative,
+                new MetroDialogSettings(){AnimateHide = true,AnimateShow = true});
         }
 
-        public void ShowError(string title, Exception exception)
+        private static MetroWindow GetMetroWindow()
         {
-            MessageBox.Show(App.Current.MainWindow, "Exception : " + Environment.NewLine + exception, title,
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            return App.Current.MainWindow as MetroWindow;
         }
 
-        public void ShowInformation(string title, string text)
+        public async void ShowError(string title, Exception exception)
         {
-            MessageBox.Show(App.Current.MainWindow, title, text, MessageBoxButton.OK, MessageBoxImage.Information);
+            await GetMetroWindow().ShowMessageAsync(title, "Exception : " + Environment.NewLine + exception, MessageDialogStyle.Affirmative,
+                new MetroDialogSettings() { AnimateHide = true, AnimateShow = true });
+        }
+
+        public async void ShowInformation(string title, string text)
+        {
+            await GetMetroWindow().ShowMessageAsync(title, text, MessageDialogStyle.Affirmative,
+                new MetroDialogSettings() { AnimateHide = true, AnimateShow = true });
         }
     }
 }
