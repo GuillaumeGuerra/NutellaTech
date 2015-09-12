@@ -13,11 +13,6 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Grid Theme" Grid.Row="0"/>
-        <ComboBox  Grid.Row="1" SelectedIndex="0" SelectedValue="{Binding GridTheme}">
-            <ComboBox.Items>
-                <ComboBoxItem>Office2013</ComboBoxItem>
-                <ComboBoxItem>Office2010Blue</ComboBoxItem>
-            </ComboBox.Items>
-        </ComboBox>
+        <ComboBox  Grid.Row="1" SelectedValue="{Binding GridTheme,Mode=TwoWay}" ItemsSource="{Binding AllGridThemes}"/>
     </Grid>
 </UserControl>

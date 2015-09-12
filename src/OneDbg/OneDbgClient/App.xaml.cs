@@ -25,6 +25,7 @@ namespace OneDbgClient
             SimpleIoc.Default.Register<OneDbgMainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<IPopupService, PopupService>();
+            SimpleIoc.Default.Register<IThemeService, ThemeService>();
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 

@@ -123,7 +123,9 @@
     <Compile Include="Framework\CommonViewModel.cs" />
     <Compile Include="Framework\IPopupService.cs" />
     <Compile Include="Framework\PopupService.cs" />
+    <Compile Include="Framework\ThemeService.cs" />
     <Compile Include="ViewModels\DebugProcessViewModel.cs" />
+    <Compile Include="Framework\IThemeService.cs" />
     <Compile Include="ViewModels\OneDbgMainViewModel.cs" />
     <Compile Include="ViewModels\ProcessesViewModel.cs" />
     <Compile Include="ViewModels\ProcessViewModel.cs" />

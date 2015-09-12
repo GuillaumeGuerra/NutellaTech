@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 using Infragistics.Windows.DataPresenter;
+using Microsoft.Practices.ServiceLocation;
+using OneDbgClient.Framework;
 
 namespace OneDbgClient.Behaviors
 {
@@ -40,14 +42,18 @@ namespace OneDbgClient.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
+
             AssociatedObject.SelectedItemsChanged += AssociatedObjectOnSelectedItemsChanged;
             AssociatedObjectOnSelectedItemsChanged(AssociatedObject, null);
+            ServiceLocator.Current.GetInstance<IThemeService>().RegisterThemedObject(AssociatedObject);
         }
 
         protected override void OnDetaching()
         {
-            AssociatedObject.SelectedItemsChanged -= AssociatedObjectOnSelectedItemsChanged;
             base.OnDetaching();
+
+            AssociatedObject.SelectedItemsChanged -= AssociatedObjectOnSelectedItemsChanged;
+            ServiceLocator.Current.GetInstance<IThemeService>().UnregisterThemedObject(AssociatedObject);
         }
 
         private void AssociatedObjectOnSelectedItemsChanged(object sender, Infragistics.Windows.DataPresenter.Events.SelectedItemsChangedEventArgs e)

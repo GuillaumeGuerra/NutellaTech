@@ -1,21 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
-using OneDbgClient.ViewModels;
 
 namespace OneDbgClient.Framework
 {
     public class CommonViewModel : ViewModelBase
     {
-        public IPopupService PopupService { get; set; }
+        protected IPopupService PopupService { get; set; }
+        protected IThemeService ThemeService { get; set; }
 
         public CommonViewModel()
         {
             PopupService = ServiceLocator.Current.GetInstance<IPopupService>();
+            ThemeService = ServiceLocator.Current.GetInstance<IThemeService>();
         }
     }
 }
