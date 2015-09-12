@@ -42,7 +42,7 @@ namespace OneDbgClient.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
-
+            
             AssociatedObject.SelectedItemsChanged += AssociatedObjectOnSelectedItemsChanged;
             AssociatedObjectOnSelectedItemsChanged(AssociatedObject, null);
             ServiceLocator.Current.GetInstance<IThemeService>().RegisterThemedObject(AssociatedObject);

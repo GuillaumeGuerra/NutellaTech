@@ -2,7 +2,7 @@ using System;
 
 namespace OneDbgClient.Framework
 {
-    public interface IPopupService
+    public interface IMessageService
     {
         void ShowError(string title, string explanation, Exception exception);
         void ShowError(string title, Exception exception);

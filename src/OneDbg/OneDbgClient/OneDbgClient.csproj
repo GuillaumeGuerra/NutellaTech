@@ -121,8 +121,8 @@
     <Compile Include="Behaviors\XamDataGridBehavior.cs" />
     <Compile Include="Converters\IsWaitingToBackgroundConverter.cs" />
     <Compile Include="Framework\CommonViewModel.cs" />
-    <Compile Include="Framework\IPopupService.cs" />
-    <Compile Include="Framework\PopupService.cs" />
+    <Compile Include="Framework\IMessageService.cs" />
+    <Compile Include="Framework\MessageService.cs" />
     <Compile Include="Framework\ThemeService.cs" />
     <Compile Include="ViewModels\DebugProcessViewModel.cs" />
     <Compile Include="Framework\IThemeService.cs" />

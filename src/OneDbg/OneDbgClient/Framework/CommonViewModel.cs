@@ -5,12 +5,12 @@ namespace OneDbgClient.Framework
 {
     public class CommonViewModel : ViewModelBase
     {
-        protected IPopupService PopupService { get; set; }
+        protected IMessageService MessageService { get; set; }
         protected IThemeService ThemeService { get; set; }
 
         public CommonViewModel()
         {
-            PopupService = ServiceLocator.Current.GetInstance<IPopupService>();
+            MessageService = ServiceLocator.Current.GetInstance<IMessageService>();
             ThemeService = ServiceLocator.Current.GetInstance<IThemeService>();
         }
     }

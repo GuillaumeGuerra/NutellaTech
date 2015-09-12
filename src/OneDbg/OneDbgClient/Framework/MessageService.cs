@@ -5,7 +5,7 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace OneDbgClient.Framework
 {
-    public class PopupService : IPopupService
+    public class MessageService : IMessageService
     {
         public async void ShowError(string title, string explanation, Exception exception = null)
         {

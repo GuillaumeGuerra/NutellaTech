@@ -23,6 +23,7 @@ namespace OneDbgClient.ViewModels
         private bool _isRefreshAvailable = true;
         private ObservableCollection<DataRecord> _selectedProcesses = new ObservableCollection<DataRecord>();
         private bool _isDebugAvailable = false;
+        private bool _isProgressRingActive = false;
 
         public ObservableCollection<ProcessViewModel> AllProcesses
         {
@@ -57,6 +58,15 @@ namespace OneDbgClient.ViewModels
             set
             {
                 _isDebugAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool IsProgressRingActive
+        {
+            get { return _isProgressRingActive; }
+            set
+            {
+                _isProgressRingActive = value;
                 RaisePropertyChanged();
             }
         }
@@ -96,15 +106,25 @@ namespace OneDbgClient.ViewModels
 
         private async void RefreshProcesses()
         {
-            //AllProcesses.Clear();
-            Header = "Refresh in progress ...";
-            IsRefreshAvailable = false;
+            try
+            {
+                Header = "Refresh in progress ...";
+                IsRefreshAvailable = false;
+                IsProgressRingActive = true;
 
-            var allProcesses = await Task.Run(() => Process.GetProcesses().Select(process => new ProcessViewModel(process)).ToList());
-            AllProcesses = new ObservableCollection<ProcessViewModel>(allProcesses);
+                var allProcesses = await Task.Run(() => Process.GetProcesses().Select(process => new ProcessViewModel(process)).ToList());
+                AllProcesses = new ObservableCollection<ProcessViewModel>(allProcesses);
 
-            Header = string.Format("{0} processes available for debug", AllProcesses.Count);
-            IsRefreshAvailable = true;
+                Header = string.Format("{0} processes available for debug", AllProcesses.Count);
+                IsRefreshAvailable = true;
+                IsProgressRingActive = false;
+            }
+            catch (Exception e)
+            {
+                MessageService.ShowError("Unable to refresh processes", e);
+                IsRefreshAvailable = false;
+                IsProgressRingActive = false;
+            }
         }
 
         private void DebugProcess()

@@ -59,6 +59,7 @@ namespace OneDbgClient.ViewModels
 
         private void ILikeStarWars()
         {
+            MessageService.ShowInformation("OMG, me too !","Star Trek sucks");
             Process.Start("http://starwars.wikia.com/wiki/Main_Page");
         }
 

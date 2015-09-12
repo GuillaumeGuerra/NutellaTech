@@ -30,6 +30,7 @@ namespace OneDbgClient.ViewModels
         private List<RunningThread> _previousThreadsSnapshot;
         private ObservableCollection<FieldSortDescription> _sortedFields = new ObservableCollection<FieldSortDescription>();
         private Visibility _deltaStateVisibility = Visibility.Hidden;
+        private bool _isProgressRingActive = false;
 
         public ProcessViewModel Process
         {
@@ -86,6 +87,15 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public bool IsProgressRingActive
+        {
+            get { return _isProgressRingActive; }
+            set
+            {
+                _isProgressRingActive = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public ICommand LoadStacksCommand
         {
@@ -113,6 +123,7 @@ namespace OneDbgClient.ViewModels
                 ThreadsSummary = string.Format("Getting threads ...");
                 AreThreadLoaded = false;
                 DeltaStateVisibility = Visibility.Collapsed;
+                IsProgressRingActive = true;
 
                 ThreadStacks = await GetStacks();
                 _previousThreadsSnapshot = ThreadStacks;
@@ -121,11 +132,13 @@ namespace OneDbgClient.ViewModels
 
                 ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
                 AreThreadLoaded = true;
+                IsProgressRingActive = false;
             }
             catch (Exception e)
             {
-                PopupService.ShowError("Unable to get stacks", "Make sure the process type (x64/x86) matches the current one", e);
+                MessageService.ShowError("Unable to get stacks", "Make sure the process type (x64/x86) matches the current one", e);
                 AreThreadLoaded = false;
+                IsProgressRingActive = false;
             }
         }
 
@@ -135,6 +148,7 @@ namespace OneDbgClient.ViewModels
             {
                 ThreadsSummary = "Getting new snapshot of threads ...";
                 AreThreadLoaded = false;
+                IsProgressRingActive = true;
 
                 var previous = _previousThreadsSnapshot;
                 var current = await GetStacks();
@@ -155,11 +169,13 @@ namespace OneDbgClient.ViewModels
 
                 AreThreadLoaded = true;
                 DeltaStateVisibility = Visibility.Visible;
+                IsProgressRingActive = false;
             }
             catch (Exception e)
             {
-                PopupService.ShowError("Unable to compute delta stacks", e);
+                MessageService.ShowError("Unable to compute delta stacks", e);
                 AreThreadLoaded = false;
+                IsProgressRingActive = false;
             }
         }
 
@@ -187,7 +203,7 @@ namespace OneDbgClient.ViewModels
             }
             catch (Exception e)
             {
-                PopupService.ShowError("Unable to export to clipboad", "It's possible that access to the clipboard is restricted", e);
+                MessageService.ShowError("Unable to export to clipboad", "It's possible that access to the clipboard is restricted", e);
             }
         }
 
@@ -216,12 +232,12 @@ namespace OneDbgClient.ViewModels
 
                 uncFileName = string.Format(@"\\{0}\{1}", Environment.MachineName, fileName.Replace(":", "$"));
 
-                PopupService.ShowInformation("Export completed", string.Format(
+                MessageService.ShowInformation("Export completed", string.Format(
                         "Export to excel is successful{0}The UNC path will be stored into your clipboard ({1})", Environment.NewLine, uncFileName));
             }
             catch (Exception e)
             {
-                PopupService.ShowError("Unable to export to excel", e);
+                MessageService.ShowError("Unable to export to excel", e);
             }
 
             try
@@ -230,7 +246,7 @@ namespace OneDbgClient.ViewModels
             }
             catch (Exception e)
             {
-                PopupService.ShowError("Unable to export to the clipboard", "It's possible that access to the clipboard is restricted", e);
+                MessageService.ShowError("Unable to export to the clipboard", "It's possible that access to the clipboard is restricted", e);
             }
         }
     }

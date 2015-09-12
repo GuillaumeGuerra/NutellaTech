@@ -13,6 +13,7 @@ namespace OneDbgClient.Framework
         public ThemeService()
         {
             ThemedElements = new List<FrameworkElement>();
+            ActiveGridTheme = "Office2010Blue";
         }
 
         public void ApplyTheme(string gridTheme)

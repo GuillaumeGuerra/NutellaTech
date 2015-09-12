@@ -9,6 +9,7 @@
              x:Class="OneDbgClient.Views.DebugProcessView"
              xmlns:views="clr-namespace:OneDbgClient.Views"
              xmlns:behaviors="clr-namespace:OneDbgClient.Behaviors"
+             xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
              x:Name="DebugProcessUserControl"
              Loaded="DebugProcessView_OnLoaded"
              mc:Ignorable="d" 
@@ -34,24 +35,24 @@
 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Label Content="{Binding ThreadsSummary}"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
-                        <Button Content="Refresh Stacks" Command="{Binding LoadStacksCommand}" Margin="10,0,10,0"/>
-                        <Button Content="Get Delta" Command="{Binding GetDeltaStacksCommand}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
-                        <Button Content="To Excel" Command="{Binding ExportToExcelCommand}" CommandParameter="{Binding ElementName=XamDataGrid}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding ThreadsSummary}" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <mahApps:ProgressRing IsActive="{Binding IsProgressRingActive}" Width="30" IsLarge="False" Margin="20,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Content="Refresh Stacks" Command="{Binding LoadStacksCommand}" Margin="10,0,0,0"/>
+                        <Button Content="Get Delta" Command="{Binding GetDeltaStacksCommand}" Margin="10,0,0,0" IsEnabled="{Binding AreThreadLoaded}"/>
+                        <Button Content="To Excel" Command="{Binding ExportToExcelCommand}" CommandParameter="{Binding ElementName=XamDataGrid}" Margin="10,0,0,0" IsEnabled="{Binding AreThreadLoaded}"/>
                         <Button Content="To Clipboard" Command="{Binding ExportToClipboardCommand}" Margin="10,0,10,0" IsEnabled="{Binding AreThreadLoaded}"/>
                     </StackPanel>
                     <igWPF:XamDataGrid Grid.Row="1"  DataSource="{Binding ThreadStacks}" IsGroupByAreaExpanded="True" IsNestedDataDisplayEnabled="True" Theme="Office2010Blue" x:Name="XamDataGrid" BindToSampleData="True">
                         <i:Interaction.Behaviors>
                             <behaviors:XamDataGridBehavior SortedFields="{Binding SortedFields}"/>
                         </i:Interaction.Behaviors>
-                        <igWPF:XamDataGrid.ViewSettings>
-                            <igWPF:GridViewSettings/>
-                        </igWPF:XamDataGrid.ViewSettings>
                         <igWPF:XamDataGrid.FieldSettings>
                             <igWPF:FieldSettings AllowEdit="False" CellClickAction="SelectCell" AllowRecordFiltering="True" FilterOperatorDefaultValue="Contains" FilterStringComparisonType="CaseInsensitive"/>
                         </igWPF:XamDataGrid.FieldSettings>
@@ -116,10 +117,13 @@
                                 </igWPF:FieldLayout.Fields>
                             </igWPF:FieldLayout>
                             <igWPF:FieldLayout ParentFieldName="Stack">
+                                <igWPF:FieldLayout.FieldSettings>
+                                    <igWPF:FieldSettings LabelClickAction="Nothing"/>
+                                </igWPF:FieldLayout.FieldSettings>
                                 <igWPF:FieldLayout.Fields>
                                     <igWPF:Field Name="FrameIndex" Label="#">
                                         <igWPF:Field.Settings>
-                                            <igWPF:FieldSettings CellWidth="20" CellMaxWidth="20"/>
+                                            <igWPF:FieldSettings CellWidth="30" CellMaxWidth="30"/>
                                         </igWPF:Field.Settings>
                                     </igWPF:Field>
                                     <igWPF:Field Name="DisplayString" Label="Frame">

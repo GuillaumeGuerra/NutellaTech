@@ -24,7 +24,7 @@ namespace OneDbgClient
             SimpleIoc.Default.Register<ProcessesViewModel>();
             SimpleIoc.Default.Register<OneDbgMainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
-            SimpleIoc.Default.Register<IPopupService, PopupService>();
+            SimpleIoc.Default.Register<IMessageService, MessageService>();
             SimpleIoc.Default.Register<IThemeService, ThemeService>();
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -34,7 +34,7 @@ namespace OneDbgClient
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            ServiceLocator.Current.GetInstance<IPopupService>().ShowError("Unhandled Exception", "UnhandledException caught !!!", e.ExceptionObject as Exception);
+            ServiceLocator.Current.GetInstance<IMessageService>().ShowError("Unhandled Exception", "UnhandledException caught !!!", e.ExceptionObject as Exception);
         }
     }
 

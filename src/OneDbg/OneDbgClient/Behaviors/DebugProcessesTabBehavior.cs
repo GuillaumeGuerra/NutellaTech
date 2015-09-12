@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
+using Infragistics.Windows.Controls;
 using OneDbgClient.ViewModels;
 using OneDbgClient.Views;
 
 namespace OneDbgClient.Behaviors
 {
-    public class DebugProcessesTabBehavior : Behavior<TabControl>
+    public class DebugProcessesTabBehavior : Behavior<XamTabControl>
     {
         public static readonly DependencyProperty DebugProcessesProperty = DependencyProperty.Register("DebugProcesses", typeof(ObservableCollection<DebugProcessViewModel>), typeof(DebugProcessesTabBehavior), new PropertyMetadata(DebugProcessesChanged));
 
@@ -44,14 +45,15 @@ namespace OneDbgClient.Behaviors
             }
         }
 
-        private static TabItem PrepareTabForNewProcessToDebug(DebugProcessViewModel process)
+        private static TabItemEx PrepareTabForNewProcessToDebug(DebugProcessViewModel process)
         {
-            return new TabItem()
+            return new TabItemEx()
             {
                 Header = string.Format("{0} - {1}", process.Process.PID, process.Process.Name),
                 DataContext = process,
                 Content = new DebugProcessView(),
-                IsSelected = true
+                IsSelected = true,
+                CloseButtonVisibility = TabItemCloseButtonVisibility.WhenSelected
             };
         }
     }
