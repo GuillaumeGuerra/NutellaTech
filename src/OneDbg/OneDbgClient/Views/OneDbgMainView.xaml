@@ -4,8 +4,7 @@
         x:Class="OneDbgClient.Views.OneDbgMainView"
         Title="OneDbg" Height="900" Width="900"
         DataContext="{Binding OneDbgMain, Mode=OneWay, Source={StaticResource Locator}}"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:b="clr-namespace:OneDbgClient.Behaviors"
         xmlns:views="clr-namespace:OneDbgClient.Views"
         xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls">
@@ -26,13 +25,13 @@
     </mahApps:MetroWindow.Flyouts>
 
     <Grid>
-        <igWPF:XamTabControl Theme="Metro">
+        <mahApps:MetroAnimatedSingleRowTabControl>
             <i:Interaction.Behaviors>
                 <b:DebugProcessesTabBehavior DebugProcesses="{Binding DebugProcesses}"/>
             </i:Interaction.Behaviors>
-            <igWPF:TabItemEx  Header="Processes" CloseButtonVisibility="Visible" AllowClosing="False">
+            <mahApps:MetroTabItem Header="Processes" CloseButtonEnabled="False">
                 <views:ProcessesView/>
-            </igWPF:TabItemEx>
-        </igWPF:XamTabControl>
+            </mahApps:MetroTabItem>
+        </mahApps:MetroAnimatedSingleRowTabControl>
     </Grid>
 </mahApps:MetroWindow>
