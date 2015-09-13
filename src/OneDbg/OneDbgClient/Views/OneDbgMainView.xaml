@@ -24,7 +24,7 @@
         </mahApps:FlyoutsControl>
     </mahApps:MetroWindow.Flyouts>
 
-    <Grid>
+    <Grid Margin="10">
         <mahApps:MetroAnimatedSingleRowTabControl>
             <i:Interaction.Behaviors>
                 <b:DebugProcessesTabBehavior DebugProcesses="{Binding DebugProcesses}"/>
