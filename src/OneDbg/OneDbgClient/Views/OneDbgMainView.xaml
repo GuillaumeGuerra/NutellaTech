@@ -5,10 +5,11 @@
         Title="OneDbg" Height="900" Width="900"
         DataContext="{Binding OneDbgMain, Mode=OneWay, Source={StaticResource Locator}}"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         xmlns:b="clr-namespace:OneDbgClient.Behaviors"
         xmlns:views="clr-namespace:OneDbgClient.Views"
         xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls">
-    
+
     <mahApps:MetroWindow.RightWindowCommands>
         <mahApps:WindowCommands>
             <Button Content="Settings" Command="{Binding Settings.OpenSettingsCommand,Source={StaticResource Locator}}"/>
@@ -18,20 +19,25 @@
 
     <mahApps:MetroWindow.Flyouts>
         <mahApps:FlyoutsControl>
-            <mahApps:Flyout Position="Right" Width="400" Theme="Dark" Header="Settings" Background="{StaticResource BlueBackground}" IsOpen="{Binding Settings.AreSettingsVisible,Source={StaticResource Locator}}">
+            <mahApps:Flyout Position="Right" Width="400" Theme="Dark" Header="Settings" Background="{DynamicResource MaterialDesignPaper}" IsOpen="{Binding Settings.AreSettingsVisible,Source={StaticResource Locator}}">
                 <views:SettingsView Margin="30"/>
             </mahApps:Flyout>
         </mahApps:FlyoutsControl>
     </mahApps:MetroWindow.Flyouts>
 
-    <Grid Margin="10">
-        <mahApps:MetroAnimatedSingleRowTabControl>
+    <Grid>
+        <dragablz:TabablzControl TextElement.Foreground="{DynamicResource MaterialDesignBody}" BorderThickness="0"
+                             Background="{DynamicResource MaterialDesignPaper}" Margin="0,-1,0,1">
             <i:Interaction.Behaviors>
                 <b:DebugProcessesTabBehavior DebugProcesses="{Binding DebugProcesses}"/>
             </i:Interaction.Behaviors>
-            <mahApps:MetroTabItem Header="Processes" CloseButtonEnabled="False">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController/>
+            </dragablz:TabablzControl.InterTabController>
+
+            <TabItem Header="Processes">
                 <views:ProcessesView/>
-            </mahApps:MetroTabItem>
-        </mahApps:MetroAnimatedSingleRowTabControl>
+            </TabItem>
+        </dragablz:TabablzControl>
     </Grid>
 </mahApps:MetroWindow>

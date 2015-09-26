@@ -11,6 +11,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600" 
              DataContext="{Binding Processes, Mode=OneWay, Source={StaticResource Locator}}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -18,11 +19,11 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
             <TextBlock Text="{Binding Header}" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <mahApps:ProgressRing IsActive="{Binding IsProgressRingActive}" Width="30" IsLarge="False" Margin="20,0,0,0"/>
+            <ProgressBar Visibility="{Binding IsProgressRingActive}" IsIndeterminate="True" Width="150" Margin="20,0,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button Content="Refresh Processes" Command="{Binding RefreshProcessesCommand}" IsEnabled="{Binding IsRefreshAvailable}" Margin="10,0,10,0"/>
-            <Button Content="Debug Selected Processes" Command="{Binding DebugProcessCommand}" IsEnabled="{Binding IsDebugAvailable}" Margin="10,0,10,0"/>
+            <Button Content="REFRESH PROCESSES" Command="{Binding RefreshProcessesCommand}" IsEnabled="{Binding IsRefreshAvailable}" Margin="10,0,10,0"/>
+            <Button Content="DEBUG SELECTED PROCESSES" Command="{Binding DebugProcessCommand}" IsEnabled="{Binding IsDebugAvailable}" Margin="10,0,10,0"/>
         </StackPanel>
         <igWPF:XamDataGrid Grid.Row="1" DataSource="{Binding AllProcesses}" IsGroupByAreaExpanded="True" BindToSampleData="True" IsNestedDataDisplayEnabled="False" Theme="Office2010Blue">
             <i:Interaction.Behaviors>

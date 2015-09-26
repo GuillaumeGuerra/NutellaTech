@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading;
 using GalaSoft.MvvmLight;
 using OneDbgClient.Framework;
 

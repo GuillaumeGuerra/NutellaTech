@@ -23,7 +23,7 @@ namespace OneDbgClient.ViewModels
         private bool _isRefreshAvailable = true;
         private ObservableCollection<DataRecord> _selectedProcesses = new ObservableCollection<DataRecord>();
         private bool _isDebugAvailable = false;
-        private bool _isProgressRingActive = false;
+        private Visibility _isProgressRingActive = Visibility.Hidden;
 
         public ObservableCollection<ProcessViewModel> AllProcesses
         {
@@ -61,7 +61,7 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public bool IsProgressRingActive
+        public Visibility IsProgressRingActive
         {
             get { return _isProgressRingActive; }
             set
@@ -110,20 +110,20 @@ namespace OneDbgClient.ViewModels
             {
                 Header = "Refresh in progress ...";
                 IsRefreshAvailable = false;
-                IsProgressRingActive = true;
+                IsProgressRingActive = Visibility.Visible;
 
                 var allProcesses = await Task.Run(() => Process.GetProcesses().Select(process => new ProcessViewModel(process)).ToList());
                 AllProcesses = new ObservableCollection<ProcessViewModel>(allProcesses);
 
                 Header = string.Format("{0} processes available for debug", AllProcesses.Count);
                 IsRefreshAvailable = true;
-                IsProgressRingActive = false;
+                IsProgressRingActive = Visibility.Hidden;
             }
             catch (Exception e)
             {
                 MessageService.ShowError("Unable to refresh processes", e);
                 IsRefreshAvailable = false;
-                IsProgressRingActive = false;
+                IsProgressRingActive = Visibility.Hidden;
             }
         }
 

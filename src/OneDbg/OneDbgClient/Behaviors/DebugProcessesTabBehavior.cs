@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
+using Dragablz;
 using Infragistics.Windows.Controls;
 using MahApps.Metro.Controls;
 using OneDbgClient.ViewModels;
@@ -15,7 +16,7 @@ using OneDbgClient.Views;
 
 namespace OneDbgClient.Behaviors
 {
-    public class DebugProcessesTabBehavior : Behavior<MetroAnimatedSingleRowTabControl>
+    public class DebugProcessesTabBehavior : Behavior<TabablzControl>
     {
         public static readonly DependencyProperty DebugProcessesProperty = DependencyProperty.Register("DebugProcesses", typeof(ObservableCollection<DebugProcessViewModel>), typeof(DebugProcessesTabBehavior), new PropertyMetadata(DebugProcessesChanged));
 
@@ -46,15 +47,14 @@ namespace OneDbgClient.Behaviors
             }
         }
 
-        private static MetroTabItem PrepareTabForNewProcessToDebug(DebugProcessViewModel process)
+        private static TabItem PrepareTabForNewProcessToDebug(DebugProcessViewModel process)
         {
-            return new MetroTabItem()
+            return new TabItem()
             {
                 Header = string.Format("{0} - {1}", process.Process.PID, process.Process.Name),
                 DataContext = process,
                 Content = new DebugProcessView(),
-                IsSelected = true,
-                CloseButtonEnabled = true
+                IsSelected = true
             };
         }
     }

@@ -30,7 +30,7 @@ namespace OneDbgClient.ViewModels
         private List<RunningThread> _previousThreadsSnapshot;
         private ObservableCollection<FieldSortDescription> _sortedFields = new ObservableCollection<FieldSortDescription>();
         private Visibility _deltaStateVisibility = Visibility.Hidden;
-        private bool _isProgressRingActive = false;
+        private Visibility _isProgressRingActive = Visibility.Hidden;
 
         public ProcessViewModel Process
         {
@@ -87,7 +87,7 @@ namespace OneDbgClient.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public bool IsProgressRingActive
+        public Visibility IsProgressRingActive
         {
             get { return _isProgressRingActive; }
             set
@@ -123,7 +123,7 @@ namespace OneDbgClient.ViewModels
                 ThreadsSummary = string.Format("Getting threads ...");
                 AreThreadLoaded = false;
                 DeltaStateVisibility = Visibility.Collapsed;
-                IsProgressRingActive = true;
+                IsProgressRingActive = Visibility.Visible;
 
                 ThreadStacks = await GetStacks();
                 _previousThreadsSnapshot = ThreadStacks;
@@ -132,13 +132,13 @@ namespace OneDbgClient.ViewModels
 
                 ThreadsSummary = string.Format("{0} threads found", ThreadStacks.Count);
                 AreThreadLoaded = true;
-                IsProgressRingActive = false;
+                IsProgressRingActive = Visibility.Hidden;
             }
             catch (Exception e)
             {
                 MessageService.ShowError("Unable to get stacks", "Make sure the process type (x64/x86) matches the current one", e);
                 AreThreadLoaded = false;
-                IsProgressRingActive = false;
+                IsProgressRingActive = Visibility.Hidden;
             }
         }
 
@@ -148,7 +148,7 @@ namespace OneDbgClient.ViewModels
             {
                 ThreadsSummary = "Getting new snapshot of threads ...";
                 AreThreadLoaded = false;
-                IsProgressRingActive = true;
+                IsProgressRingActive = Visibility.Visible;
 
                 var previous = _previousThreadsSnapshot;
                 var current = await GetStacks();
@@ -169,13 +169,13 @@ namespace OneDbgClient.ViewModels
 
                 AreThreadLoaded = true;
                 DeltaStateVisibility = Visibility.Visible;
-                IsProgressRingActive = false;
+                IsProgressRingActive = Visibility.Hidden;
             }
             catch (Exception e)
             {
                 MessageService.ShowError("Unable to compute delta stacks", e);
                 AreThreadLoaded = false;
-                IsProgressRingActive = false;
+                IsProgressRingActive = Visibility.Hidden;
             }
         }
 

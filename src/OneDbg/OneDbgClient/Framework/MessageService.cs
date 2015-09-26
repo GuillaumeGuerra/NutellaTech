@@ -7,6 +7,23 @@ namespace OneDbgClient.Framework
 {
     public class MessageService : IMessageService
     {
+        private  MetroDialogSettings _metroDialogSettings;
+
+        public MessageService()
+        {
+            _metroDialogSettings = new MetroDialogSettings()
+            {
+                AnimateHide = true,
+                AnimateShow = true,
+                CustomResourceDictionary =
+                    new ResourceDictionary
+                    {
+                        Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.MahApps.Dialogs.xaml")
+                    },
+                SuppressDefaultResources = true
+            };
+        }
+
         public async void ShowError(string title, string explanation, Exception exception = null)
         {
             string exceptionText = "";
@@ -14,24 +31,24 @@ namespace OneDbgClient.Framework
                 exceptionText = Environment.NewLine + Environment.NewLine + "Exception : " + Environment.NewLine + exception;
 
             await GetMetroWindow().ShowMessageAsync(title, explanation + exceptionText, MessageDialogStyle.Affirmative,
-                new MetroDialogSettings(){AnimateHide = true,AnimateShow = true});
-        }
-
-        private static MetroWindow GetMetroWindow()
-        {
-            return App.Current.MainWindow as MetroWindow;
+                _metroDialogSettings);
         }
 
         public async void ShowError(string title, Exception exception)
         {
             await GetMetroWindow().ShowMessageAsync(title, "Exception : " + Environment.NewLine + exception, MessageDialogStyle.Affirmative,
-                new MetroDialogSettings() { AnimateHide = true, AnimateShow = true });
+                _metroDialogSettings);
         }
 
         public async void ShowInformation(string title, string text)
         {
             await GetMetroWindow().ShowMessageAsync(title, text, MessageDialogStyle.Affirmative,
-                new MetroDialogSettings() { AnimateHide = true, AnimateShow = true });
+                _metroDialogSettings);
+        }
+
+        private  MetroWindow GetMetroWindow()
+        {
+            return App.Current.MainWindow as MetroWindow;
         }
     }
 }
