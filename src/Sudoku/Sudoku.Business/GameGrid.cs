@@ -9,6 +9,8 @@ namespace Sudoku.Business
 {
     public class GameGrid : IEnumerable<int?>
     {
+        private static Random _random = new Random((int) (DateTime.Now.Ticks % int.MaxValue));
+
         public int GridSize { get; set; }
         private int?[] Items { get; set; }
 
@@ -32,12 +34,45 @@ namespace Sudoku.Business
 
         public void Reinitialize()
         {
-            int count = 0;
+            // First, populate all cells with a valid layout
+
             for (int row = 0; row < GridSize; row++)
             {
                 for (int column = 0; column < GridSize; column++)
                 {
-                    this[row, column] = count++;
+                    this[row, column] = 1 + ((column + row) % GridSize);
+                }
+            }
+
+            // let's make a random number of permutations of rows
+            var rowsOperations = 15 + _random.Next(15);
+            for (int i = 0; i < rowsOperations; i++)
+            {
+                var firstRow = _random.Next(GridSize);
+                var secondRow = _random.Next(GridSize);
+
+                for (int j = 0; j < GridSize; j++)
+                {
+                    var temp = this[firstRow, j];
+
+                    this[firstRow, j] = this[secondRow, j];
+                    this[secondRow, j] = temp;
+                }
+            }
+
+            // same for columns
+            var columnOperations = 15 + _random.Next(15);
+            for (int i = 0; i < columnOperations; i++)
+            {
+                var firstColumn = _random.Next(GridSize);
+                var secondColumn = _random.Next(GridSize);
+
+                for (int j = 0; j < GridSize; j++)
+                {
+                    var temp = this[j, firstColumn];
+
+                    this[j, firstColumn] = this[j, secondColumn];
+                    this[j, secondColumn] = temp;
                 }
             }
         }

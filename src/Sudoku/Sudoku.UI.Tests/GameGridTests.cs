@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Sudoku.Business;
 
 namespace Sudoku.UI.Tests
@@ -33,14 +36,37 @@ namespace Sudoku.UI.Tests
         }
 
         [TestMethod]
-        public void ShouldPopulateGridWithRandomValuesWhenCreatingNewGame()
+        public void ShouldCreateValidGridWithRandomValuesWhenCreatingNewGame()
         {
-            var grid = new GameGrid(6);
-            grid.Reinitialize();
+            List<GameGrid> grids = new List<GameGrid>();
 
-            foreach (var item in grid)
+            for (int count = 0; count < 10; count++)
             {
-                Assert.IsNotNull(item);
+                var grid = new GameGrid(6);
+                grid.Reinitialize();
+
+                foreach (var item in grid)
+                {
+                    Assert.IsNotNull(item);
+                }
+
+                Assert.IsTrue(grid.IsValid(), "Grids should be valid");
+
+                grids.Add(grid);
+            }
+
+            for (int leftIndex = 0; leftIndex < grids.Count; leftIndex++)
+            {
+                for (int rightIndex = 0; rightIndex < grids.Count; rightIndex++)
+                {
+                    var left = grids[leftIndex];
+                    var right = grids[rightIndex];
+
+                    if (object.ReferenceEquals(left, right))
+                        continue;
+
+                    Assert.IsFalse(CompareGrids(left, right), "Grids should not be the same (indexes {0},{1})", leftIndex, rightIndex);
+                }
             }
         }
 
@@ -102,6 +128,22 @@ namespace Sudoku.UI.Tests
             grid[2, 0] = outOfRangeValue; // Out of range
 
             Assert.IsFalse(grid.IsValid());
+        }
+
+        public bool CompareGrids(GameGrid expected, GameGrid actual)
+        {
+            Assert.AreEqual(expected.GridSize, actual.GridSize);
+
+            for (int row = 0; row < expected.GridSize; row++)
+            {
+                for (int column = 0; column < expected.GridSize; column++)
+                {
+                    if (expected[row, column] != actual[row, column])
+                        return false;
+                }
+            }
+
+            return true;
         }
     }
 }
