@@ -14,6 +14,13 @@ namespace Sudoku.Behaviors
     public class GameGridBehavior : BehaviorBase<Grid>
     {
         public static readonly DependencyProperty GameGridProperty = DependencyProperty.Register("GameGrid", typeof(GameGrid), typeof(GameGridBehavior), new PropertyMetadata(default(GameGrid), GameGridDependencyPropertyChanged));
+        private  readonly  Dictionary<Tuple<int,int>,TextBlock> _textBlocks=new Dictionary<Tuple<int, int>, TextBlock>();
+
+        public GameGrid GameGrid
+        {
+            get { return (GameGrid)GetValue(GameGridProperty); }
+            set { SetValue(GameGridProperty, value); }
+        }
 
         private static void GameGridDependencyPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {
@@ -30,20 +37,38 @@ namespace Sudoku.Behaviors
             }
         }
 
-        private  void BindItems(GameGrid gameGrid)
+        private void BindItems(GameGrid gameGrid)
         {
-            throw new NotImplementedException();
+            AssociatedElement.RowDefinitions.Clear();
+            AssociatedElement.ColumnDefinitions.Clear();
+            for (int i = 0; i < gameGrid.GridSize; i++)
+            {
+                AssociatedElement.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(80) });
+                AssociatedElement.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(80) });
+            }
+
+            _textBlocks.Clear();
+
+            gameGrid.ForEach((row, column) =>
+            {
+                var text = new TextBlock();
+
+                text.VerticalAlignment = VerticalAlignment.Center;
+                text.HorizontalAlignment = HorizontalAlignment.Center;
+                
+                Grid.SetRow(text, row);
+                Grid.SetColumn(text, column);
+
+                AssociatedElement.Children.Add(text);
+
+                _textBlocks[new Tuple<int, int>(row, column)] = text;
+                GameGridChanged(row, column);
+            });
         }
 
-        private  void GameGridChanged(int row, int column)
+        private void GameGridChanged(int row, int column)
         {
-            throw new NotImplementedException();
-        }
-
-        public GameGrid GameGrid
-        {
-            get { return (GameGrid)GetValue(GameGridProperty); }
-            set { SetValue(GameGridProperty, value); }
+            _textBlocks[new Tuple<int, int>(row, column)].Text = GameGrid.CellAt(row, column).ToString();
         }
     }
 }

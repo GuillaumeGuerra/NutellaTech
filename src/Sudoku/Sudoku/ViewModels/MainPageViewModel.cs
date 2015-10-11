@@ -20,7 +20,7 @@ namespace Sudoku.ViewModels
 
         public MainPageViewModel()
         {
-            GameGrid = new GameGrid();
+            GameGrid = new GameGrid(9);
         }
 
         private void NewGame()

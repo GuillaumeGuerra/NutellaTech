@@ -7,29 +7,42 @@ using Sudoku.Business.Annotations;
 
 namespace Sudoku.Business
 {
-    public class GameGrid : IEnumerable<int?>
+    public class GameGrid : IEnumerable<GameGridCell>
     {
-        private static Random _random = new Random((int) (DateTime.Now.Ticks % int.MaxValue));
+        private static Random _random = new Random((int)(DateTime.Now.Ticks % int.MaxValue));
 
         public int GridSize { get; set; }
-        private int?[] Items { get; set; }
+        private GameGridCell[] Items { get; set; }
 
         public event Action<int, int> OnValueChanged;
 
         public GameGrid(int gridSize)
         {
+            // Checking that the grid size is a multiple of 3, to define proper areas
+            if (gridSize - 3 * (gridSize / 3) > 0)
+                throw new NotSupportedException("GridSize should be a multiple of 3");
+
             GridSize = gridSize;
-            Items = new int?[GridSize * GridSize];
+            Items = new GameGridCell[GridSize * GridSize];
+            for (int i = 0; i < Items.Length; i++)
+            {
+                Items[i] = new GameGridCell();
+            }
         }
 
         public int? this[int row, int column]
         {
-            get { return Items[row * GridSize + column]; }
+            get { return CellAt(row, column).CurrentValue; }
             set
             {
-                Items[row * GridSize + column] = value;
+                CellAt(row, column).CurrentValue = value;
                 OnValueChanged?.Invoke(row, column);
             }
+        }
+
+        public GameGridCell CellAt(int row, int column)
+        {
+            return Items[row * GridSize + column];
         }
 
         public void Reinitialize()
@@ -77,11 +90,22 @@ namespace Sudoku.Business
             }
         }
 
+        public void ForEach(Action<int, int> action)
+        {
+            for (int row = 0; row < GridSize; row++)
+            {
+                for (int column = 0; column < GridSize; column++)
+                {
+                    action(row, column);
+                }
+            }
+        }
+
         #region Interfaces
 
-        IEnumerator<int?> IEnumerable<int?>.GetEnumerator()
+        IEnumerator<GameGridCell> IEnumerable<GameGridCell>.GetEnumerator()
         {
-            return (IEnumerator<int?>)Items.GetEnumerator();
+            return (IEnumerator<GameGridCell>)Items.GetEnumerator();
         }
 
         public IEnumerator GetEnumerator()
@@ -99,13 +123,14 @@ namespace Sudoku.Business
                   if (!item.HasValue)
                       return true;
 
-                  if (item.Value < 1 || item.Value > GridSize)
+                  var value = item.Value;
+                  if (value < 1 || value > GridSize)
                       return false; // value out of range
 
-                  if (set.Contains(item.Value))
+                  if (set.Contains(value))
                       return false;
 
-                  set.Add(item.Value);
+                  set.Add(value);
 
                   return true;
               };
@@ -129,6 +154,25 @@ namespace Sudoku.Business
                 {
                     if (!check(values, row, column))
                         return false;
+                }
+            }
+
+            // Checking areas
+            var areaSize = GridSize / 3;
+            for (int areaRow = 0; areaRow < 3; areaRow++)
+            {
+                for (int areaColumn = 0; areaColumn < 3; areaColumn++)
+                {
+                    HashSet<int> values = new HashSet<int>();
+
+                    for (int row = areaRow * areaSize; row < areaSize; row++)
+                    {
+                        for (int column = areaColumn * areaSize; column < areaSize; column++)
+                        {
+                            if (!check(values, row, column))
+                                return false;
+                        }
+                    }
                 }
             }
 
