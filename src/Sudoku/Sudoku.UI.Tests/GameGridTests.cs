@@ -42,7 +42,7 @@ namespace Sudoku.UI.Tests
 
             for (int count = 0; count < 10; count++)
             {
-                var grid = new GameGrid(6);
+                var grid = new GameGrid(9);
                 grid.Reinitialize();
 
                 foreach (var item in grid)
@@ -88,33 +88,33 @@ namespace Sudoku.UI.Tests
             grid[0, 4] = 5;
             grid[0, 5] = 6;
 
-            grid[1, 0] = 2;
-            grid[1, 1] = 3;
-            grid[1, 2] = 4;
-            grid[1, 3] = 5;
-            grid[1, 4] = 6;
-            grid[1, 5] = 1;
+            grid[1, 0] = 3;
+            grid[1, 1] = 4;
+            grid[1, 2] = 5;
+            grid[1, 3] = 6;
+            grid[1, 4] = 1;
+            grid[1, 5] = 2;
 
-            grid[2, 0] = 3;
-            grid[2, 1] = 4;
-            grid[2, 2] = 5;
-            grid[2, 3] = 6;
-            grid[2, 4] = 1;
-            grid[2, 5] = 2;
+            grid[2, 0] = 2;
+            grid[2, 1] = 3;
+            grid[2, 2] = 4;
+            grid[2, 3] = 5;
+            grid[2, 4] = 6;
+            grid[2, 5] = 1;
 
-            grid[3, 0] = 4;
-            grid[3, 1] = 5;
-            grid[3, 2] = 6;
-            grid[3, 3] = 1;
-            grid[3, 4] = 2;
-            grid[3, 5] = 3;
+            grid[3, 0] = 5;
+            grid[3, 1] = 6;
+            grid[3, 2] = 1;
+            grid[3, 3] = 2;
+            grid[3, 4] = 3;
+            grid[3, 5] = 4;
 
-            grid[4, 0] = 5;
-            grid[4, 1] = 6;
-            grid[4, 2] = 1;
-            grid[4, 3] = 2;
-            grid[4, 4] = 3;
-            grid[4, 5] = 4;
+            grid[4, 0] = 4;
+            grid[4, 1] = 5;
+            grid[4, 2] = 6;
+            grid[4, 3] = 1;
+            grid[4, 4] = 2;
+            grid[4, 5] = 3;
 
             grid[5, 0] = 6;
             grid[5, 1] = 1;
@@ -187,6 +187,17 @@ namespace Sudoku.UI.Tests
         public void ShouldRefuseToCreateGameGridWhenGridSizeIsNotAMultipleOf3()
         {
             Assert.ThrowsException<NotSupportedException>(() => new GameGrid(4));
+        }
+
+        [TestMethod]
+        public void ShouldDrawAPrettyGridWhenExecutingToString()
+        {
+            var grid = new GameGrid(9);
+
+            grid.Reinitialize();
+            var toString = grid.ToString();
+
+            Assert.IsNotNull(toString);
         }
 
         public bool CompareGrids(GameGrid expected, GameGrid actual)

@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Sudoku.Business.Annotations;
 
 namespace Sudoku.Business
@@ -47,45 +49,54 @@ namespace Sudoku.Business
 
         public void Reinitialize()
         {
+            var areaSize = GridSize / 3;
+
             // First, populate all cells with a valid layout
 
             for (int row = 0; row < GridSize; row++)
             {
                 for (int column = 0; column < GridSize; column++)
                 {
-                    this[row, column] = 1 + ((column + row) % GridSize);
+                    this[row, column] = 1 + ((row / areaSize + column + row * GridSize / 3) % GridSize);
                 }
             }
 
             // let's make a random number of permutations of rows
+            // grouped by pack of GridSize/3 to keep the rows area consitency
             var rowsOperations = 15 + _random.Next(15);
-            for (int i = 0; i < rowsOperations; i++)
+            for (int operation = 0; operation < rowsOperations; operation++)
             {
-                var firstRow = _random.Next(GridSize);
-                var secondRow = _random.Next(GridSize);
+                var firstAreaRow = _random.Next(areaSize) * areaSize;
+                var secondAreaRow = _random.Next(areaSize) * areaSize;
 
-                for (int j = 0; j < GridSize; j++)
+                for (int row = 0; row < 3; row++)
                 {
-                    var temp = this[firstRow, j];
+                    for (int column = 0; column < GridSize; column++)
+                    {
+                        var temp = this[firstAreaRow + row, column];
 
-                    this[firstRow, j] = this[secondRow, j];
-                    this[secondRow, j] = temp;
+                        this[firstAreaRow + row, column] = this[secondAreaRow + row, column];
+                        this[secondAreaRow + row, column] = temp;
+                    }
                 }
             }
 
             // same for columns
             var columnOperations = 15 + _random.Next(15);
-            for (int i = 0; i < columnOperations; i++)
+            for (int operation = 0; operation < columnOperations; operation++)
             {
-                var firstColumn = _random.Next(GridSize);
-                var secondColumn = _random.Next(GridSize);
+                var firstAreaColumn = _random.Next(areaSize) * areaSize;
+                var secondAreaColumn = _random.Next(areaSize) * areaSize;
 
-                for (int j = 0; j < GridSize; j++)
+                for (int column = 0; column < 3; column++)
                 {
-                    var temp = this[j, firstColumn];
+                    for (int row = 0; row < GridSize; row++)
+                    {
+                        var temp = this[row, firstAreaColumn + column];
 
-                    this[j, firstColumn] = this[j, secondColumn];
-                    this[j, secondColumn] = temp;
+                        this[row, firstAreaColumn + column] = this[row, secondAreaColumn + column];
+                        this[row, secondAreaColumn + column] = temp;
+                    }
                 }
             }
         }
@@ -100,20 +111,6 @@ namespace Sudoku.Business
                 }
             }
         }
-
-        #region Interfaces
-
-        IEnumerator<GameGridCell> IEnumerable<GameGridCell>.GetEnumerator()
-        {
-            return (IEnumerator<GameGridCell>)Items.GetEnumerator();
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return Items.GetEnumerator();
-        }
-
-        #endregion
 
         public bool IsValid()
         {
@@ -178,5 +175,31 @@ namespace Sudoku.Business
 
             return true;
         }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+
+            for (int row = 0; row < GridSize; row++)
+            {
+                builder.AppendLine(string.Join(" | ", Enumerable.Range(row * GridSize, GridSize).Select(i => Items[i])));
+            }
+
+            return builder.ToString();
+        }
+
+        #region Interfaces
+
+        IEnumerator<GameGridCell> IEnumerable<GameGridCell>.GetEnumerator()
+        {
+            return (IEnumerator<GameGridCell>)Items.GetEnumerator();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return Items.GetEnumerator();
+        }
+
+        #endregion
     }
 }
