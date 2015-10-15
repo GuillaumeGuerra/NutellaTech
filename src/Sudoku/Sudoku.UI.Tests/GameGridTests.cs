@@ -35,14 +35,17 @@ namespace Sudoku.UI.Tests
             Assert.AreEqual(1, grid[0, 0]);
         }
 
-        [TestMethod]
-        public void ShouldCreateValidGridWithRandomValuesWhenCreatingNewGame()
+        [DataTestMethod]
+        [DataRow(6)]
+        [DataRow(9)]
+        [DataRow(12)]
+        public void ShouldCreateValidGridWithRandomValuesWhenCreatingNewGame(int gridSize)
         {
             List<GameGrid> grids = new List<GameGrid>();
 
             for (int count = 0; count < 10; count++)
             {
-                var grid = new GameGrid(9);
+                var grid = new GameGrid(gridSize);
                 grid.Reinitialize();
 
                 foreach (var item in grid)

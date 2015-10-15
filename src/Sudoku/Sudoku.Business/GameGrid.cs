@@ -12,25 +12,29 @@ namespace Sudoku.Business
     public class GameGrid : IEnumerable<GameGridCell>
     {
         private static Random _random = new Random((int)(DateTime.Now.Ticks % int.MaxValue));
+        private GameGridCell[] Items { get; set; }
 
         public int GridSize { get; set; }
-        private GameGridCell[] Items { get; set; }
+        public int AreaSize { get; set; }
 
         public event Action<int, int> OnValueChanged;
 
         public GameGrid(int gridSize)
         {
+            GridSize = gridSize;
+            AreaSize = GridSize / 3;
+
             // Checking that the grid size is a multiple of 3, to define proper areas
-            if (gridSize - 3 * (gridSize / 3) > 0)
+            if (GridSize - 3 * (AreaSize) > 0)
                 throw new NotSupportedException("GridSize should be a multiple of 3");
 
-            GridSize = gridSize;
             Items = new GameGridCell[GridSize * GridSize];
             for (int i = 0; i < Items.Length; i++)
             {
                 Items[i] = new GameGridCell();
             }
         }
+
 
         public int? this[int row, int column]
         {
@@ -49,35 +53,31 @@ namespace Sudoku.Business
 
         public void Reinitialize()
         {
-            var areaSize = GridSize / 3;
-
             // First, populate all cells with a valid layout
-
             for (int row = 0; row < GridSize; row++)
             {
                 for (int column = 0; column < GridSize; column++)
                 {
-                    this[row, column] = 1 + ((row / areaSize + column + row * GridSize / 3) % GridSize);
+                    this[row, column] = 1 + ((row / 3 + column + row * AreaSize) % GridSize);
                 }
             }
 
             // let's make a random number of permutations of rows
-            // grouped by pack of GridSize/3 to keep the rows area consitency
+            // the permutation have to remain inside the same area, to save consistency
             var rowsOperations = 15 + _random.Next(15);
             for (int operation = 0; operation < rowsOperations; operation++)
             {
-                var firstAreaRow = _random.Next(areaSize) * areaSize;
-                var secondAreaRow = _random.Next(areaSize) * areaSize;
+                var areaRow = _random.Next(3) * AreaSize;
 
-                for (int row = 0; row < 3; row++)
+                var firstAreaRow = areaRow + _random.Next(AreaSize);
+                var secondAreaRow = areaRow + _random.Next(AreaSize);
+
+                for (int column = 0; column < GridSize; column++)
                 {
-                    for (int column = 0; column < GridSize; column++)
-                    {
-                        var temp = this[firstAreaRow + row, column];
+                    var temp = this[firstAreaRow, column];
 
-                        this[firstAreaRow + row, column] = this[secondAreaRow + row, column];
-                        this[secondAreaRow + row, column] = temp;
-                    }
+                    this[firstAreaRow, column] = this[secondAreaRow, column];
+                    this[secondAreaRow, column] = temp;
                 }
             }
 
@@ -85,18 +85,17 @@ namespace Sudoku.Business
             var columnOperations = 15 + _random.Next(15);
             for (int operation = 0; operation < columnOperations; operation++)
             {
-                var firstAreaColumn = _random.Next(areaSize) * areaSize;
-                var secondAreaColumn = _random.Next(areaSize) * areaSize;
+                var areaColumn = _random.Next(3) * AreaSize;
 
-                for (int column = 0; column < 3; column++)
+                var firstAreaColumn = areaColumn + _random.Next(AreaSize);
+                var secondAreaColumn = areaColumn + _random.Next(AreaSize);
+
+                for (int row = 0; row < GridSize; row++)
                 {
-                    for (int row = 0; row < GridSize; row++)
-                    {
-                        var temp = this[row, firstAreaColumn + column];
+                    var temp = this[row, firstAreaColumn];
 
-                        this[row, firstAreaColumn + column] = this[row, secondAreaColumn + column];
-                        this[row, secondAreaColumn + column] = temp;
-                    }
+                    this[row, firstAreaColumn] = this[row, secondAreaColumn];
+                    this[row, secondAreaColumn] = temp;
                 }
             }
         }
@@ -155,16 +154,15 @@ namespace Sudoku.Business
             }
 
             // Checking areas
-            var areaSize = GridSize / 3;
             for (int areaRow = 0; areaRow < 3; areaRow++)
             {
                 for (int areaColumn = 0; areaColumn < 3; areaColumn++)
                 {
                     HashSet<int> values = new HashSet<int>();
 
-                    for (int row = areaRow * areaSize; row < areaSize; row++)
+                    for (int row = areaRow * AreaSize; row < AreaSize; row++)
                     {
-                        for (int column = areaColumn * areaSize; column < areaSize; column++)
+                        for (int column = areaColumn * AreaSize; column < AreaSize; column++)
                         {
                             if (!check(values, row, column))
                                 return false;
@@ -182,7 +180,11 @@ namespace Sudoku.Business
 
             for (int row = 0; row < GridSize; row++)
             {
-                builder.AppendLine(string.Join(" | ", Enumerable.Range(row * GridSize, GridSize).Select(i => Items[i])));
+                builder.AppendLine(string.Join(" | ", Enumerable.Range(row * GridSize, GridSize).Select(i =>
+                {
+                    var cell = Items[i].CurrentValue;
+                    return cell.HasValue ? cell.Value.ToString("00") : "  "; // Two digits so that a 12 x 12 grid is well formatted (some values are on 2 digits)
+                })));
             }
 
             return builder.ToString();
