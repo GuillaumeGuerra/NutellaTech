@@ -15,18 +15,19 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using OmniLauncher.ViewModels;
 
 namespace OmniLauncher.ViewModel
 {
     public class ViewModelLocator
     {
-        //public ProcessesViewModel Processes
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<ProcessesViewModel>();
-        //    }
-        //}
+        public OmniLauncherViewModel MainViewModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<OmniLauncherViewModel>();
+            }
+        }
 
         //public OneDbgMainViewModel OneDbgMain
         //{

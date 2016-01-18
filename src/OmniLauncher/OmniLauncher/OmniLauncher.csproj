@@ -49,7 +49,15 @@
     </Reference>
     <Reference Include="InfragisticsWPF4.Controls.Gauges.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="InfragisticsWPF4.Controls.Menus.XamRadialMenu.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.DataPresenter.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="InfragisticsWPF4.DataVisualization.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Editors.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Themes.Fall.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Themes.ForestGreen.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Themes.Leaf.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Themes.Lipstick.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Themes.Water.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Themes.Wind.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="InfragisticsWPF4.v14.1, Version=14.1.20141.2283, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -79,24 +87,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\XamRadialMenuBehavior.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\LauncherConfigurationProcessor.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\LauncherLink.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\Launchers.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\LaunchersGroup.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\LaunchersRootGroup.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfiguration.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherGenericTemplate.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherLink.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherLinkGroup.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherRootDirectory.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfigurationReader.cs" />
+    <Compile Include="ViewModels\OmniLauncherViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="Views\OmniLauncherView.xaml.cs">
+      <DependentUpon>OmniLauncherView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -129,10 +139,32 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Configuration\Launchers.xml">
+    <None Include="Configuration\Launchers.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Assets\IG.xamRadialMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Styles.Shared.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Styles.WPF.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Theme.Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OmniLauncherView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

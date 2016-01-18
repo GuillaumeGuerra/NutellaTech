@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using OmniLauncher.Services.LauncherConfigurationProcessor;
 using OmniLauncher.Services.XmlConfigurationReader;
 
 namespace OmniLauncher.Tests
@@ -136,98 +137,5 @@ namespace OmniLauncher.Tests
             };
             return configuration;
         }
-    }
-
-    public class LauncherConfigurationProcessor
-    {
-        private const string RootToken = "[ROOT]";
-
-        public Launchers ProcessConfiguration(XmlLauncherConfiguration configuration)
-        {
-            var launchers = new Launchers();
-
-            foreach (var root in configuration.RootDirectories)
-            {
-                launchers.RootGroups.Add(ProcessRoot(root, configuration.GenericTemplate));
-            }
-
-            return launchers;
-        }
-
-        public LaunchersRootGroup ProcessRoot(XmlLauncherRootDirectory root, XmlLauncherGenericTemplate template)
-        {
-            var result = new LaunchersRootGroup() { Header = root.Header };
-
-            foreach (var group in template.LinkGroups)
-            {
-                result.Groups.Add(ProcessGroup(root, group));
-            }
-
-            return result;
-        }
-
-        public LaunchersGroup ProcessGroup(XmlLauncherRootDirectory root, XmlLauncherLinkGroup group)
-        {
-            var result = new LaunchersGroup() { Header = group.Header };
-
-            foreach (var launcher in group.Launchers)
-            {
-                result.Launchers.Add(ProcessLauncherLink(root, launcher));
-            }
-
-            return result;
-        }
-
-        public LauncherLink ProcessLauncherLink(XmlLauncherRootDirectory root, XmlLauncherLink launcher)
-        {
-            var resolvedRootPath = root.Path;
-            if (root.Path.EndsWith("/") || root.Path.EndsWith(@"\"))
-                resolvedRootPath = resolvedRootPath.Substring(0, resolvedRootPath.Length - 1);
-
-            return new LauncherLink()
-            {
-                Header = launcher.Header,
-                Command = launcher.Command.Replace(RootToken, resolvedRootPath)
-            };
-        }
-    }
-
-    public class Launchers
-    {
-        public List<LaunchersRootGroup> RootGroups { get; set; }
-
-        public Launchers()
-        {
-            RootGroups = new List<LaunchersRootGroup>();
-        }
-    }
-
-    public class LaunchersRootGroup
-    {
-        public string Header { get; set; }
-
-        public List<LaunchersGroup> Groups { get; set; }
-
-        public LaunchersRootGroup()
-        {
-            Groups = new List<LaunchersGroup>();
-        }
-    }
-
-    public class LaunchersGroup
-    {
-        public string Header { get; set; }
-        public List<LauncherLink> Launchers { get; set; }
-
-        public LaunchersGroup()
-        {
-            Launchers = new List<LauncherLink>();
-        }
-    }
-
-    public class LauncherLink
-    {
-        public string Header { get; set; }
-        public string Command { get; set; }
     }
 }
