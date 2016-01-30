@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -30,21 +31,29 @@ namespace OmniLauncher.Behaviors
 
         private void ApplyItems()
         {
+            var items = GetRadialMenuItems(Launchers);
+
             AssociatedObject.Items.Clear();
-            foreach (var rootGroup in Launchers.RootGroups)
+            foreach (var item in items)
             {
-                AssociatedObject.Items.Add(new RadialMenuItem() { Header = rootGroup.Header });
+                AssociatedObject.Items.Add(item);
             }
+
         }
 
-        protected override void OnAttached()
+        public IList GetRadialMenuItems(Launchers launchers)
         {
-            base.OnAttached();
-        }
+            var items = new List<object>();
 
-        protected override void OnDetaching()
-        {
-            base.OnDetaching();
+            if (launchers != null)
+            {
+                foreach (var rootGroup in launchers.RootGroups)
+                {
+                    items.Add(new RadialMenuItem() { Header = rootGroup.Header });
+                }
+            }
+
+            return items;
         }
     }
 }
