@@ -4,9 +4,9 @@ var gerritsServices = angular.module('gerritsServices', ['ngResource']);
 
 patchesServices.factory('Gerrits', ['$resource',
   function ($resource) {
-      return $resource('/api/patches/:patchVersion/gerrits/:gerrit', {
+      return $resource('/api/patches/:patchVersion/gerrits/:gerritId', {
           patchVersion: '@version',
-          gerrit: '@gerrit'
+          gerritId: '@id'
       }, {
           query: { method: 'GET', params: {}, isArray: true }
       });

@@ -45,9 +45,7 @@ namespace PatchManager.Controllers
         [Route("{patchVersion}")]
         public Patch GetPatch([FromRoute] string patchVersion)
         {
-            var result = GetAllPatches().FirstOrDefault(patch => patch.Version == patchVersion);
-
-            return result;
+            return GetAllPatches().FirstOrDefault(patch => patch.Version == patchVersion);
         }
 
         [HttpGet]
@@ -97,6 +95,24 @@ namespace PatchManager.Controllers
                     }
                 },
             };
+        }
+
+        [HttpGet]
+        [Route("{patchVersion}/gerrits/{gerritId}")]
+        public Gerrit GetPatchGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId)
+        {
+            var result = GetPatchGerrits(patchVersion).FirstOrDefault(gerrit => gerrit.Id == gerritId);
+
+            if (result != null)
+                result.Status = new GerritStatus()
+                {
+                    TestStatus = TestStatus.Tested,
+                    JiraStatus = JiraStatus.Resolved,
+                    MergeStatus = MergeStatus.Merged,
+                    PatchStatus = PatchStatus.Accepted
+                };
+
+            return result;
         }
     }
 }

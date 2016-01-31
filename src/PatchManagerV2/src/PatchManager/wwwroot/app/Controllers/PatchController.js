@@ -24,6 +24,12 @@ function patchController($scope, $routeParams, patches, gerrits) {
     $scope.gerrits = gerrits.query({ patchVersion: $routeParams.patchVersion });
 
     $scope.refreshGerrit = function (gerrit) {
-        console.log("refreshing gerrit " + gerrit.id); //TODO: refresh all dynamic properties of the gerrit
-    }
-};
+        console.log("refreshing gerrit " + gerrit.id);
+
+        gerrits.get({ gerritId: gerrit.id, patchVersion: $routeParams.patchVersion }).$promise.then(function (result) {
+
+            console.log("Refreshing statuses for gerrit " + result.id);
+            gerrit.status = result.status;
+        });
+    };
+}
