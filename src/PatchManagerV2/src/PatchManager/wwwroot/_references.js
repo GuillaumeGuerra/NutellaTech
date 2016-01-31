@@ -6,6 +6,7 @@
 /// <reference path="app/controllers/navbarcontroller.js" />
 /// <reference path="app/controllers/patchcontroller.js" />
 /// <reference path="app/services/booksservice.js" />
+/// <reference path="app/services/patchesservice - copy.js" />
 /// <reference path="app/services/patchesservice.js" />
 /// <reference path="js/site.js" />
 /// <reference path="lib/angular/angular.js" />

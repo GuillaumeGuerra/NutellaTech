@@ -47,37 +47,56 @@ namespace PatchManager.Controllers
         {
             var result = GetAllPatches().FirstOrDefault(patch => patch.Version == patchVersion);
 
-            if (result != null)
-                result.Gerrits = new[]
-                {
-                    new Gerrit()
-                    {
-                        Id = 123,
-                        Title = "Get rid of Jar-Jar once and for all",
-                        Jira = "STR-123"
-                    },
-                    new Gerrit()
-                    {
-                        Id = 456,
-                        Title = "Now that Jar-Jar is gone, time to take care of Anakin",
-                        Jira = "STR-456"
-                    },
-                    new Gerrit()
-                    {
-                        Id = 789,
-                        Title = "Revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
-                        Jira = "STR-789"
-                    },
-                };
-
             return result;
         }
-    }
 
-    public class Gerrit
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Jira { get; set; }
+        [HttpGet]
+        [Route("{patchVersion}/gerrits")]
+        public IEnumerable<Gerrit> GetPatchGerrits([FromRoute] string patchVersion)
+        {
+            return new[]
+            {
+                new Gerrit()
+                {
+                    Id = 123,
+                    Title = "Get rid of Jar-Jar once and for all",
+                    Jira = "STR-123_" + patchVersion,
+                    Status = new GerritStatus()
+                    {
+                        PatchStatus = PatchStatus.Accepted,
+                        JiraStatus = JiraStatus.InProgress,
+                        MergeStatus = MergeStatus.MissingReviews,
+                        TestStatus = TestStatus.ToTest
+                    }
+                },
+                new Gerrit()
+                {
+                    Id = 456,
+                    Title = "Now that Jar-Jar is gone, time to take care of Anakin",
+                    Jira = "STR-456_" + patchVersion,
+                    Status = new GerritStatus()
+                    {
+                        PatchStatus = PatchStatus.Refused,
+                        JiraStatus = JiraStatus.Open,
+                        MergeStatus = MergeStatus.ReadyForMerge,
+                        TestStatus = TestStatus.Tested
+                    }
+                },
+                new Gerrit()
+                {
+                    Id = 789,
+                    Title =
+                        "Revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
+                    Jira = "STR-789_" + patchVersion,
+                    Status = new GerritStatus()
+                    {
+                        PatchStatus = PatchStatus.Asked,
+                        JiraStatus = JiraStatus.Resolved,
+                        MergeStatus = MergeStatus.Merged,
+                        TestStatus = TestStatus.Issue
+                    }
+                },
+            };
+        }
     }
 }

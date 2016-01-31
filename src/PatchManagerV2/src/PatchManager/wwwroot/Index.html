@@ -13,6 +13,7 @@
     <script src="app/app.js"></script>
     <script src="app/services/booksService.js"></script>
     <script src="app/services/patchesService.js"></script>
+    <script src="app/services/gerritsService.js"></script>
     <script src="app/controllers/bookListController.js"></script>
     <script src="app/Controllers/editBookController.js"></script>
     <script src="app/Controllers/navbarController.js"></script>
@@ -34,7 +35,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="#/patches/{{currentPatch.Version}}">Current Patch<span class="sr-only">(current)</span></a></li>
+                    <li><a href="#/patches/{{currentPatch.version}}">Current Patch<span class="sr-only">(current)</span></a></li>
                     <li><a href="#/patches/">Edit patches</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown">
@@ -42,7 +43,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li ng-repeat="patch in allPatches"><a href="#/patches/{{patch.Version}}">{{patch.Version}}</a></li>
+                            <li ng-repeat="patch in allPatches"><a href="#/patches/{{patch.version}}">{{patch.version}}</a></li>
                         </ul>
                     </li>
                 </ul>

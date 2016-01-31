@@ -7,7 +7,8 @@
 
         // Custom modules 
         'booksServices',
-        'patchesServices'
+        'patchesServices',
+        'gerritsServices'
 
         // 3rd Party Modules
 

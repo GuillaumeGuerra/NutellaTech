@@ -1,21 +1,25 @@
 ﻿<div>
+    <div class="alert alert-danger" ng-hide="patch.isCurrent===true">
+        <strong>Beware !</strong> This is not the current patch !
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading">About this patch</div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4">
                     <label for="releaseManager">Release Manager </label>
-                    <a class="btn btn-primary" href="mailto:{{patch.ReleaseManagerMail}}" id="releaseManager">{{patch.ReleaseManager}}</a>
+                    <a class="btn btn-primary" href="mailto:{{patch.releaseManagerMail}}" id="releaseManager">{{patch.releaseManager}}</a>
                 </div>
 
                 <div class="col-md-2">
                     <label for="version">Version </label>
-                    <a class="btn btn-default" id="version">{{patch.Version}}</a>
+                    <a class="btn btn-default" id="version">{{patch.version}}</a>
                 </div>
 
                 <div class="col-md-4">
                     <label for="date">Date </label>
-                    <a class="btn btn-default" id="date">{{patch.Date | date:'mediumDate'}}</a>
+                    <a class="btn btn-default" id="date">{{patch.date | date:'mediumDate'}}</a>
                 </div>
             </div>
         </div>
@@ -25,19 +29,27 @@
         <div class="panel-body">
             <table class="table table-striped table-hover">
                 <thead>
-                <tr>
-                    <th></th>
-                    <th>Gerrit</th>
-                    <th>Title</th>
-                    <th>Jira</th>
-                </tr>
+                    <tr>
+                        <th></th>
+                        <th>Gerrit</th>
+                        <th>Title</th>
+                        <th>Jira</th>
+                        <th>Patch Status</th>
+                        <th>Jira Status</th>
+                        <th>Merge Status</th>
+                        <th>Test Status</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="gerrit in patch.Gerrits">
+                    <tr ng-repeat="gerrit in gerrits">
                         <td><button type="button" class="btn btn-success active btn-sm" ng-click="refreshGerrit(gerrit)"><span class="glyphicon glyphicon-refresh"></span></button></td>
-                        <td>{{gerrit.Id}}</td>
-                        <td>{{gerrit.Title}}</td>
-                        <td>{{gerrit.Jira}}</td>
+                        <td>{{gerrit.id}}</td>
+                        <td>{{gerrit.title}}</td>
+                        <td>{{gerrit.jira}}</td>
+                        <td>{{gerrit.status.patchStatus}}</td>
+                        <td>{{gerrit.status.jiraStatus}}</td>
+                        <td>{{gerrit.status.mergeStatus}}</td>
+                        <td>{{gerrit.status.testStatus}}</td>
                     </tr>
                 </tbody>
             </table>
