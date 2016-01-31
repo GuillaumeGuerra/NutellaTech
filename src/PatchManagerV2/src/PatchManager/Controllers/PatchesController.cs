@@ -115,6 +115,14 @@ namespace PatchManager.Controllers
             return result;
         }
 
+        [HttpPost]
+        [Route("{patchVersion}/gerrits/")]
+        public Gerrit PostGerritForPatch([FromRoute] string patchVersion, [FromBody] Gerrit gerrit)
+        {
+            //TOTO : push it in the repository
+            return gerrit;
+        }
+
         [HttpGet]
         [Route("{patchVersion}/gerrits/{gerritId}/preview")]
         public Gerrit PreviewGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId)

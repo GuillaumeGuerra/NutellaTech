@@ -28,7 +28,7 @@
         <div class="panel-heading">Gerrits</div>
         <div class="panel-body">
             <button style="float: left;" type="button" class="btn btn-success active" ng-click="refreshAllGerrits()"><span class="glyphicon glyphicon-refresh"></span> Refresh All</button>
-            <button style="float: right;" type="button" class="btn btn-primary active right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</button>
+            <button style="float: right;" type="button" class="btn btn-primary active right" data-toggle="modal" data-target="#myModal" ng-click="newGerrit={}"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</button>
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
@@ -100,12 +100,11 @@
                             <label for="mergeStatus"><span class="glyphicon glyphicon-ok"></span> Review Status</label>
                             <input type="text" class="form-control" id="mergeStatus" ng-model="newGerrit.status.merge" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
                         </div>
-                        <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-default" data-dismiss="modal">Validate</button>
+                    <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                    <button type="submit" class="btn btn-success btn-default pull-right" data-dismiss="modal" ng-click="saveGerrit()"><span class="glyphicon glyphicon-plus"></span> Add</button>
                 </div>
             </div>
 

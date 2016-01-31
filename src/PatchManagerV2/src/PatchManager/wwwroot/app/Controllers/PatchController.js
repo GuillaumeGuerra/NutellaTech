@@ -42,7 +42,15 @@ function patchController($scope, $routeParams, patches, gerrits) {
     }
 
     $scope.searchForGerrit = function () {
-        console.log("Looking for gerrit information for gerrit " + $scope.newGerrit);
+        console.log("Looking for gerrit information for gerrit " + $scope.newGerrit.id);
         $scope.newGerrit = gerrits.get({ gerritId: $scope.newGerrit.id, patchVersion: $routeParams.patchVersion, preview: 'preview' });
     };
+
+    $scope.saveGerrit = function () {
+        console.log("Saving new gerrit " + $scope.newGerrit.id);
+
+        gerrits.save({ gerritId: '', patchVersion: $routeParams.patchVersion }, $scope.newGerrit);
+
+        $scope.gerrits.push($scope.newGerrit);
+    }
 }
