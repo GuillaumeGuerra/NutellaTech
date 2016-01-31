@@ -1,0 +1,36 @@
+﻿<div ng-controller="booksController">
+    <table class="table table-bordered table-striped table-hover ">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Type</th>
+                <th>Date Published</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="book in allBooks">
+                <td>{{book.Title}}</td>
+                <td>{{book.Author}}</td>
+                <td>{{book.Type}}</td>
+                <td>{{book.DatePublished|date:"dd/MM/yyyy"}}</td>
+                <td>${{book.Price}}</td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="#/editBook/{{book.Title}}">Edit</a>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Delete</a></li>
+                            <li><a href="#">Get More Information</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

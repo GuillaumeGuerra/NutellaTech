@@ -216,3 +216,4 @@ pip-log.txt
 .mr.developer.cfg
 *.dll
 src/XOneBlotter/src/XOneBlotter/node_modules/*
+src/XOneBlotter/src/XOneBlotter/wwwroot/lib

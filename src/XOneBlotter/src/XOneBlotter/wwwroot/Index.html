@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html ng-app="XOneBlotter">
+<head>
+    <meta charset="utf-8" />
+    <title>List of Books</title>
+    <link href="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="lib/angular-resource/angular-resource.js"></script>
+    <script src="lib/angular-route/angular-route.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/controllers/booksController.js"></script>
+    <script src="app/services/booksService.js"></script>
+    <script src="app/Controllers/editBookController.js"></script>
+</head>
+<body ng-cloak>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/home">XOneBlotter</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="#/books">All Books<span class="sr-only">(current)</span></a></li>
+                    <li><a href="#/addBook">Add Book</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div ng-view />
+</body>
+</html>
