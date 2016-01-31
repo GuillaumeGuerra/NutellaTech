@@ -32,4 +32,17 @@ function patchController($scope, $routeParams, patches, gerrits) {
             gerrit.status = result.status;
         });
     };
+
+    $scope.refreshAllGerrits = function () {
+        console.log("Refreshing all gerrits");
+
+        $scope.gerrits.forEach(function (gerrit) {
+            $scope.refreshGerrit(gerrit);
+        });
+    }
+
+    $scope.searchForGerrit = function () {
+        console.log("Looking for gerrit information for gerrit " + $scope.newGerrit);
+        $scope.newGerrit = gerrits.get({ gerritId: $scope.newGerrit.id, patchVersion: $routeParams.patchVersion, preview: 'preview' });
+    };
 }

@@ -2,9 +2,9 @@ namespace PatchManager.Models
 {
     public class GerritStatus
     {
-        public PatchStatus PatchStatus { get; set; }
-        public JiraStatus JiraStatus { get; set; }
-        public MergeStatus MergeStatus { get; set; }
-        public TestStatus TestStatus { get; set; }
+        public PatchStatus Patch { get; set; }
+        public JiraStatus Jira { get; set; }
+        public MergeStatus Merge { get; set; }
+        public TestStatus Test { get; set; }
     }
 }

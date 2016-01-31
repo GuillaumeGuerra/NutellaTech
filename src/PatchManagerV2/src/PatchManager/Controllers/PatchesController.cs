@@ -61,10 +61,10 @@ namespace PatchManager.Controllers
                     Jira = "STR-123_" + patchVersion,
                     Status = new GerritStatus()
                     {
-                        PatchStatus = PatchStatus.Accepted,
-                        JiraStatus = JiraStatus.InProgress,
-                        MergeStatus = MergeStatus.MissingReviews,
-                        TestStatus = TestStatus.ToTest
+                        Patch = PatchStatus.Accepted,
+                        Jira = JiraStatus.InProgress,
+                        Merge = MergeStatus.MissingReviews,
+                        Test = TestStatus.ToTest
                     }
                 },
                 new Gerrit()
@@ -74,10 +74,10 @@ namespace PatchManager.Controllers
                     Jira = "STR-456_" + patchVersion,
                     Status = new GerritStatus()
                     {
-                        PatchStatus = PatchStatus.Refused,
-                        JiraStatus = JiraStatus.Open,
-                        MergeStatus = MergeStatus.ReadyForMerge,
-                        TestStatus = TestStatus.Tested
+                        Patch = PatchStatus.Refused,
+                        Jira = JiraStatus.Open,
+                        Merge = MergeStatus.ReadyForMerge,
+                        Test = TestStatus.Tested
                     }
                 },
                 new Gerrit()
@@ -88,10 +88,10 @@ namespace PatchManager.Controllers
                     Jira = "STR-789_" + patchVersion,
                     Status = new GerritStatus()
                     {
-                        PatchStatus = PatchStatus.Asked,
-                        JiraStatus = JiraStatus.Resolved,
-                        MergeStatus = MergeStatus.Merged,
-                        TestStatus = TestStatus.Issue
+                        Patch = PatchStatus.Asked,
+                        Jira = JiraStatus.Resolved,
+                        Merge = MergeStatus.Merged,
+                        Test = TestStatus.Issue
                     }
                 },
             };
@@ -106,13 +106,31 @@ namespace PatchManager.Controllers
             if (result != null)
                 result.Status = new GerritStatus()
                 {
-                    TestStatus = TestStatus.Tested,
-                    JiraStatus = JiraStatus.Resolved,
-                    MergeStatus = MergeStatus.Merged,
-                    PatchStatus = PatchStatus.Accepted
+                    Test = TestStatus.Tested,
+                    Jira = JiraStatus.Resolved,
+                    Merge = MergeStatus.Merged,
+                    Patch = PatchStatus.Accepted
                 };
 
             return result;
+        }
+
+        [HttpGet]
+        [Route("{patchVersion}/gerrits/{gerritId}/preview")]
+        public Gerrit PreviewGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId)
+        {
+            return new Gerrit()
+            {
+                Id = gerritId,
+                Jira = "STW-123_"+gerritId,
+                Owner = "ObiWan Kenobi",
+                Title = "You have a nice beard",
+                Status = new GerritStatus()
+                {
+                    Jira = JiraStatus.Open,
+                    Merge = MergeStatus.ReadyForMerge
+                }
+            };
         }
     }
 }
