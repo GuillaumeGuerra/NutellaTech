@@ -15,10 +15,10 @@
     app.config(['$routeProvider',
       function ($routeProvider) {
           $routeProvider.
-            when('/books', {
-                templateUrl: 'app/partials/book-list.html',
-                controller: 'booksController'
-            }).
+            //when('/books', {
+            //    templateUrl: 'app/partials/book-list.html',
+            //    controller: 'booksController'
+            //}).
             when('/home', {
                 templateUrl: 'app/partials/home.html'
             }).
@@ -26,10 +26,10 @@
                 templateUrl: 'app/partials/add-book.html',
                 controller: 'addBookController'
             }).
-            when('/editBook/:bookTitle', {
-                templateUrl: 'app/partials/edit-book.html',
-                controller: 'editBookController'
-            }).
+            //when('/editBook/:bookTitle', {
+            //    templateUrl: 'app/partials/edit-book.html',
+            //    controller: 'editBookController'
+            //}).
             otherwise({
                 redirectTo: '/home'
             });

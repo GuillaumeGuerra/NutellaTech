@@ -1,17 +1,26 @@
-﻿(function () {
-    'use strict';
+﻿'use strict';
 
-    angular
-        .module('XOneBlotter')
-        .controller('editBookController', editBookController);
+angular
+    .module('XOneBlotter')
+    .config(['$routeProvider',
+        function ($routeProvider) {
+            $routeProvider.
+                when('/editBook/:bookTitle', {
+                    templateUrl: 'app/partials/edit-book.html',
+                    controller: 'editBookController'
+                });
+        }]);
 
-    editBookController.$inject = ['$scope', '$routeParams', 'Books'];
+angular
+    .module('XOneBlotter')
+    .controller('editBookController', editBookController);
 
-    function editBookController($scope, $routeParams, books) {
-        $scope.Title = 'MON Q !!!!';
+editBookController.$inject = ['$scope', '$routeParams', 'Books'];
 
-        console.log("getting the book with id " + $routeParams.bookTitle);
+function editBookController($scope, $routeParams, books) {
+    $scope.Title = 'MON Q !!!!';
 
-        $scope.book = books.get({ bookTitle: $routeParams.bookTitle });
-    }
-})();
+    console.log("getting the book with id " + $routeParams.bookTitle);
+
+    $scope.book = books.get({ bookTitle: $routeParams.bookTitle });
+};
