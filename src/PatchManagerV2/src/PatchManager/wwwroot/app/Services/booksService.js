@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 var booksServices = angular.module('booksServices', ['ngResource']);
 
 booksServices.factory('Books', ['$resource',

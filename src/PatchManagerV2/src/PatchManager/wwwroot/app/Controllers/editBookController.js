@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 angular
-    .module('XOneBlotter')
+    .module('PatchManager')
     .config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider.
@@ -12,7 +12,7 @@ angular
         }]);
 
 angular
-    .module('XOneBlotter')
+    .module('PatchManager')
     .controller('editBookController', editBookController);
 
 editBookController.$inject = ['$scope', '$routeParams', 'Books'];

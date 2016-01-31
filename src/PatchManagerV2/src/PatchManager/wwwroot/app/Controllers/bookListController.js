@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-angular.module('XOneBlotter').config(['$routeProvider',
+angular.module('PatchManager').config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider.
                 when('/books', {
@@ -10,7 +10,7 @@ angular.module('XOneBlotter').config(['$routeProvider',
         }]);
 
 angular
-    .module('XOneBlotter')
+    .module('PatchManager')
     .controller('bookListController', booksController);
 
 booksController.$inject = ['$scope', 'Books'];

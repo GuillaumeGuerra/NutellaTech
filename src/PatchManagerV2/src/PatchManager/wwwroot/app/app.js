@@ -1,12 +1,13 @@
 ﻿(function () {
     'use strict';
 
-    var app = angular.module('XOneBlotter', [
+    var app = angular.module('PatchManager', [
         // Angular modules 
         'ngRoute',
 
         // Custom modules 
-        'booksServices'
+        'booksServices',
+        'patchesServices'
 
         // 3rd Party Modules
 
