@@ -1,0 +1,18 @@
+﻿{
+  "Persistence": {
+    "type": "PatchManager.Services.PersistenceService.DemoPersistenceService",
+    "isSingleton": false
+  },
+  "Model": {
+    "type": "PatchManager.Services.ModelService.ModelService",
+    "isSingleton": true
+  },
+  "Gerrit": {
+    "type": "PatchManager.Services.GerritService.DemoGerritService",
+    "isSingleton": false
+  },
+  "Jira": {
+    "type": "PatchManager.Services.JiraService.DemoJiraService",
+    "isSingleton": false
+  }
+}

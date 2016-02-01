@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Autofac;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.StaticFiles;
@@ -10,29 +8,72 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using PatchManager.Config;
+using Autofac.Extensions.DependencyInjection;
+using PatchManager.Services.ModelService;
+using PatchManager.Services.PersistenceService;
+using PatchManager.Services.GerritService;
+using PatchManager.Services.JiraService;
 
 namespace PatchManager
 {
     public class Startup
     {
+        public IContainer Container { get; private set; }
+
         public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddJsonFile("services.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            // To initialize the model
+            //ModelService.Current.Initialize();
         }
 
         public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddMvcCore().
                 AddJsonFormatters(a => a.ContractResolver = new CamelCasePropertyNamesContractResolver()).
                 AddJsonFormatters(a => a.Converters.Add(new StringEnumConverter()));
+
+            var conf = Configuration.Get<ServicesConfiguration>();
+
+            var builder = new ContainerBuilder();
+
+            RegisterCustomService<IPersistenceService>(builder, conf.Persistence);
+            RegisterCustomService<IModelService>(builder, conf.Model);
+            RegisterCustomService<IGerritService>(builder, conf.Gerrit);
+            RegisterCustomService<IJiraService>(builder, conf.Jira);
+
+            builder.Populate(services);
+            Container = builder.Build();
+
+            return Container.Resolve<IServiceProvider>();
+        }
+
+        private void RegisterCustomService<TService>(ContainerBuilder builder, SingleServiceConfiguration service)
+        {
+            if (service == null)
+                throw new InvalidOperationException(string.Format("Missing configuration for service [{0}] in services.json file", typeof(TService).Name));
+
+            var type = Type.GetType(service.Type);
+
+            if (type == null)
+                throw new InvalidOperationException(string.Format("Unknown service type [{0}] for interface [{1}]", service.Type, typeof(TService)));
+
+            var registration = builder.RegisterType(type).As<TService>().PropertiesAutowired();
+            if (service.IsSingleton)
+                registration.SingleInstance();
+            else
+                registration.InstancePerDependency();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
