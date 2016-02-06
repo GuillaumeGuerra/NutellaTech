@@ -5,6 +5,8 @@ namespace PatchManager.Models
         Open,
         InProgress,
         Resolved,
-        Closed
+        Closed,
+        Unknown,
+        Approved
     }
 }

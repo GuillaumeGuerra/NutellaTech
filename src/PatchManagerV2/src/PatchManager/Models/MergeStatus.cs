@@ -6,6 +6,7 @@ namespace PatchManager.Models
         MissingBuild,
         BuildFailed,
         ReadyForMerge,
-        Merged
+        Merged,
+        Unknown
     }
 }

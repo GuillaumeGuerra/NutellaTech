@@ -27,15 +27,15 @@ namespace PatchManager.Services.ModelService
             return TryGetPatch(patchVersion).Patch;
         }
 
-        public List<Gerrit> GetPatchGerrits(string patchVersion)
+        public List<GerritWithMetadata> GetPatchGerrits(string patchVersion)
         {
             // Copied to a list, to prevent modifications during iteration
             return TryGetPatch(patchVersion).Gerrits.Select(pair => pair.Value).ToList();
         }
 
-        public Gerrit GetGerritForPatch(string patchVersion, int gerritId)
+        public GerritWithMetadata GetGerritForPatch(string patchVersion, int gerritId)
         {
-            Gerrit gerrit;
+            GerritWithMetadata gerrit;
             TryGetPatch(patchVersion).Gerrits.TryGetValue(gerritId, out gerrit);
             return gerrit;
         }
@@ -46,7 +46,7 @@ namespace PatchManager.Services.ModelService
             if (patch.Patch == null)
                 return; // Case of a non existing patch, probably an issue ...
 
-            patch.Gerrits.Add(gerrit.Id, gerrit);
+            patch.Gerrits.Add(gerrit.Id, new GerritWithMetadata(gerrit));
             Persistence.AddGerritToPatch(patch.Patch, gerrit);
         }
 
@@ -65,16 +65,16 @@ namespace PatchManager.Services.ModelService
             _patchesDico = new Dictionary<string, PatchWithGerrits>();
             foreach (var patch in Persistence.GetAllPatches())
             {
-                _patchesDico.Add(patch.Version, new PatchWithGerrits(patch, Persistence.GetGerrits(patch.Version).ToDictionary(gerrit => gerrit.Id)));
+                _patchesDico.Add(patch.Version, new PatchWithGerrits(patch, Persistence.GetGerrits(patch.Version).Select(gerrit => new GerritWithMetadata(gerrit)).ToDictionary(gerrit => gerrit.Gerrit.Id)));
             }
         }
 
         private class PatchWithGerrits
         {
             public Patch Patch { get; }
-            public Dictionary<int, Gerrit> Gerrits { get; }
+            public Dictionary<int, GerritWithMetadata> Gerrits { get; }
 
-            public PatchWithGerrits(Patch patch, Dictionary<int, Gerrit> gerrits)
+            public PatchWithGerrits(Patch patch, Dictionary<int, GerritWithMetadata> gerrits)
             {
                 Patch = patch;
                 Gerrits = gerrits;
@@ -82,7 +82,7 @@ namespace PatchManager.Services.ModelService
 
             public PatchWithGerrits()
             {
-                Gerrits = new Dictionary<int, Gerrit>();
+                Gerrits = new Dictionary<int, GerritWithMetadata>();
             }
         }
     }

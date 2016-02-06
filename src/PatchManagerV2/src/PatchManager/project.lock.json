@@ -872,6 +872,21 @@
           "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
+      "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "6.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ],
+        "compile": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        }
+      },
       "Microsoft.AspNet.WebUtilities/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -4900,6 +4915,21 @@
           "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
+      "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "6.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ],
+        "compile": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        }
+      },
       "Microsoft.AspNet.WebUtilities/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -6595,6 +6625,21 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "6.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ],
+        "compile": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
         }
       },
       "Microsoft.AspNet.WebUtilities/1.0.0-rc1-final": {
@@ -13374,6 +13419,20 @@
         "Microsoft.AspNet.Tooling.Razor.nuspec"
       ]
     },
+    "Microsoft.AspNet.WebApi.Client/5.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "3kiI8peSXbXHDDrRuo+QaX0iCEVRe0nvn2dBDRw656uPX32UalbBlSIDUDlJxu05eau4tnuhsikiUuugvvoUoQ==",
+      "files": [
+        "lib/net45/System.Net.Http.Formatting.dll",
+        "lib/net45/System.Net.Http.Formatting.xml",
+        "lib/portable-wp8+netcore45+net45+wp81+wpa81/System.Net.Http.Formatting.dll",
+        "lib/portable-wp8+netcore45+net45+wp81+wpa81/System.Net.Http.Formatting.xml",
+        "Microsoft.AspNet.WebApi.Client.5.2.3.nupkg",
+        "Microsoft.AspNet.WebApi.Client.5.2.3.nupkg.sha512",
+        "Microsoft.AspNet.WebApi.Client.nuspec"
+      ]
+    },
     "Microsoft.AspNet.WebUtilities/1.0.0-rc1-final": {
       "type": "package",
       "serviceable": true,
@@ -17820,7 +17879,10 @@
       "Microsoft.Extensions.Logging.Debug >= 1.0.0-rc1-final",
       "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0-rc1-final"
     ],
-    "DNX,Version=v4.5.1": [],
+    "DNX,Version=v4.5.1": [
+      "Microsoft.AspNet.WebApi.Client >= 5.2.3",
+      "fx/System.Net.Http >= 4.0.0"
+    ],
     "DNXCore,Version=v5.0": []
   }
 }

@@ -4,6 +4,7 @@ namespace PatchManager.Models
     {
         ToTest,
         Tested,
-        Issue
+        Issue,
+        Unknown
     }
 }

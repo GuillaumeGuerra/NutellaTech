@@ -2,7 +2,7 @@
 
 namespace PatchManager.Services.GerritService
 {
-    public class GerritMetadata
+    public class GerritInformation
     {
         public string JiraId { get; set; }
         public string Title { get; set; }

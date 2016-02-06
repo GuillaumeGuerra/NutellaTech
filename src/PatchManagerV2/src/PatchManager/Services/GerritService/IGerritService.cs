@@ -6,6 +6,6 @@ namespace PatchManager.Services.GerritService
 {
     public interface IGerritService
     {
-        GerritMetadata GetGerritMetadata(int gerritId);
+        GerritInformation GetGerritInformation(int gerritId);
     }
 }

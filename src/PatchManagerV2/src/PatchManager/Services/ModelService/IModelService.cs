@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PatchManager.Models;
 
 namespace PatchManager.Services.ModelService
@@ -9,9 +10,9 @@ namespace PatchManager.Services.ModelService
 
         Patch GetPatch(string patchVersion);
 
-        List<Gerrit> GetPatchGerrits(string patchVersion);
+        List<GerritWithMetadata> GetPatchGerrits(string patchVersion);
 
-        Gerrit GetGerritForPatch(string patchVersion, int gerritId);
+        GerritWithMetadata GetGerritForPatch(string patchVersion, int gerritId);
 
         void AddGerritToPatch(string patchVersion, Gerrit gerrit);
     }

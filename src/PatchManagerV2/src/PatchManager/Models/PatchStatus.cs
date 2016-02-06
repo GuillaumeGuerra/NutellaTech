@@ -5,6 +5,7 @@ namespace PatchManager.Models
         Accepted,
         Refused,
         Asked,
-        Reverted
+        Reverted,
+        Unknown
     }
 }

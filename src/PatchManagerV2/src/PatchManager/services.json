@@ -14,5 +14,9 @@
   "Jira": {
     "type": "PatchManager.Services.JiraService.DemoJiraService",
     "isSingleton": false
+  },
+  "Resolver": {
+    "type": "PatchManager.Services.StatusResolverService.StatusResolverService",
+    "isSingleton": false
   }
 }

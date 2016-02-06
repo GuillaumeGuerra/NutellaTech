@@ -7,5 +7,10 @@ namespace PatchManager.Models
         public string Jira { get; set; }
         public string Owner { get; set; }
         public GerritStatus Status { get; set; }
+
+        public Gerrit()
+        {
+            Status = new GerritStatus();
+        }
     }
 }

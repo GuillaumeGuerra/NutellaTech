@@ -14,12 +14,15 @@ using PatchManager.Services.ModelService;
 using PatchManager.Services.PersistenceService;
 using PatchManager.Services.GerritService;
 using PatchManager.Services.JiraService;
+using PatchManager.Services.StatusResolverService;
 
 namespace PatchManager
 {
     public class Startup
     {
-        public IContainer Container { get; private set; }
+        public static IContainer Container { get; private set; }
+        public static IConfigurationRoot Configuration { get; set; }
+        public static SettingsConfiguration Settings { get; set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -27,14 +30,12 @@ namespace PatchManager
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("services.json")
+                .AddJsonFile("settings.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            // To initialize the model
-            //ModelService.Current.Initialize();
+            Settings = Configuration.Get<SettingsConfiguration>();
         }
-
-        public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -52,6 +53,7 @@ namespace PatchManager
             RegisterCustomService<IModelService>(builder, conf.Model);
             RegisterCustomService<IGerritService>(builder, conf.Gerrit);
             RegisterCustomService<IJiraService>(builder, conf.Jira);
+            RegisterCustomService<IStatusResolverService>(builder, conf.Resolver);
 
             builder.Populate(services);
             Container = builder.Build();

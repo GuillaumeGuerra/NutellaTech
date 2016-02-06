@@ -1,0 +1,5 @@
+﻿{
+  "TimeoutInMinutesToResolveGerritStatus": 5,
+  "JiraUrl": "https://itbox-jira.fr.world.socgen",
+  "GerritUrl": "https://gerrit-xone.fr.world.socgen"
+}

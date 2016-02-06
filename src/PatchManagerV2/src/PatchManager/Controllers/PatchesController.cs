@@ -6,6 +6,7 @@ using PatchManager.Models;
 using PatchManager.Services.GerritService;
 using PatchManager.Services.JiraService;
 using PatchManager.Services.ModelService;
+using PatchManager.Services.StatusResolverService;
 
 namespace PatchManager.Controllers
 {
@@ -13,14 +14,12 @@ namespace PatchManager.Controllers
     public class PatchesController : Controller
     {
         public IModelService Model { get; set; }
-        public IGerritService Gerrit { get; set; }
-        public IJiraService Jira { get; set; }
+        public IStatusResolverService StatusResolver { get; set; }
 
-        public PatchesController(IModelService model, IGerritService gerrit, IJiraService jira)
+        public PatchesController(IModelService model, IStatusResolverService statusResolver)
         {
             Model = model;
-            Gerrit = gerrit;
-            Jira = jira;
+            StatusResolver = statusResolver;
         }
 
         [HttpGet]
@@ -40,7 +39,11 @@ namespace PatchManager.Controllers
         [Route("{patchVersion}/gerrits")]
         public IEnumerable<Gerrit> GetPatchGerrits([FromRoute] string patchVersion)
         {
-            return Model.GetPatchGerrits(patchVersion);
+            foreach (var gerrit in Model.GetPatchGerrits(patchVersion))
+            {
+                StatusResolver.ResolveIfOutdated(gerrit);
+                yield return gerrit.Gerrit;
+            }
         }
 
         [HttpGet]
@@ -49,13 +52,9 @@ namespace PatchManager.Controllers
         {
             var gerrit = Model.GetGerritForPatch(patchVersion, gerritId);
 
-            var gerritMetadata = Gerrit.GetGerritMetadata(gerritId);
-            var jiraMetadata = Jira.GetJiraMetadata(gerritMetadata.JiraId);
+            StatusResolver.Resolve(gerrit);
 
-            gerrit.Status.Merge = gerritMetadata.Status;
-            gerrit.Status.Jira = jiraMetadata.Status;
-
-            return gerrit;
+            return gerrit.Gerrit;
         }
 
         [HttpPost]
@@ -74,21 +73,13 @@ namespace PatchManager.Controllers
         [Route("{patchVersion}/gerrits/{gerritId}/preview")]
         public Gerrit PreviewGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId)
         {
-            var gerritMetadata = Gerrit.GetGerritMetadata(gerritId);
-            var jiraMetadata = Jira.GetJiraMetadata(gerritMetadata.JiraId);
-
-            return new Gerrit()
+            var gerrit = new GerritWithMetadata(new Gerrit()
             {
-                Id = gerritId,
-                Jira = gerritMetadata.JiraId,
-                Owner = gerritMetadata.Owner,
-                Title = gerritMetadata.Title,
-                Status = new GerritStatus()
-                {
-                    Jira = jiraMetadata.Status,
-                    Merge = gerritMetadata.Status
-                }
-            };
+                Id = gerritId
+            });
+            StatusResolver.Resolve(gerrit);
+
+            return gerrit.Gerrit;
         }
     }
 }
