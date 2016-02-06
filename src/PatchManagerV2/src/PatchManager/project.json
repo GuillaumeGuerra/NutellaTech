@@ -19,7 +19,9 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final"
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
+    "System.Net.Http": "4.0",
+    "Microsoft.AspNet.WebApi.Client": "5.2.3"
   },
 
   "commands": {
@@ -29,10 +31,8 @@
   "frameworks": {
     "dnx451": {
       "frameworkAssemblies": {
-        "System.Net.Http": "4.0.0.0"
       },
       "dependencies": {
-        "Microsoft.AspNet.WebApi.Client": "5.2.3"
       }
     },
     "dnxcore50": { }
