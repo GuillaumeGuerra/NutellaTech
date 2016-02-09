@@ -4,9 +4,9 @@ angular
     .module('PatchManager')
     .controller('navbarController', navbarController);
 
-navbarController.$inject = ['$scope', 'Patches'];
+navbarController.$inject = ['$scope', "$location", 'Patches'];
 
-function navbarController($scope, patches) {
+function navbarController($scope, $location, patches) {
 
     console.log("fetching all patches !!");
 
@@ -23,5 +23,11 @@ function navbarController($scope, patches) {
             }
         });
     });
+
+    $scope.selectPatch = function (patchVersion) {
+        console.log("Selecting patch " + patchVersion);
+
+        $location.url('/patches/' + patchVersion);
+    }
 };
 

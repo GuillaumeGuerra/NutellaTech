@@ -6,10 +6,13 @@
 /// <reference path="app/controllers/navbarcontroller.js" />
 /// <reference path="app/controllers/patchcontroller.js" />
 /// <reference path="app/services/booksservice.js" />
-/// <reference path="app/services/patchesservice - copy.js" />
+/// <reference path="app/Services/gerritsService.js" />
 /// <reference path="app/services/patchesservice.js" />
-/// <reference path="js/site.js" />
 /// <reference path="lib/angular/angular.js" />
+/// <reference path="lib/angular-animate/angular-animate.js" />
+/// <reference path="lib/angular-aria/angular-aria.js" />
+/// <reference path="lib/angular-material/angular-material.js" />
+/// <reference path="lib/angular-messages/angular-messages.js" />
 /// <reference path="lib/angular-resource/angular-resource.js" />
 /// <reference path="lib/angular-route/angular-route.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />

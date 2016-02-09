@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="Angular Material: UI Components">
+
+    <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/master/angular-material.min.css" />
+
+    <style>
+        html, body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        /** Enabled Step 3... */
+
+        md-toolbar h3 {
+            margin: auto;
+            font-weight: 500;
+        }
+
+        md-list-item > button {
+            width: 100%;
+            text-align: left !important;
+        }
+
+        #content {
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-top: 5px;
+        }
+
+        .avatar {
+            position: relative;
+            width: 128px;
+            height: 128px;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            display: inline-block;
+            overflow: hidden;
+            margin: 0px;
+            vertical-align: middle;
+            zoom: 0.70;
+            transform: translateZ(0);
+            -webkit-transform: scale(0.70);
+            -moz-transform: scale(0.70);
+        }
+    </style>
+
+</head>
+<body ng-app="MyApp" ng-cloak layout="column">
+
+    <md-toolbar>
+        <h3>Angular Material Starter</h3>
+    </md-toolbar>
+
+    <div class="container" layout="row" flex>
+        <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2">
+            <md-list>
+                <md-list-item>
+                    <md-button>
+                        <md-icon md-svg-src="https://rawgit.com/angular/material-start/es5-tutorial/app/assets/svg/avatar-1.svg" class="avatar"></md-icon>
+                        Lia Luogo
+                    </md-button>
+                </md-list-item>
+
+                <md-list-item>
+                    <md-button>
+                        <md-icon md-svg-src="https://rawgit.com/angular/material-start/es5-tutorial/app/assets/svg/avatar-4.svg" class="avatar"></md-icon>
+                        Lawrence Ray
+                    </md-button>
+                </md-list-item>
+
+            </md-list>
+        </md-sidenav>
+        <md-content flex id="content" class="lightgreen" flex>
+            <md-icon md-svg-icon="https://rawgit.com/angular/material-start/es5-tutorial/app/assets/svg/avatar-1.svg" class="avatar"></md-icon>
+            <h2>Lia Luogo</h2>
+            <p>
+                I love cheese, especially airedale queso. Cheese and biscuits halloumi cauliflower cheese cottage cheese
+                swiss boursin fondue caerphilly. Cow port-salut camembert de normandie macaroni cheese feta who moved my
+                cheese babybel boursin. Red leicester roquefort boursin squirty cheese jarlsberg blue castello caerphilly
+                chalk and cheese. Lancashire.
+            </p>
+        </md-content>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.9/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.9/angular-aria.min.js"></script>
+    <script src="https://rawgit.com/angular/bower-material/master/angular-material.min.js"></script>
+
+    <script>
+        angular
+          .module('MyApp', ['ngMaterial'])
+          .run(function ($log) {
+              $log.debug("MyApp is ready!");
+          });
+    </script>
+
+</body>
+</html>
