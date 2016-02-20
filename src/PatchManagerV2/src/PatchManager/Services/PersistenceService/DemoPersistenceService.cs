@@ -48,7 +48,11 @@ namespace PatchManager.Services.PersistenceService
                 {
                     Id = 123,
                     Title = "Get rid of Jar-Jar once and for all",
-                    Jira = "STR-123_" + patchVersion,
+                    Jira = new Jira()
+                    {
+                        Id = "STR-123_" + patchVersion,
+                        Description = "Jira to get rid of Jar-Jar once and for all",
+                    },
                     Status = new GerritStatus()
                     {
                         Patch = PatchStatus.Accepted,
@@ -61,7 +65,11 @@ namespace PatchManager.Services.PersistenceService
                 {
                     Id = 456,
                     Title = "Now that Jar-Jar is gone, time to take care of Anakin",
-                    Jira = "STR-456_" + patchVersion,
+                    Jira = new Jira()
+                    {
+                        Id = "STR-456_" + patchVersion,
+                        Description = "Jira to Get rid of Anakin, now that Jar-Jar is gone",
+                    },
                     Status = new GerritStatus()
                     {
                         Patch = PatchStatus.Refused,
@@ -75,7 +83,11 @@ namespace PatchManager.Services.PersistenceService
                     Id = 789,
                     Title =
                         "Revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
-                    Jira = "STR-789_" + patchVersion,
+                    Jira = new Jira()
+                    {
+                        Id = "STR-789_" + patchVersion,
+                        Description = "Jira to revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
+                    },
                     Status = new GerritStatus()
                     {
                         Patch = PatchStatus.Asked,

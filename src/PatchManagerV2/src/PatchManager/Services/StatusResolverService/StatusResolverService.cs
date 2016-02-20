@@ -24,7 +24,6 @@ namespace PatchManager.Services.StatusResolverService
             if (gerrit.Gerrit.Status == null)
                 gerrit.Gerrit.Status = new GerritStatus();
 
-
             ResolveGerritIfNecessary(gerrit);
             ResolveJiraIfNecessary(gerrit);
 
@@ -39,7 +38,8 @@ namespace PatchManager.Services.StatusResolverService
                 return;
             }
 
-            var jiraMetadata = Jira.GetJiraInformation(gerrit.Gerrit.Jira);
+            var jiraMetadata = Jira.GetJiraInformation(gerrit.Gerrit.Jira.Id);
+            gerrit.Gerrit.Jira.Description = jiraMetadata.Description;
             gerrit.Gerrit.Status.Jira = jiraMetadata.Status;
         }
 
@@ -54,9 +54,20 @@ namespace PatchManager.Services.StatusResolverService
             var gerritMetadata = Gerrit.GetGerritInformation(gerrit.Gerrit.Id);
 
             gerrit.Gerrit.Owner = gerritMetadata.Owner;
-            gerrit.Gerrit.Jira = gerritMetadata.JiraId;
             gerrit.Gerrit.Title = gerritMetadata.Title;
             gerrit.Gerrit.Status.Merge = gerritMetadata.Status;
+
+            if (gerrit.Gerrit.Jira == null || gerrit.Gerrit.Jira.Id != gerritMetadata.JiraId)
+            {
+                gerrit.Gerrit.Jira = new Jira()
+                {
+                    Id = gerritMetadata.JiraId
+                };
+                
+                // Don't forget to update the jira status, to force a call to jira API
+                // If the jira status was already merged, we wouldn't refresh it, so as we know the associated jira has changed, let's be defensive and force a refresh
+                gerrit.Gerrit.Status.Jira = JiraStatus.Unknown;
+            }
         }
 
         public void ResolveIfOutdated(GerritWithMetadata gerrit)

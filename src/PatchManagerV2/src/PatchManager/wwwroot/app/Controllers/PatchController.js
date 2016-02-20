@@ -19,6 +19,8 @@ function patchController($scope, $routeParams, patches, gerrits) {
 
     console.log("getting all the gerrits related to patch " + $routeParams.patchVersion);
 
+    var originatorEv;
+
     $scope.patch = patches.get({ patchVersion: $routeParams.patchVersion });
 
     $scope.gerrits = gerrits.query({ patchVersion: $routeParams.patchVersion });
@@ -53,4 +55,27 @@ function patchController($scope, $routeParams, patches, gerrits) {
 
         $scope.gerrits.push($scope.newGerrit);
     }
+
+    $scope.acceptGerrit = function (gerrit) {
+        console.log("Accepting gerrit " + gerrit.id);
+
+        //gerrits.save({ gerritId: '', patchVersion: $routeParams.patchVersion }, $scope.newGerrit);
+
+        //$scope.gerrits.push($scope.newGerrit);
+    }
+
+    $scope.refuseGerrit = function (gerrit) {
+        console.log("Refusing gerrit " + gerrit.id);
+
+        //gerrits.save({ gerritId: '', patchVersion: $routeParams.patchVersion }, $scope.newGerrit);
+
+        //$scope.gerrits.push($scope.newGerrit);
+    }
+
+    $scope.openMenu = function ($mdOpenMenu, ev) {
+        console.log("opening menu");
+        
+        originatorEv = ev;
+        $mdOpenMenu(ev);
+    };
 }

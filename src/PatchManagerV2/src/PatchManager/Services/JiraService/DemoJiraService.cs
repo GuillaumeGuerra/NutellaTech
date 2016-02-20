@@ -7,10 +7,18 @@ namespace PatchManager.Services.JiraService
     {
         public JiraInformation GetJiraInformation(string jiraId)
         {
+            var random = new Random((int)DateTime.Now.Ticks);
             var values = Enum.GetValues(typeof(JiraStatus));
+            var titles = new[]
+            {
+                "Darth Vader you stink",
+                "Palpatine could use some botox injection once in a while",
+                "Han, you're dead now, but you got to date Leia, lucky you"
+            };
             return new JiraInformation()
             {
-                Status = (JiraStatus) values.GetValue(new Random((int)DateTime.Now.Ticks).Next(values.Length))
+                Status = (JiraStatus) values.GetValue(random.Next(values.Length)),
+                Description = titles[random.Next(titles.Length)],
             };
         }
     }
