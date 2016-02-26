@@ -102,5 +102,9 @@ namespace PatchManager.Services.PersistenceService
         public void AddGerritToPatch(Patch patch, Gerrit gerrit)
         {
         }
+
+        public void UpdatePathGerrit(Patch patch, Gerrit gerrit)
+        {
+        }
     }
 }

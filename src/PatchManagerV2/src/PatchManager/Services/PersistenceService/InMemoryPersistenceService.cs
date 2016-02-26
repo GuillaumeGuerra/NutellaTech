@@ -18,9 +18,8 @@ namespace PatchManager.Services.PersistenceService
             return new List<Gerrit>();
         }
 
-        public void AddGerritToPatch(Patch patch, Gerrit gerrit)
-        {
-            
-        }
+        public void AddGerritToPatch(Patch patch, Gerrit gerrit) { }
+
+        public void UpdatePathGerrit(Patch patch, Gerrit gerrit) { }
     }
 }

@@ -70,7 +70,7 @@ namespace PatchManager.Controllers
         }
 
         [HttpGet]
-        [Route("{patchVersion}/gerrits/{gerritId}/preview")]
+        [Route("{patchVersion}/gerrits/{gerritId}/action/preview")]
         public Gerrit PreviewGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId)
         {
             var gerrit = new GerritWithMetadata(new Gerrit()
@@ -80,6 +80,46 @@ namespace PatchManager.Controllers
             StatusResolver.Resolve(gerrit);
 
             return gerrit.Gerrit;
+        }
+
+        [HttpPost]
+        [Route("{patchVersion}/gerrits/{gerritId}/action/accept")]
+        public Gerrit AcceptGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
+        {
+            return ApplyActionToGerrit(patchVersion, gerritId, gerrit =>
+            {
+                if (gerrit.Status.Patch == PatchStatus.Accepted)
+                    return false;
+
+                gerrit.Status.Patch = PatchStatus.Accepted;
+                return true;
+            });
+        }
+
+        [HttpPost]
+        [Route("{patchVersion}/gerrits/{gerritId}/action/refuse")]
+        public Gerrit RefuseGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
+        {
+            return ApplyActionToGerrit(patchVersion, gerritId, gerrit =>
+            {
+                if (gerrit.Status.Patch == PatchStatus.Refused)
+                    return false;
+
+                gerrit.Status.Patch = PatchStatus.Refused;
+                return true;
+            });
+        }
+
+        private Gerrit ApplyActionToGerrit(string patchVersion, int gerritId, Func<Gerrit,bool> func )
+        {
+            var current = Model.GetGerritForPatch(patchVersion, gerritId);
+            if (current == null)
+                return null;
+
+            if(func(current.Gerrit))
+                Model.UpdatePatchGerrit(patchVersion, current.Gerrit);
+
+            return current.Gerrit;
         }
     }
 }

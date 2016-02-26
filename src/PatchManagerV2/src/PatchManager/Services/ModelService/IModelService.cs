@@ -15,5 +15,7 @@ namespace PatchManager.Services.ModelService
         GerritWithMetadata GetGerritForPatch(string patchVersion, int gerritId);
 
         void AddGerritToPatch(string patchVersion, Gerrit gerrit);
+
+        void UpdatePatchGerrit(string patchVersion, Gerrit gerrit);
     }
 }

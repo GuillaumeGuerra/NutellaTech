@@ -50,6 +50,16 @@ namespace PatchManager.Services.ModelService
             Persistence.AddGerritToPatch(patch.Patch, gerrit);
         }
 
+        public void UpdatePatchGerrit(string patchVersion, Gerrit gerrit)
+        {
+            PatchWithGerrits patch;
+            var foundGerrit = TryGetPatchGerrit(patchVersion, gerrit.Id, out patch);
+            if (foundGerrit == null)
+                return; // Case of a non existing patch, probably an issue ...
+
+            Persistence.UpdatePathGerrit(patch.Patch, gerrit);
+        }
+
         private PatchWithGerrits TryGetPatch(string patchVersion)
         {
             PatchWithGerrits patch;
@@ -58,6 +68,19 @@ namespace PatchManager.Services.ModelService
                 return patch;
 
             return new PatchWithGerrits();
+        }
+
+        private GerritWithMetadata TryGetPatchGerrit(string patchVersion, int gerritId, out PatchWithGerrits patch)
+        {
+            patch = TryGetPatch(patchVersion);
+            if (patch == null)
+                return null;
+
+            GerritWithMetadata gerrit;
+            if (patch.Gerrits.TryGetValue(gerritId, out gerrit))
+                return gerrit;
+
+            return null;
         }
 
         private void Initialize()
