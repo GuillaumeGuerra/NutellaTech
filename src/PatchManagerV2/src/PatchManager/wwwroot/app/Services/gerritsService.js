@@ -10,6 +10,7 @@ gerritsServices.factory('Gerrits', ['$resource',
           {
               query: { method: 'GET', params: {}, isArray: true },
               accept: { method: 'POST', params: { action: 'action', actionType: 'accept' } },
+              ask: { method: 'POST', params: { action: 'action', actionType: 'ask' } },
               refuse: { method: 'POST', params: { action: 'action', actionType: 'refuse' } }
           });
   }]);

@@ -97,6 +97,20 @@ namespace PatchManager.Controllers
         }
 
         [HttpPost]
+        [Route("{patchVersion}/gerrits/{gerritId}/action/ask")]
+        public Gerrit AskGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
+        {
+            return ApplyActionToGerrit(patchVersion, gerritId, gerrit =>
+            {
+                if (gerrit.Status.Patch == PatchStatus.Asked)
+                    return false;
+
+                gerrit.Status.Patch = PatchStatus.Asked;
+                return true;
+            });
+        }
+
+        [HttpPost]
         [Route("{patchVersion}/gerrits/{gerritId}/action/refuse")]
         public Gerrit RefuseGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
         {
