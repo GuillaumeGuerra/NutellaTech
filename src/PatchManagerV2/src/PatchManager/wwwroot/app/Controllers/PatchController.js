@@ -59,17 +59,13 @@ function patchController($scope, $routeParams, patches, gerrits) {
     $scope.acceptGerrit = function (gerrit) {
         console.log("Accepting gerrit " + gerrit.id);
 
-        gerrit.status = gerrits.save({ gerritId: gerrit.id, patchVersion: $routeParams.patchVersion, action: 'action', actionType: 'accept' }).status;
-
-        //gerrits.save({ gerritId: '', patchVersion: $routeParams.patchVersion }, $scope.newGerrit);
-
-        //$scope.gerrits.push($scope.newGerrit);
+        gerrit.$accept({ patchVersion: $routeParams.patchVersion });
     }
 
     $scope.refuseGerrit = function (gerrit) {
         console.log("Refusing gerrit " + gerrit.id);
-
-        gerrit.status = gerrits.save({ gerritId: gerrit.id, patchVersion: $routeParams.patchVersion, action: 'action', actionType: 'refuse' }).status;
+        
+        gerrit.$refuse({ patchVersion: $routeParams.patchVersion });
 
         //gerrits.save({ gerritId: '', patchVersion: $routeParams.patchVersion }, $scope.newGerrit);
 

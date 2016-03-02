@@ -96,6 +96,24 @@ namespace PatchManager.Services.PersistenceService
                         Test = TestStatus.Issue
                     }
                 },
+                new Gerrit()
+                {
+                    Id = 666,
+                    Title =
+                        "Rey, we don't know yet if you're Leia's daughter, but you're as pretty as she was, a long time ago, in a galaxy far far away",
+                    Jira = new Jira()
+                    {
+                        Id = "STR-666_" + patchVersion,
+                        Description = "Let's find another fancy bikini, as it's the only way to decide who is the prettiest"
+                    },
+                    Status = new GerritStatus()
+                    {
+                        Patch = PatchStatus.Asked,
+                        Jira = JiraStatus.Resolved,
+                        Merge = MergeStatus.Merged,
+                        Test = TestStatus.Issue
+                    }
+                },
             };
         }
 

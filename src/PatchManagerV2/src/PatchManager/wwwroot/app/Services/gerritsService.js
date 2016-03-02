@@ -7,5 +7,9 @@ gerritsServices.factory('Gerrits', ['$resource',
       return $resource(
           '/api/patches/:patchVersion/gerrits/:gerritId/:action/:actionType',
           { patchVersion: '@version', gerritId: '@id', action: '', actionType: '' },
-          { query: { method: 'GET', params: {}, isArray: true } });
+          {
+              query: { method: 'GET', params: {}, isArray: true },
+              accept: { method: 'POST', params: { action: 'action', actionType: 'accept' } },
+              refuse: { method: 'POST', params: { action: 'action', actionType: 'refuse' } }
+          });
   }]);
