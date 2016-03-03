@@ -21,5 +21,10 @@ namespace PatchManager.Services.JiraService
                 Description = titles[random.Next(titles.Length)],
             };
         }
+
+        public bool Resolve(string jiraId)
+        {
+            return true;
+        }
     }
 }

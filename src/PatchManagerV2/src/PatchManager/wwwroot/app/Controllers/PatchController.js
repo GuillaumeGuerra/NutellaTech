@@ -56,22 +56,10 @@ function patchController($scope, $routeParams, patches, gerrits) {
         $scope.gerrits.push($scope.newGerrit);
     }
 
-    $scope.acceptGerrit = function (gerrit) {
-        console.log("Accepting gerrit " + gerrit.id);
+    $scope.applyActionToGerrit = function (gerrit, actionToApply) {
+        console.log("Applying action " + actionToApply + " to gerrit " + gerrit.id);
 
-        gerrit.$accept({ patchVersion: $routeParams.patchVersion });
-    }
-
-    $scope.refuseGerrit = function (gerrit) {
-        console.log("Refusing gerrit " + gerrit.id);
-        
-        gerrit.$refuse({ patchVersion: $routeParams.patchVersion });
-    }
-
-    $scope.askGerrit = function (gerrit) {
-        console.log("Asking gerrit " + gerrit.id);
-
-        gerrit.$ask({ patchVersion: $routeParams.patchVersion });
+        gerrit.$action({ patchVersion: $routeParams.patchVersion, action: actionToApply });
     }
 
     $scope.openMenu = function ($mdOpenMenu, ev) {

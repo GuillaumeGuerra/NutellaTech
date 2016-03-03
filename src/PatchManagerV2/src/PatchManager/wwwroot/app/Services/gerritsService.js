@@ -5,12 +5,10 @@ var gerritsServices = angular.module('gerritsServices', ['ngResource']);
 gerritsServices.factory('Gerrits', ['$resource',
   function ($resource) {
       return $resource(
-          '/api/patches/:patchVersion/gerrits/:gerritId/:action/:actionType',
-          { patchVersion: '@version', gerritId: '@id', action: '', actionType: '' },
+          '/api/patches/:patchVersion/gerrits/:gerritId/:isAction/:action',
+          { patchVersion: '@version', gerritId: '@id', isAction: '', action: '' },
           {
               query: { method: 'GET', params: {}, isArray: true },
-              accept: { method: 'POST', params: { action: 'action', actionType: 'accept' } },
-              ask: { method: 'POST', params: { action: 'action', actionType: 'ask' } },
-              refuse: { method: 'POST', params: { action: 'action', actionType: 'refuse' } }
+              action: { method: 'POST', params: { isAction: 'action'} },
           });
   }]);

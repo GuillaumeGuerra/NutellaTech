@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Autofac;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -10,6 +11,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using PatchManager.Config;
 using Autofac.Extensions.DependencyInjection;
+using PatchManager.Services.GerritActions;
 using PatchManager.Services.ModelService;
 using PatchManager.Services.PersistenceService;
 using PatchManager.Services.GerritService;
@@ -20,6 +22,19 @@ namespace PatchManager
 {
     public class Startup
     {
+        //TODO : update the model when the status resolver decided to refresh jira and gerrit status
+        //TODO : add logs
+        //TODO : find a way to log all exceptions in a single location
+        //TODO : implement actual gerrit and jira services
+        //TODO : provide a grid view in addition to the card one
+        //TODO : show the refresh and refresh all buttons in a 3 points menu on the top right corner of the cards
+        //TODO : review the "Register gerrit" form using material api
+        //TODO : handle authentication, to use RM credentials in Gerrit and Jira
+        //TODO : split the api into a dedicated project without DNX, and write proper UTs
+        //TODO : think about what can be threaded, to perform asynchronous save into the model
+        //TODO : handle exceptions in the website, and show a popup with the error message
+
+
         public static IContainer Container { get; private set; }
         public static IConfigurationRoot Configuration { get; set; }
         public static SettingsConfiguration Settings { get; set; }
@@ -55,10 +70,27 @@ namespace PatchManager
             RegisterCustomService<IJiraService>(builder, conf.Jira);
             RegisterCustomService<IStatusResolverService>(builder, conf.Resolver);
 
+            RegisterActions(builder);
+
             builder.Populate(services);
             Container = builder.Build();
 
             return Container.Resolve<IServiceProvider>();
+        }
+
+        private void RegisterActions(ContainerBuilder builder)
+        {
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                if (type.GetInterface(typeof(IGerritAction).Name) != null && !type.IsAbstract)
+                {
+                    var attribute = type.GetCustomAttribute<GerritActionAttribute>();
+                    if (attribute == null)
+                        throw new InvalidOperationException(string.Format("Missing GerritAction attribute on type [{0}]", type.Name));
+
+                    builder.RegisterType(type).Named<IGerritAction>(attribute.Name.ToUpper());
+                }
+            }
         }
 
         private void RegisterCustomService<TService>(ContainerBuilder builder, SingleServiceConfiguration service)
@@ -96,7 +128,7 @@ namespace PatchManager
 
             app.UseIISPlatformHandler();
 
-            app.UseDefaultFiles(new DefaultFilesOptions() { DefaultFileNames = new[] { "index.html" } });
+            app.UseDefaultFiles(new DefaultFilesOptions() { DefaultFileNames = new[] { "Material.html" } });
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

@@ -22,6 +22,11 @@ namespace PatchManager.Services.JiraService
             };
         }
 
+        public bool Resolve(string jiraId)
+        {
+            throw new NotImplementedException("TODO !!!!");
+        }
+
         private JiraStatus ParseStatus(string status)
         {
             switch (status)

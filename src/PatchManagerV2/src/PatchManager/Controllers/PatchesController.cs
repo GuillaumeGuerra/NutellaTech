@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Autofac;
 using Microsoft.AspNet.Mvc;
 using PatchManager.Models;
-using PatchManager.Services.GerritService;
-using PatchManager.Services.JiraService;
+using PatchManager.Services.GerritActions;
 using PatchManager.Services.ModelService;
 using PatchManager.Services.StatusResolverService;
 
@@ -69,68 +68,20 @@ namespace PatchManager.Controllers
             return gerrit;
         }
 
-        [HttpGet]
-        [Route("{patchVersion}/gerrits/{gerritId}/action/preview")]
-        public Gerrit PreviewGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId)
-        {
-            var gerrit = new GerritWithMetadata(new Gerrit()
-            {
-                Id = gerritId
-            });
-            StatusResolver.Resolve(gerrit);
-
-            return gerrit.Gerrit;
-        }
-
         [HttpPost]
-        [Route("{patchVersion}/gerrits/{gerritId}/action/accept")]
-        public Gerrit AcceptGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
-        {
-            return ApplyActionToGerrit(patchVersion, gerritId, gerrit =>
-            {
-                if (gerrit.Status.Patch == PatchStatus.Accepted)
-                    return false;
-
-                gerrit.Status.Patch = PatchStatus.Accepted;
-                return true;
-            });
-        }
-
-        [HttpPost]
-        [Route("{patchVersion}/gerrits/{gerritId}/action/ask")]
-        public Gerrit AskGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
-        {
-            return ApplyActionToGerrit(patchVersion, gerritId, gerrit =>
-            {
-                if (gerrit.Status.Patch == PatchStatus.Asked)
-                    return false;
-
-                gerrit.Status.Patch = PatchStatus.Asked;
-                return true;
-            });
-        }
-
-        [HttpPost]
-        [Route("{patchVersion}/gerrits/{gerritId}/action/refuse")]
-        public Gerrit RefuseGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
-        {
-            return ApplyActionToGerrit(patchVersion, gerritId, gerrit =>
-            {
-                if (gerrit.Status.Patch == PatchStatus.Refused)
-                    return false;
-
-                gerrit.Status.Patch = PatchStatus.Refused;
-                return true;
-            });
-        }
-
-        private Gerrit ApplyActionToGerrit(string patchVersion, int gerritId, Func<Gerrit,bool> func )
+        [Route("{patchVersion}/gerrits/{gerritId}/action/{actionToPerform}")]
+        public Gerrit ApplyActionToGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
         {
             var current = Model.GetGerritForPatch(patchVersion, gerritId);
             if (current == null)
                 return null;
 
-            if(func(current.Gerrit))
+            var action = Startup.Container.ResolveOptionalNamed<IGerritAction>(actionToPerform.ToUpper());
+
+            if (action == null)
+                throw new InvalidOperationException(string.Format("Unknown action to apply [{0}]", actionToPerform));
+
+            if (action.Apply(current.Gerrit))
                 Model.UpdatePatchGerrit(patchVersion, current.Gerrit);
 
             return current.Gerrit;

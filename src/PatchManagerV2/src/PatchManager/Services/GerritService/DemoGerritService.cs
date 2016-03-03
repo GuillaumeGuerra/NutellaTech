@@ -25,5 +25,10 @@ namespace PatchManager.Services.GerritService
                 Status = (MergeStatus) values.GetValue(random.Next(values.Length))
             };
         }
+
+        public bool Merge(int gerritId)
+        {
+            return true;
+        }
     }
 }

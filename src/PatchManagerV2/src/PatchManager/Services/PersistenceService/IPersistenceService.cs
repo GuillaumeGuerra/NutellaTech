@@ -8,6 +8,6 @@ namespace PatchManager.Services.PersistenceService
         IEnumerable<Patch> GetAllPatches();
         IEnumerable<Gerrit> GetGerrits(string patchVersion);
         void AddGerritToPatch(Patch patch, Gerrit gerrit);
-        void UpdatePathGerrit(Patch patch, Gerrit gerrit);
+        void UpdatePatchGerrit(Patch patch, Gerrit gerrit);
     }
 }

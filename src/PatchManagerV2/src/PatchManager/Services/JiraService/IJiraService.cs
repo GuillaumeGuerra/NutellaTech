@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace PatchManager.Services.JiraService
+﻿namespace PatchManager.Services.JiraService
 {
     public interface IJiraService
     {
         JiraInformation GetJiraInformation(string jiraId);
+        bool Resolve(string jiraId);
     }
 }

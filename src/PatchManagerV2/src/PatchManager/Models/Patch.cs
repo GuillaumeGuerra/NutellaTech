@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using PatchManager.Controllers;
 
 namespace PatchManager.Models
 {

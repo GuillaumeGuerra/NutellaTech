@@ -57,7 +57,7 @@ namespace PatchManager.Services.ModelService
             if (foundGerrit == null)
                 return; // Case of a non existing patch, probably an issue ...
 
-            Persistence.UpdatePathGerrit(patch.Patch, gerrit);
+            Persistence.UpdatePatchGerrit(patch.Patch, gerrit);
         }
 
         private PatchWithGerrits TryGetPatch(string patchVersion)
