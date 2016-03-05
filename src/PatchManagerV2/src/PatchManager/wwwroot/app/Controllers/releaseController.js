@@ -3,32 +3,32 @@
 angular.module('PatchManager').config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider.
-                when('/patches/:patchVersion', {
-                    templateUrl: 'app/partials/patch.html',
-                    controller: 'patchController'
+                when('/patches/:releaseVersion', {
+                    templateUrl: 'app/partials/release.html',
+                    controller: 'releaseController'
                 });
         }]);
 
 angular
     .module('PatchManager')
-    .controller('patchController', patchController);
+    .controller('releaseController', releaseController);
 
-patchController.$inject = ['$scope', '$routeParams', 'Patches', 'Gerrits', '$mdDialog', '$mdMedia'];
+releaseController.$inject = ['$scope', '$routeParams', 'Patches', 'Gerrits', '$mdDialog'];
 
-function patchController($scope, $routeParams, patches, gerrits, $mdDialog, $mdMedia) {
+function releaseController($scope, $routeParams, patches, gerrits, $mdDialog) {
 
-    console.log("getting all the gerrits related to patch " + $routeParams.patchVersion);
+    console.log("getting all the gerrits related to release " + $routeParams.releaseVersion);
 
     var originatorEv;
 
-    $scope.patch = patches.get({ patchVersion: $routeParams.patchVersion });
+    $scope.release = patches.get({ patchVersion: $routeParams.releaseVersion });
 
-    $scope.gerrits = gerrits.query({ patchVersion: $routeParams.patchVersion });
+    $scope.gerrits = gerrits.query({ patchVersion: $routeParams.releaseVersion });
 
     $scope.refreshGerrit = function (gerrit) {
         console.log("refreshing gerrit " + gerrit.id);
 
-        gerrits.get({ gerritId: gerrit.id, patchVersion: $routeParams.patchVersion }).$promise.then(function (result) {
+        gerrits.get({ gerritId: gerrit.id, patchVersion: $routeParams.releaseVersion }).$promise.then(function (result) {
 
             console.log("Refreshing statuses for gerrit " + result.id);
             gerrit.status = result.status;
@@ -46,7 +46,7 @@ function patchController($scope, $routeParams, patches, gerrits, $mdDialog, $mdM
     $scope.saveGerrit = function () {
         console.log("Saving new gerrit " + $scope.newGerrit.id);
 
-        gerrits.save({ gerritId: '', patchVersion: $routeParams.patchVersion }, $scope.newGerrit);
+        gerrits.save({ gerritId: '', patchVersion: $routeParams.releaseVersion }, $scope.newGerrit);
 
         $scope.gerrits.push($scope.newGerrit);
     }
@@ -54,7 +54,7 @@ function patchController($scope, $routeParams, patches, gerrits, $mdDialog, $mdM
     $scope.applyActionToGerrit = function (gerrit, actionToApply) {
         console.log("Applying action " + actionToApply + " to gerrit " + gerrit.id);
 
-        gerrit.$action({ patchVersion: $routeParams.patchVersion, action: actionToApply });
+        gerrit.$action({ patchVersion: $routeParams.releaseVersion, action: actionToApply });
     }
 
     $scope.openMenu = function ($mdOpenMenu, ev) {

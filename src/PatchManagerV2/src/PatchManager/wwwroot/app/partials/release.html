@@ -1,6 +1,6 @@
 ﻿<div ng-cloak="">
-    <!--<div class="alert alert-danger" ng-hide="patch.isCurrent===true">
-        <strong>Beware !</strong> This is not the current patch !
+    <!--<div class="alert alert-danger" ng-hide="release.isCurrent===true">
+        <strong>Beware !</strong> This is not the current release !
     </div>-->
     <md-content>
 
@@ -8,18 +8,18 @@
 
             <md-input-container>
                 <label>Release Manager</label>
-                <input ng-model="patch.releaseManager" ng-disabled="true">
-                <!--<md-button class="md-primary" ng-href="mailto:{{patch.releaseManagerMail}}" target="_blank">{{patch.releaseManager}}</md-button>-->
+                <input ng-model="release.releaseManager" ng-disabled="true">
+                <!--<md-button class="md-primary" ng-href="mailto:{{release.releaseManagerMail}}" target="_blank">{{release.releaseManager}}</md-button>-->
             </md-input-container>
 
             <md-input-container>
                 <label>Version</label>
-                <input ng-model="patch.version" ng-disabled="true">
+                <input ng-model="release.version" ng-disabled="true">
             </md-input-container>
 
             <md-input-container>
                 <label>Date</label>
-                <input ng-model="patch.date" ng-disabled="true">
+                <input ng-model="release.date" ng-disabled="true">
             </md-input-container>
         </section>
 
