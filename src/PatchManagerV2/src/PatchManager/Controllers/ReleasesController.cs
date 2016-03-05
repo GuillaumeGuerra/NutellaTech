@@ -10,12 +10,12 @@ using PatchManager.Services.StatusResolverService;
 namespace PatchManager.Controllers
 {
     [Route("api/[controller]")]
-    public class PatchesController : Controller
+    public class ReleasesController : Controller
     {
         public IModelService Model { get; set; }
         public IStatusResolverService StatusResolver { get; set; }
 
-        public PatchesController(IModelService model, IStatusResolverService statusResolver)
+        public ReleasesController(IModelService model, IStatusResolverService statusResolver)
         {
             Model = model;
             StatusResolver = statusResolver;
