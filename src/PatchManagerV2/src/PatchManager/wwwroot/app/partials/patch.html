@@ -3,11 +3,8 @@
         <strong>Beware !</strong> This is not the current patch !
     </div>-->
     <md-content>
-        <!--<div layout="row">-->
-        <!-- -->
 
-        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="">
-            <!--<div class="panel-heading">About this patch</div>-->
+        <section layout="row" layout-align="center center">
 
             <md-input-container>
                 <label>Release Manager</label>
@@ -54,10 +51,7 @@
                         </md-card-header-text>
                     </md-card-header>
                     <md-card-content>
-                        <div layout="row" layout-align="space-between stretch">
-                            <p flex="20">{{gerrit.id}}</p>
-                            <p flex="80">{{gerrit.title}}</p>
-                        </div>
+                        <p>{{gerrit.title}}</p>
                     </md-card-content>
                     <md-card-footer>
                         <div layout="row" layout-align="space-between stretch" layout-wrap>
