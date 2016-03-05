@@ -86,5 +86,18 @@ namespace PatchManager.Controllers
 
             return current.Gerrit;
         }
+
+        [HttpGet]
+        [Route("{patchVersion}/gerrits/{gerritId}/action/preview")]
+        public Gerrit PreviewGerrit([FromRoute] string patchVersion, [FromRoute] int gerritId)
+        {
+            var gerrit = new GerritWithMetadata(new Gerrit()
+            {
+                Id = gerritId
+            });
+            StatusResolver.Resolve(gerrit);
+
+            return gerrit.Gerrit;
+        }
     }
 }

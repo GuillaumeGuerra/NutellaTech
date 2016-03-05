@@ -4,6 +4,7 @@
 /// <reference path="app/Controllers/bookListController.js" />
 /// <reference path="app/controllers/editbookcontroller.js" />
 /// <reference path="app/controllers/navbarcontroller.js" />
+/// <reference path="app/controllers/patchcontroller - copy.js" />
 /// <reference path="app/controllers/patchcontroller.js" />
 /// <reference path="app/services/booksservice.js" />
 /// <reference path="app/Services/gerritsService.js" />

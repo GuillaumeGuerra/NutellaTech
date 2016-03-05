@@ -13,9 +13,9 @@ angular
     .module('PatchManager')
     .controller('patchController', patchController);
 
-patchController.$inject = ['$scope', '$routeParams', 'Patches', 'Gerrits'];
+patchController.$inject = ['$scope', '$routeParams', 'Patches', 'Gerrits', '$mdDialog', '$mdMedia'];
 
-function patchController($scope, $routeParams, patches, gerrits) {
+function patchController($scope, $routeParams, patches, gerrits, $mdDialog, $mdMedia) {
 
     console.log("getting all the gerrits related to patch " + $routeParams.patchVersion);
 
@@ -41,11 +41,6 @@ function patchController($scope, $routeParams, patches, gerrits) {
         $scope.gerrits.forEach(function (gerrit) {
             $scope.refreshGerrit(gerrit);
         });
-    }
-
-    $scope.searchForGerrit = function () {
-        console.log("Looking for gerrit information for gerrit " + $scope.newGerrit.id);
-        $scope.newGerrit = gerrits.get({ gerritId: $scope.newGerrit.id, patchVersion: $routeParams.patchVersion, action: 'action', actionType: 'preview' });
     };
 
     $scope.saveGerrit = function () {
@@ -67,5 +62,23 @@ function patchController($scope, $routeParams, patches, gerrits) {
 
         originatorEv = ev;
         $mdOpenMenu(ev);
+    };
+
+    $scope.showAdvanced = function (ev) {
+        $mdDialog.show({
+            controller: newGerritController,
+            templateUrl: 'app/partials/add-gerrit.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: false,
+            fullscreen: true
+        })
+        .then(function (answer) {
+            console.log("New gerrit received from the popup, saving it");
+            $scope.newGerrit = answer;
+            $scope.saveGerrit();
+        }, function () {
+            console.log("New gerrit creation cancelled");
+        });
     };
 }

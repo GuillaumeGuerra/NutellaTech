@@ -4,7 +4,7 @@
     </div>-->
     <md-content>
         <!--<div layout="row">-->
-        <!--  -->
+        <!-- -->
 
         <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="">
             <!--<div class="panel-heading">About this patch</div>-->
@@ -28,7 +28,7 @@
 
         <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="">
             <md-button style="float: left;" class="md-raised md-primary" ng-click="refreshAllGerrits()">Refresh All</md-button>
-            <md-button style="float: right;" class="md-raised md-warn" data-toggle="modal" data-target="#myModal" ng-click="newGerrit={}"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</md-button>
+            <md-button style="float: right;" class="md-raised md-warn" ng-click="showAdvanced($event)"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</md-button>
         </section>
 
         <section layout-align="center center">
@@ -50,6 +50,8 @@
                             <p flex="20">{{gerrit.id}}</p>
                             <p flex="80">{{gerrit.title}}</p>
                         </div>
+                    </md-card-content>
+                    <md-card-footer>
                         <div layout="row" layout-align="space-between stretch" layout-wrap>
 
                             <md-menu>
@@ -123,9 +125,10 @@
                                     </md-menu-item>
                                 </md-menu-content>
                             </md-menu>
-                            
+
                         </div>
-                    </md-card-content>
+                    </md-card-footer>
+
                     <!--<md-card-actions layout="row" layout-align="space-between center">
                         <md-button class="md-raised md-primary">Accept</md-button>
                         <md-button class="md-raised md-warn">Refuse</md-button>
@@ -137,5 +140,6 @@
             </div>
         </section>
     </md-content>
+
 </div>
 

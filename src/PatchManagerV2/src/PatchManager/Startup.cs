@@ -33,6 +33,13 @@ namespace PatchManager
         //TODO : split the api into a dedicated project without DNX, and write proper UTs
         //TODO : think about what can be threaded, to perform asynchronous save into the model
         //TODO : handle exceptions in the website, and show a popup with the error message
+        //TODO : show a progress bar when background actions are ongoing, freeze specific buttons that can't be run in the same time
+        //TODO : provide multiple views in the client : "gerrit gathering" (no other status than accepted or not), "merge" (filter non accepted patches, show only merge and jira status), "test" (only test status)
+        //TODO : think about a way to provide a unique "meta-status" : "gerrit to accept", "gerrit to merge and jira to review", "gerrit to test". it should be a combination of all status into a single meaningful one
+        //TODO : use the proper button class for the search button in the add-gerrit page
+        //TODO : add the owner of the gerrit (the one who who pushes the mail), in addition to the actual author of the gerrit, that can be off for instance
+        //TODO : use tabs in the gerrit addtion page, to separate gerrit and jira informations
+        //TODO : add the team asset for each gerrit 
 
 
         public static IContainer Container { get; private set; }
