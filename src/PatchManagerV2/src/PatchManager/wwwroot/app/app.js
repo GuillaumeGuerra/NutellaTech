@@ -8,7 +8,7 @@ var app = angular.module('PatchManager', [
 
     // Custom modules 
     'booksServices',
-    'patchesServices',
+    'releasesServices',
     'gerritsServices'
 
     // 3rd Party Modules

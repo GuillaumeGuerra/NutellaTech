@@ -16,7 +16,7 @@
     <script src="lib/angular-route/angular-route.js"></script>
     <script src="app/app.js"></script>
     <script src="app/services/booksService.js"></script>
-    <script src="app/services/patchesService.js"></script>
+    <script src="app/services/releasesService.js"></script>
     <script src="app/services/gerritsService.js"></script>
     <script src="app/controllers/bookListController.js"></script>
     <script src="app/Controllers/editBookController.js"></script>
@@ -35,11 +35,11 @@
 <div flex class="container" layout="row">
     <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2">
         <md-list ng-cloak="" class="listdemoListControls" ng-controller="navbarController">
-            <md-list-item ng-click="selectPatch(currentPatch.version)" class="secondary-button-padding">
-                <p>Current ({{currentPatch.version}})</p>
+            <md-list-item ng-click="selectRelease(currentRelease.version)" class="secondary-button-padding">
+                <p>Current ({{currentRelease.version}})</p>
             </md-list-item>
-            <md-list-item ng-repeat="patch in allPatches" ng-click="selectPatch(patch.version)">
-                <p>{{patch.version}}</p>
+            <md-list-item ng-repeat="release in allReleases" ng-click="selectRelease(release.version)">
+                <p>{{release.version}}</p>
             </md-list-item>
 
             <md-divider></md-divider>

@@ -4,30 +4,30 @@ angular
     .module('PatchManager')
     .controller('navbarController', navbarController);
 
-navbarController.$inject = ['$scope', "$location", 'Patches'];
+navbarController.$inject = ['$scope', "$location", 'Releases'];
 
-function navbarController($scope, $location, patches) {
+function navbarController($scope, $location, releases) {
 
-    console.log("fetching all patches !!");
+    console.log("fetching all releases !!");
 
-    $scope.allPatches = patches.query();
-    $scope.allPatches.$promise.then(function (result) {
+    $scope.allReleases = releases.query();
+    $scope.allReleases.$promise.then(function (result) {
 
-        console.log("Iterating on all patches");
+        console.log("Iterating on all releases");
 
-        result.forEach(function (patch) {
-            console.log("Current patch is " + patch.version);
-            if (patch.isCurrent === true) {
-                console.log("Found the current patch !!! " + patch.version);
-                $scope.currentPatch = patch;
+        result.forEach(function (release) {
+            console.log("Current release is " + release.version);
+            if (release.isCurrent === true) {
+                console.log("Found the current release !!! " + release.version);
+                $scope.currentRelease = release;
             }
         });
     });
 
-    $scope.selectPatch = function (patchVersion) {
-        console.log("Selecting patch " + patchVersion);
+    $scope.selectRelease = function (releaseVersion) {
+        console.log("Selecting release " + releaseVersion);
 
-        $location.url('/patches/' + patchVersion);
+        $location.url('/releases/' + releaseVersion);
     }
 };
 

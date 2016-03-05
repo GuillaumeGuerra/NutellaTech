@@ -29,7 +29,7 @@ function newGerritController($scope, $routeParams, $mdDialog, gerrits) {
         console.log("saved owner is " + $scope.userInput.owner);
         console.log("initial owner is " + $scope.newGerrit.owner);
 
-        gerrits.get({ gerritId: $scope.newGerrit.id, patchVersion: $routeParams.patchVersion, isAction: 'action', action: 'preview' }).$promise.then(
+        gerrits.get({ gerritId: $scope.newGerrit.id, releaseVersion: $routeParams.releaseVersion, isAction: 'action', action: 'preview' }).$promise.then(
             function (result) {
                 console.log(result);
                 console.log("restored owner is " + $scope.userInput.owner);
