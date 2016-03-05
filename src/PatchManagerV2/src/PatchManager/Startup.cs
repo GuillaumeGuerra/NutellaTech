@@ -28,7 +28,7 @@ namespace PatchManager
         //TODO : implement actual gerrit and jira services
         //TODO : provide a grid view in addition to the card one
         //TODO : show the refresh and refresh all buttons in a 3 points menu on the top right corner of the cards
-        //TODO : review the "Register gerrit" form using material api
+        //DONE : review the "Register gerrit" form using material api
         //TODO : handle authentication, to use RM credentials in Gerrit and Jira
         //TODO : split the api into a dedicated project without DNX, and write proper UTs
         //TODO : think about what can be threaded, to perform asynchronous save into the model
@@ -37,9 +37,10 @@ namespace PatchManager
         //TODO : provide multiple views in the client : "gerrit gathering" (no other status than accepted or not), "merge" (filter non accepted patches, show only merge and jira status), "test" (only test status)
         //TODO : think about a way to provide a unique "meta-status" : "gerrit to accept", "gerrit to merge and jira to review", "gerrit to test". it should be a combination of all status into a single meaningful one
         //TODO : use the proper button class for the search button in the add-gerrit page
-        //TODO : add the owner of the gerrit (the one who who pushes the mail), in addition to the actual author of the gerrit, that can be off for instance
+        //DONE : add the owner of the gerrit (the one who who pushes the mail), in addition to the actual author of the gerrit, that can be off for instance
         //TODO : use tabs in the gerrit addtion page, to separate gerrit and jira informations
-        //TODO : add the team asset for each gerrit 
+        //DONE : add the team asset for each gerrit 
+        //TODO : provide a quick searh feature
 
 
         public static IContainer Container { get; private set; }

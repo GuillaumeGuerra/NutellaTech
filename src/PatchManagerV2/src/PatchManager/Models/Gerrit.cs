@@ -8,6 +8,7 @@ namespace PatchManager.Models
         public string Owner { get; set; }
         public Jira Jira { get; set; }
         public GerritStatus Status { get; set; }
+        public RiskOneAsset Asset { get; set; }
 
         public Gerrit()
         {

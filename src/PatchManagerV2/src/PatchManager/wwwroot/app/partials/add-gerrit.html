@@ -11,17 +11,28 @@
         </md-toolbar>
         <md-dialog-content>
             <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
-                <div>
+                <div layout-gt-sm="row">
                     <md-input-container>
                         <label>Gerrit Id</label>
-                        <input ng-model="newGerrit.id" placeholder="12345" type="number">
+                        <input ng-model="newGerrit.id" type="number">
                     </md-input-container>
                     <md-button class="md-icon-button" ng-click="searchForGerrit()">
                         <md-icon md-svg-src="images/cross.svg"></md-icon>
                     </md-button>
                     <md-input-container>
-                        <label>Gerrit Owner</label>
-                        <input ng-model="newGerrit.owner" placeholder="Firstname Lastname" type="text">
+                        <label>Owner</label>
+                        <input ng-model="newGerrit.owner" type="text">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Asset</label>
+                        <md-select ng-model="newGerrit.asset">
+                            <md-option>Core</md-option>
+                            <md-option>Credit</md-option>
+                            <md-option>Official</md-option>
+                            <md-option>Pricing</md-option>
+                            <md-option>Rates</md-option>
+                            <md-option>Repo</md-option>
+                        </md-select>
                     </md-input-container>
                 </div>
             </md-content>

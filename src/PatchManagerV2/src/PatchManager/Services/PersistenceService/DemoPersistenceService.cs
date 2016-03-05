@@ -53,6 +53,8 @@ namespace PatchManager.Services.PersistenceService
                         Id = "STR-123_" + patchVersion,
                         Description = "Jira to get rid of Jar-Jar once and for all",
                     },
+                    Asset = RiskOneAsset.Core,
+                    Owner = "Kylo Ren",
                     Status = new GerritStatus()
                     {
                         Patch = PatchStatus.Accepted,
@@ -70,6 +72,8 @@ namespace PatchManager.Services.PersistenceService
                         Id = "STR-456_" + patchVersion,
                         Description = "Jira to Get rid of Anakin, now that Jar-Jar is gone",
                     },
+                    Asset = RiskOneAsset.Official,
+                    Owner = "Finn",
                     Status = new GerritStatus()
                     {
                         Patch = PatchStatus.Refused,
@@ -88,6 +92,8 @@ namespace PatchManager.Services.PersistenceService
                         Id = "STR-789_" + patchVersion,
                         Description = "Jira to revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
                     },
+                    Asset = RiskOneAsset.Rates,
+                    Owner = "Rey",
                     Status = new GerritStatus()
                     {
                         Patch = PatchStatus.Asked,
@@ -106,6 +112,8 @@ namespace PatchManager.Services.PersistenceService
                         Id = "STR-666_" + patchVersion,
                         Description = "Let's find another fancy bikini, as it's the only way to decide who is the prettiest"
                     },
+                    Asset = RiskOneAsset.Repo,
+                    Owner = "Poe Dameron",
                     Status = new GerritStatus()
                     {
                         Patch = PatchStatus.Asked,
