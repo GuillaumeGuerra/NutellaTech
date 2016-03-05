@@ -26,130 +26,129 @@
                 </div>
             </md-content>
             <md-content layout-padding="">
-                <div>
-                    <!--<div layout-gt-xs="row">
-                        <md-input-container flex-gt-xs="">
-                            <label>Gerrit Author</label>
-                            <input ng-model="newGerrit.gerritAuthor" disabled="" />
+                <div layout-gt-xs="row">
+                    <div layout-gt-xs="column" flex="20">
+                        <md-input-container flex-gt-xs="" style="margin: 0px">
+                            <label>Gerrit Id</label>
+                            <input ng-model="newGerrit.id" disabled="" />
                         </md-input-container>
-                    </div>-->
-                    <div layout-gt-xs="row">
-                        <div layout-gt-xs="column" flex="20">
-                            <md-input-container flex-gt-xs="">
-                                <label>Gerrit Id</label>
-                                <input ng-model="newGerrit.id" disabled="" />
-                            </md-input-container>
-                            <md-input-container flex-gt-xs="">
-                                <label>Status</label>
-                                <input ng-model="newGerrit.status.merge" disabled />
-                            </md-input-container>
-                        </div>
-                        <md-input-container flex-gt-xs="">
+                        <md-input-container flex-gt-xs="" style="margin: 0px">
+                            <label>Status</label>
+                            <input ng-model="newGerrit.status.merge" disabled />
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-xs="column" flex>
+                        <md-input-container flex-gt-xs="" style="margin: 0px">
+                            <label>Author</label>
+                            <input ng-model="newGerrit.author" disabled="" />
+                        </md-input-container>
+                        <md-input-container flex-gt-xs="" style="margin: 0px">
                             <label>Gerrit Description</label>
                             <textarea ng-model="newGerrit.title" rows="5" md-select-on-focus="" disabled></textarea>
                         </md-input-container>
                     </div>
-                    <div layout-gt-xs="row">
-                        <div layout-gt-xs="column" flex="20">
-                            <md-input-container flex-gt-xs="">
-                                <label>Jira Id</label>
-                                <input ng-model="newGerrit.jira.id" disabled="" />
-                            </md-input-container>
-                            <md-input-container flex-gt-xs="">
-                                <label>Status</label>
-                                <input ng-model="newGerrit.status.jira" disabled="" />
-                            </md-input-container>
-                        </div>
-                        <md-input-container flex-gt-xs="">
-                            <label>Jira Description</label>
-                            <textarea ng-model="newGerrit.jira.description" rows="5" md-select-on-focus="" disabled></textarea>
+                </div>
+            </md-content>
+            <md-content layout-padding="">
+                <div layout-gt-xs="row">
+                    <div layout-gt-xs="column" flex="20">
+                        <md-input-container flex-gt-xs="" style="margin: 0px">
+                            <label>Jira Id</label>
+                            <input ng-model="newGerrit.jira.id" disabled="" />
+                        </md-input-container>
+                        <md-input-container flex-gt-xs="" style="margin: 0px">
+                            <label>Status</label>
+                            <input ng-model="newGerrit.status.jira" disabled="" />
                         </md-input-container>
                     </div>
-
-                    <!--<div layout-gt-sm="row">
-                        <md-input-container class="md-block" flex-gt-sm="">
-                            <label>City</label>
-                            <input ng-model="user.city" />
-                        </md-input-container>
-                        <md-input-container class="md-block" flex-gt-sm="">
-                            <label>State</label>
-                            <md-select ng-model="user.state">
-                                <md-option ng-repeat="state in states" value="{{state.abbrev}}">
-                                    {{state.abbrev}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container class="md-block" flex-gt-sm="">
-                            <label>Postal Code</label>
-                            <input name="postalCode" ng-model="user.postalCode" placeholder="12345"
-                                   required="" ng-pattern="/^[0-9]{5}$/" md-maxlength="5" />
-                            <div ng-messages="userForm.postalCode.$error" role="alert" multiple="">
-                                <div ng-message="required" class="my-message">You must supply a postal code.</div>
-                                <div ng-message="pattern" class="my-message">
-                                    That doesn't look like a valid postal
-                                    code.
-                                </div>
-                                <div ng-message="md-maxlength" class="my-message">
-                                    Don't use the long version silly...we don't need to be that specific...
-                                </div>
-                            </div>
-                        </md-input-container>
-                    </div>-->
-                    <!--<md-input-container class="md-block">
-                        <label>Biography</label>
-                        <textarea ng-model="user.biography" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
-                    </md-input-container>-->
-
-                    <!--<div id="myModal" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">New gerrit for the patch</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <form role="form">
-                                        <div class="form-group">
-                                            <label for="gerritId"><span class="glyphicon glyphicon-search"></span> Gerrit Id</label>
-                                            <div class="input-group" id="gerritId">
-                                                <input type="text" class="form-control" aria-describedby="basic-addon1" placeholder="123" ng-model="newGerrit.id">
-                                                <span class="input-group-btn">
-                                                            <button class="btn btn-default" type="button" ng-click="searchForGerrit()"><span class="glyphicon glyphicon-search"></span></button>
-                                                        </span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="owner"><span class="glyphicon glyphicon-user"></span> Owner</label>
-                                            <input type="text" class="form-control" id="owner" ng-model="newGerrit.owner" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="title"><span class="glyphicon glyphicon-file"></span> Title</label>
-                                            <input type="text" class="form-control" id="title" ng-model="newGerrit.title" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="jiraId"><span class="glyphicon glyphicon-bookmark"></span> Jira</label>
-                                            <input type="text" class="form-control" id="jiraId" ng-model="newGerrit.jira" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="jiraStatus"><span class="glyphicon glyphicon-ok"></span> Jira Status</label>
-                                            <input type="text" class="form-control" id="jiraStatus" ng-model="newGerrit.status.jira" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="mergeStatus"><span class="glyphicon glyphicon-ok"></span> Review Status</label>
-                                            <input type="text" class="form-control" id="mergeStatus" ng-model="newGerrit.status.merge" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-                                    <button type="submit" class="btn btn-success btn-default pull-right" data-dismiss="modal" ng-click="saveGerrit()"><span class="glyphicon glyphicon-plus"></span> Add</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>-->
+                    <md-input-container flex-gt-xs="" style="margin: 0px">
+                        <label>Jira Description</label>
+                        <textarea ng-model="newGerrit.jira.description" rows="5" md-select-on-focus="" disabled></textarea>
+                    </md-input-container>
                 </div>
+
+                <!--<div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>City</label>
+                        <input ng-model="user.city" />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>State</label>
+                        <md-select ng-model="user.state">
+                            <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+                                {{state.abbrev}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Postal Code</label>
+                        <input name="postalCode" ng-model="user.postalCode" placeholder="12345"
+                               required="" ng-pattern="/^[0-9]{5}$/" md-maxlength="5" />
+                        <div ng-messages="userForm.postalCode.$error" role="alert" multiple="">
+                            <div ng-message="required" class="my-message">You must supply a postal code.</div>
+                            <div ng-message="pattern" class="my-message">
+                                That doesn't look like a valid postal
+                                code.
+                            </div>
+                            <div ng-message="md-maxlength" class="my-message">
+                                Don't use the long version silly...we don't need to be that specific...
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>-->
+                <!--<md-input-container class="md-block">
+                    <label>Biography</label>
+                    <textarea ng-model="user.biography" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+                </md-input-container>-->
+                <!--<div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">New gerrit for the patch</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <label for="gerritId"><span class="glyphicon glyphicon-search"></span> Gerrit Id</label>
+                                        <div class="input-group" id="gerritId">
+                                            <input type="text" class="form-control" aria-describedby="basic-addon1" placeholder="123" ng-model="newGerrit.id">
+                                            <span class="input-group-btn">
+                                                                <button class="btn btn-default" type="button" ng-click="searchForGerrit()"><span class="glyphicon glyphicon-search"></span></button>
+                                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="owner"><span class="glyphicon glyphicon-user"></span> Owner</label>
+                                        <input type="text" class="form-control" id="owner" ng-model="newGerrit.owner" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title"><span class="glyphicon glyphicon-file"></span> Title</label>
+                                        <input type="text" class="form-control" id="title" ng-model="newGerrit.title" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jiraId"><span class="glyphicon glyphicon-bookmark"></span> Jira</label>
+                                        <input type="text" class="form-control" id="jiraId" ng-model="newGerrit.jira" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jiraStatus"><span class="glyphicon glyphicon-ok"></span> Jira Status</label>
+                                        <input type="text" class="form-control" id="jiraStatus" ng-model="newGerrit.status.jira" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mergeStatus"><span class="glyphicon glyphicon-ok"></span> Review Status</label>
+                                        <input type="text" class="form-control" id="mergeStatus" ng-model="newGerrit.status.merge" placeholder="Please click on the gerrit id search button ..." ng-disabled="true">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                                <button type="submit" class="btn btn-success btn-default pull-right" data-dismiss="modal" ng-click="saveGerrit()"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>-->
             </md-content>
         </md-dialog-content>
         <md-dialog-actions layout="row">
@@ -157,10 +156,10 @@
                 Best practices for patches (WIKI)
             </md-button>
             <span flex=""></span>
-            <md-button class="md-raised md-warn"  ng-click="cancel()">
+            <md-button class="md-raised md-warn" ng-click="cancel()">
                 Cancel
             </md-button>
-            <md-button class="md-raised md-primary"  ng-click="answer(newGerrit)" style="margin-right:20px;">
+            <md-button class="md-raised md-primary" ng-click="answer(newGerrit)" style="margin-right:20px;">
                 Send !
             </md-button>
         </md-dialog-actions>

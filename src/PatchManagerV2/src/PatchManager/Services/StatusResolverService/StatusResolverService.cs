@@ -53,7 +53,7 @@ namespace PatchManager.Services.StatusResolverService
 
             var gerritMetadata = Gerrit.GetGerritInformation(gerrit.Gerrit.Id);
 
-            gerrit.Gerrit.Owner = gerritMetadata.Owner;
+            gerrit.Gerrit.Author = gerritMetadata.Owner;
             gerrit.Gerrit.Title = gerritMetadata.Title;
             gerrit.Gerrit.Status.Merge = gerritMetadata.Status;
 

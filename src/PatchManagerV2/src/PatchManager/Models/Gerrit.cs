@@ -4,6 +4,7 @@ namespace PatchManager.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string Author { get; set; }
         public string Owner { get; set; }
         public Jira Jira { get; set; }
         public GerritStatus Status { get; set; }
