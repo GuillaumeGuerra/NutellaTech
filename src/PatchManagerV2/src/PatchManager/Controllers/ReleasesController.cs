@@ -22,55 +22,55 @@ namespace PatchManager.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Patch> GetAllReleases()
+        public IEnumerable<Release> GetAllReleases()
         {
             return Model.GetAllPatches();
         }
 
         [HttpGet]
         [Route("{releaseVersion}")]
-        public Patch GetRelease([FromRoute] string releaseVersion)
+        public Release GetRelease([FromRoute] string releaseVersion)
         {
             return Model.GetPatch(releaseVersion);
         }
 
         [HttpGet]
         [Route("{releaseVersion}/gerrits")]
-        public IEnumerable<Gerrit> GetReleaseGerrits([FromRoute] string releaseVersion)
+        public IEnumerable<Patch> GetReleaseGerrits([FromRoute] string releaseVersion)
         {
             foreach (var gerrit in Model.GetPatchGerrits(releaseVersion))
             {
                 StatusResolver.ResolveIfOutdated(gerrit);
-                yield return gerrit.Gerrit;
+                yield return gerrit.Patch;
             }
         }
 
         [HttpGet]
         [Route("{releaseVersion}/gerrits/{gerritId}")]
-        public Gerrit GetReleaseGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId)
+        public Patch GetReleaseGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId)
         {
             var gerrit = Model.GetGerritForPatch(releaseVersion, gerritId);
 
             StatusResolver.Resolve(gerrit);
 
-            return gerrit.Gerrit;
+            return gerrit.Patch;
         }
 
         [HttpPost]
         [Route("{releaseVersion}/gerrits/")]
-        public Gerrit PostGerritForRelease([FromRoute] string releaseVersion, [FromBody] Gerrit gerrit)
+        public Patch PostGerritForRelease([FromRoute] string releaseVersion, [FromBody] Patch patch)
         {
-            gerrit.Status.Patch = PatchStatus.Asked;
-            gerrit.Status.Test = TestStatus.ToTest;
+            patch.Status.Patch = PatchStatus.Asked;
+            patch.Status.Test = TestStatus.ToTest;
 
-            Model.AddGerritToPatch(releaseVersion, gerrit);
+            Model.AddGerritToPatch(releaseVersion, patch);
 
-            return gerrit;
+            return patch;
         }
 
         [HttpPost]
         [Route("{releaseVersion}/gerrits/{gerritId}/action/{actionToPerform}")]
-        public Gerrit ApplyActionToGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
+        public Patch ApplyActionToGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
         {
             var current = Model.GetGerritForPatch(releaseVersion, gerritId);
             if (current == null)
@@ -81,23 +81,23 @@ namespace PatchManager.Controllers
             if (action == null)
                 throw new InvalidOperationException(string.Format("Unknown action to apply [{0}]", actionToPerform));
 
-            if (action.Apply(current.Gerrit))
-                Model.UpdatePatchGerrit(releaseVersion, current.Gerrit);
+            if (action.Apply(current.Patch))
+                Model.UpdatePatchGerrit(releaseVersion, current.Patch);
 
-            return current.Gerrit;
+            return current.Patch;
         }
 
         [HttpGet]
         [Route("{releaseVersion}/gerrits/{gerritId}/action/preview")]
-        public Gerrit PreviewGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId)
+        public Patch PreviewGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId)
         {
-            var gerrit = new GerritWithMetadata(new Gerrit()
+            var gerrit = new GerritWithMetadata(new Patch()
             {
                 Id = gerritId
             });
             StatusResolver.Resolve(gerrit);
 
-            return gerrit.Gerrit;
+            return gerrit.Patch;
         }
     }
 }

@@ -11,12 +11,12 @@ namespace PatchManager.Services.GerritActions
             TestStatus = testStatus;
         }
 
-        public bool Apply(Gerrit gerrit)
+        public bool Apply(Patch patch)
         {
-            if (gerrit.Status.Test == TestStatus)
+            if (patch.Status.Test == TestStatus)
                 return false;
 
-            gerrit.Status.Test = TestStatus;
+            patch.Status.Test = TestStatus;
             return true;
         }
     }

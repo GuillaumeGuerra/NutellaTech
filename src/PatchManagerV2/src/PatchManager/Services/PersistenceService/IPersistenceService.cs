@@ -5,9 +5,9 @@ namespace PatchManager.Services.PersistenceService
 {
     public interface IPersistenceService
     {
-        IEnumerable<Patch> GetAllPatches();
-        IEnumerable<Gerrit> GetGerrits(string patchVersion);
-        void AddGerritToPatch(Patch patch, Gerrit gerrit);
-        void UpdatePatchGerrit(Patch patch, Gerrit gerrit);
+        IEnumerable<Release> GetAllPatches();
+        IEnumerable<Patch> GetGerrits(string patchVersion);
+        void AddGerritToPatch(Release release, Patch patch);
+        void UpdatePatchGerrit(Release release, Patch patch);
     }
 }

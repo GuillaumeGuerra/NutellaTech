@@ -16,15 +16,15 @@ namespace PatchManager.Services.ModelService
             Initialize();
         }
 
-        public List<Patch> GetAllPatches()
+        public List<Release> GetAllPatches()
         {
             // Copied to a list, to prevent modifications during iteration
-            return _patchesDico.Select(pair => pair.Value.Patch).ToList();
+            return _patchesDico.Select(pair => pair.Value.Release).ToList();
         }
 
-        public Patch GetPatch(string patchVersion)
+        public Release GetPatch(string patchVersion)
         {
-            return TryGetPatch(patchVersion).Patch;
+            return TryGetPatch(patchVersion).Release;
         }
 
         public List<GerritWithMetadata> GetPatchGerrits(string patchVersion)
@@ -40,24 +40,24 @@ namespace PatchManager.Services.ModelService
             return gerrit;
         }
 
-        public void AddGerritToPatch(string patchVersion, Gerrit gerrit)
+        public void AddGerritToPatch(string patchVersion, Patch patch)
         {
-            var patch = TryGetPatch(patchVersion);
-            if (patch.Patch == null)
+            var release = TryGetPatch(patchVersion);
+            if (release.Release == null)
                 return; // Case of a non existing patch, probably an issue ...
 
-            patch.Gerrits.Add(gerrit.Id, new GerritWithMetadata(gerrit));
-            Persistence.AddGerritToPatch(patch.Patch, gerrit);
+            release.Gerrits.Add(patch.Id, new GerritWithMetadata(patch));
+            Persistence.AddGerritToPatch(release.Release, patch);
         }
 
-        public void UpdatePatchGerrit(string patchVersion, Gerrit gerrit)
+        public void UpdatePatchGerrit(string patchVersion, Patch patch)
         {
-            PatchWithGerrits patch;
-            var foundGerrit = TryGetPatchGerrit(patchVersion, gerrit.Id, out patch);
+            PatchWithGerrits release;
+            var foundGerrit = TryGetPatchGerrit(patchVersion, patch.Id, out release);
             if (foundGerrit == null)
                 return; // Case of a non existing patch, probably an issue ...
 
-            Persistence.UpdatePatchGerrit(patch.Patch, gerrit);
+            Persistence.UpdatePatchGerrit(release.Release, patch);
         }
 
         private PatchWithGerrits TryGetPatch(string patchVersion)
@@ -88,18 +88,18 @@ namespace PatchManager.Services.ModelService
             _patchesDico = new Dictionary<string, PatchWithGerrits>();
             foreach (var patch in Persistence.GetAllPatches())
             {
-                _patchesDico.Add(patch.Version, new PatchWithGerrits(patch, Persistence.GetGerrits(patch.Version).Select(gerrit => new GerritWithMetadata(gerrit)).ToDictionary(gerrit => gerrit.Gerrit.Id)));
+                _patchesDico.Add(patch.Version, new PatchWithGerrits(patch, Persistence.GetGerrits(patch.Version).Select(gerrit => new GerritWithMetadata(gerrit)).ToDictionary(gerrit => gerrit.Patch.Id)));
             }
         }
 
         private class PatchWithGerrits
         {
-            public Patch Patch { get; }
+            public Release Release { get; }
             public Dictionary<int, GerritWithMetadata> Gerrits { get; }
 
-            public PatchWithGerrits(Patch patch, Dictionary<int, GerritWithMetadata> gerrits)
+            public PatchWithGerrits(Release release, Dictionary<int, GerritWithMetadata> gerrits)
             {
-                Patch = patch;
+                Release = release;
                 Gerrits = gerrits;
             }
 

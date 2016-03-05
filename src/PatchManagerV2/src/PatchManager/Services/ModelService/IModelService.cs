@@ -5,16 +5,16 @@ namespace PatchManager.Services.ModelService
 {
     public interface IModelService
     {
-        List<Patch> GetAllPatches();
+        List<Release> GetAllPatches();
 
-        Patch GetPatch(string patchVersion);
+        Release GetPatch(string patchVersion);
 
         List<GerritWithMetadata> GetPatchGerrits(string patchVersion);
 
         GerritWithMetadata GetGerritForPatch(string patchVersion, int gerritId);
 
-        void AddGerritToPatch(string patchVersion, Gerrit gerrit);
+        void AddGerritToPatch(string patchVersion, Patch patch);
 
-        void UpdatePatchGerrit(string patchVersion, Gerrit gerrit);
+        void UpdatePatchGerrit(string patchVersion, Patch patch);
     }
 }

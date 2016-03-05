@@ -19,10 +19,10 @@ namespace PatchManager.Services.StatusResolverService
 
         public void Resolve(GerritWithMetadata gerrit)
         {
-            if (gerrit.Gerrit == null)
+            if (gerrit.Patch == null)
                 return;
-            if (gerrit.Gerrit.Status == null)
-                gerrit.Gerrit.Status = new GerritStatus();
+            if (gerrit.Patch.Status == null)
+                gerrit.Patch.Status = new GerritStatus();
 
             ResolveGerritIfNecessary(gerrit);
             ResolveJiraIfNecessary(gerrit);
@@ -32,41 +32,41 @@ namespace PatchManager.Services.StatusResolverService
 
         private void ResolveJiraIfNecessary(GerritWithMetadata gerrit)
         {
-            if (gerrit.Gerrit.Status.Jira == JiraStatus.Closed)
+            if (gerrit.Patch.Status.Jira == JiraStatus.Closed)
             {
                 // In that case, the jira cannot be updated any more, so there's no reason to fetch new information
                 return;
             }
 
-            var jiraMetadata = Jira.GetJiraInformation(gerrit.Gerrit.Jira.Id);
-            gerrit.Gerrit.Jira.Description = jiraMetadata.Description;
-            gerrit.Gerrit.Status.Jira = jiraMetadata.Status;
+            var jiraMetadata = Jira.GetJiraInformation(gerrit.Patch.Jira.Id);
+            gerrit.Patch.Jira.Description = jiraMetadata.Description;
+            gerrit.Patch.Status.Jira = jiraMetadata.Status;
         }
 
         private void ResolveGerritIfNecessary(GerritWithMetadata gerrit)
         {
-            if (gerrit.Gerrit.Status.Merge == MergeStatus.Merged)
+            if (gerrit.Patch.Status.Merge == MergeStatus.Merged)
             {
                 // In that case, the gerrit cannot be updated any more, so there's no reason to fetch new information
                 return;
             }
 
-            var gerritMetadata = Gerrit.GetGerritInformation(gerrit.Gerrit.Id);
+            var gerritMetadata = Gerrit.GetGerritInformation(gerrit.Patch.Id);
 
-            gerrit.Gerrit.Author = gerritMetadata.Owner;
-            gerrit.Gerrit.Title = gerritMetadata.Title;
-            gerrit.Gerrit.Status.Merge = gerritMetadata.Status;
+            gerrit.Patch.Author = gerritMetadata.Owner;
+            gerrit.Patch.Title = gerritMetadata.Title;
+            gerrit.Patch.Status.Merge = gerritMetadata.Status;
 
-            if (gerrit.Gerrit.Jira == null || gerrit.Gerrit.Jira.Id != gerritMetadata.JiraId)
+            if (gerrit.Patch.Jira == null || gerrit.Patch.Jira.Id != gerritMetadata.JiraId)
             {
-                gerrit.Gerrit.Jira = new Jira()
+                gerrit.Patch.Jira = new Jira()
                 {
                     Id = gerritMetadata.JiraId
                 };
                 
                 // Don't forget to update the jira status, to force a call to jira API
                 // If the jira status was already merged, we wouldn't refresh it, so as we know the associated jira has changed, let's be defensive and force a refresh
-                gerrit.Gerrit.Status.Jira = JiraStatus.Unknown;
+                gerrit.Patch.Status.Jira = JiraStatus.Unknown;
             }
         }
 

@@ -9,11 +9,11 @@ namespace PatchManager.Services.PersistenceService
     /// </summary>
     internal class DemoPersistenceService : IPersistenceService
     {
-        public IEnumerable<Patch> GetAllPatches()
+        public IEnumerable<Release> GetAllPatches()
         {
             return new[]
             {
-                new Patch()
+                new Release()
                 {
                     Version = "19.8",
                     ReleaseManager = "Peter Goron",
@@ -21,7 +21,7 @@ namespace PatchManager.Services.PersistenceService
                     Date = new DateTime(2015, 12, 16),
                     IsCurrent = false
                 },
-                new Patch()
+                new Release()
                 {
                     Version = "20.1",
                     ReleaseManager = "Guillaume Guerra",
@@ -29,7 +29,7 @@ namespace PatchManager.Services.PersistenceService
                     Date = new DateTime(2016, 12, 14),
                     IsCurrent = false
                 },
-                new Patch()
+                new Release()
                 {
                     Version = "20.2",
                     ReleaseManager = "Sullivan Veres",
@@ -40,11 +40,11 @@ namespace PatchManager.Services.PersistenceService
             };
         }
 
-        public IEnumerable<Gerrit> GetGerrits(string patchVersion)
+        public IEnumerable<Patch> GetGerrits(string patchVersion)
         {
             return new[]
             {
-                new Gerrit()
+                new Patch()
                 {
                     Id = 123,
                     Title = "Get rid of Jar-Jar once and for all",
@@ -63,7 +63,7 @@ namespace PatchManager.Services.PersistenceService
                         Test = TestStatus.ToTest
                     }
                 },
-                new Gerrit()
+                new Patch()
                 {
                     Id = 456,
                     Title = "Now that Jar-Jar is gone, time to take care of Anakin",
@@ -82,7 +82,7 @@ namespace PatchManager.Services.PersistenceService
                         Test = TestStatus.Tested
                     }
                 },
-                new Gerrit()
+                new Patch()
                 {
                     Id = 789,
                     Title =
@@ -102,7 +102,7 @@ namespace PatchManager.Services.PersistenceService
                         Test = TestStatus.Issue
                     }
                 },
-                new Gerrit()
+                new Patch()
                 {
                     Id = 666,
                     Title =
@@ -125,11 +125,11 @@ namespace PatchManager.Services.PersistenceService
             };
         }
 
-        public void AddGerritToPatch(Patch patch, Gerrit gerrit)
+        public void AddGerritToPatch(Release release, Patch patch)
         {
         }
 
-        public void UpdatePatchGerrit(Patch patch, Gerrit gerrit)
+        public void UpdatePatchGerrit(Release release, Patch patch)
         {
         }
     }

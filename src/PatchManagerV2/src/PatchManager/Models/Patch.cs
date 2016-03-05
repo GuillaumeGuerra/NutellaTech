@@ -1,13 +1,18 @@
-﻿using System;
-
 namespace PatchManager.Models
 {
     public class Patch
     {
-        public string Version { get; set; }
-        public string ReleaseManager { get; set; }
-        public string ReleaseManagerMail { get; set; }
-        public bool IsCurrent { get; set; }
-        public DateTime Date { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public string Owner { get; set; }
+        public Jira Jira { get; set; }
+        public GerritStatus Status { get; set; }
+        public RiskOneAsset Asset { get; set; }
+
+        public Patch()
+        {
+            Status = new GerritStatus();
+        }
     }
 }

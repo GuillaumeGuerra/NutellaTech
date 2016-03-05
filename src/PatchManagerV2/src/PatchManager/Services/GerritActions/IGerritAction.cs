@@ -4,6 +4,6 @@ namespace PatchManager.Services.GerritActions
 {
     public interface IGerritAction
     {
-        bool Apply(Gerrit gerrit);
+        bool Apply(Patch patch);
     }
 }

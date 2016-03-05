@@ -13,13 +13,13 @@ namespace PatchManager.Services.GerritActions
             Service = service;
         }
 
-        public bool Apply(Gerrit gerrit)
+        public bool Apply(Patch patch)
         {
-            if (gerrit.Status.Jira == JiraStatus.Resolved)
+            if (patch.Status.Jira == JiraStatus.Resolved)
                 return false;
 
-            if (Service.Resolve(gerrit.Jira.Id))
-                gerrit.Status.Jira = JiraStatus.Resolved;
+            if (Service.Resolve(patch.Jira.Id))
+                patch.Status.Jira = JiraStatus.Resolved;
 
             return true;
         }

@@ -13,13 +13,13 @@ namespace PatchManager.Services.GerritActions
             Service = service;
         }
 
-        public bool Apply(Gerrit gerrit)
+        public bool Apply(Patch patch)
         {
-            if (gerrit.Status.Merge != MergeStatus.ReadyForMerge)
+            if (patch.Status.Merge != MergeStatus.ReadyForMerge)
                 return false;
 
-            if (Service.Merge(gerrit.Id))
-                gerrit.Status.Merge = MergeStatus.Merged;
+            if (Service.Merge(patch.Id))
+                patch.Status.Merge = MergeStatus.Merged;
 
             return true;
         }

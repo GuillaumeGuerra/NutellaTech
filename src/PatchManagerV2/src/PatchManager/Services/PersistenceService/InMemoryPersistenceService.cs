@@ -8,18 +8,18 @@ namespace PatchManager.Services.PersistenceService
     /// </summary>
     internal class InMemoryPersistenceService : IPersistenceService
     {
-        public IEnumerable<Patch> GetAllPatches()
+        public IEnumerable<Release> GetAllPatches()
+        {
+            return new List<Release>();
+        }
+
+        public IEnumerable<Patch> GetGerrits(string patchVersion)
         {
             return new List<Patch>();
         }
 
-        public IEnumerable<Gerrit> GetGerrits(string patchVersion)
-        {
-            return new List<Gerrit>();
-        }
+        public void AddGerritToPatch(Release release, Patch patch) { }
 
-        public void AddGerritToPatch(Patch patch, Gerrit gerrit) { }
-
-        public void UpdatePatchGerrit(Patch patch, Gerrit gerrit) { }
+        public void UpdatePatchGerrit(Release release, Patch patch) { }
     }
 }

@@ -5,13 +5,13 @@ namespace PatchManager.Services.ModelService
 {
     public class GerritWithMetadata
     {
-        public Gerrit Gerrit { get; set; }
+        public Patch Patch { get; set; }
 
         public DateTime LastRefresh { get; set; }
 
-        public GerritWithMetadata(Gerrit gerrit)
+        public GerritWithMetadata(Patch patch)
         {
-            Gerrit = gerrit;
+            Patch = patch;
             LastRefresh = DateTime.MinValue;
         }
     }
