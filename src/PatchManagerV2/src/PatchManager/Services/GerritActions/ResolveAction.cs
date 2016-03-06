@@ -3,8 +3,8 @@ using PatchManager.Services.JiraService;
 
 namespace PatchManager.Services.GerritActions
 {
-    [GerritAction("resolve")]
-    public class ResolveAction : IGerritAction
+    [PatchAction("resolve")]
+    public class ResolveAction : IPatchAction
     {
         public IJiraService Service { get; set; }
 

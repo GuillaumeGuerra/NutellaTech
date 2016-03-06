@@ -8,7 +8,7 @@ namespace PatchManager.Services.ModelService
     public class ModelService : IModelService
     {
         public IPersistenceService Persistence { get; set; }
-        private Dictionary<string, PatchWithGerrits> _patchesDico;
+        private Dictionary<string, ReleaseWithPatches> ReleasesDico { get; set; }
 
         public ModelService(IPersistenceService persistence)
         {
@@ -16,96 +16,96 @@ namespace PatchManager.Services.ModelService
             Initialize();
         }
 
-        public List<Release> GetAllPatches()
+        public List<Release> GetAllReleases()
         {
             // Copied to a list, to prevent modifications during iteration
-            return _patchesDico.Select(pair => pair.Value.Release).ToList();
+            return ReleasesDico.Select(pair => pair.Value.Release).ToList();
         }
 
-        public Release GetPatch(string patchVersion)
+        public Release GetRelease(string releaseVersion)
         {
-            return TryGetPatch(patchVersion).Release;
+            return TryGetRelease(releaseVersion).Release;
         }
 
-        public List<GerritWithMetadata> GetPatchGerrits(string patchVersion)
+        public List<PatchWithMetadata> GetReleasePatches(string releaseVersion)
         {
             // Copied to a list, to prevent modifications during iteration
-            return TryGetPatch(patchVersion).Gerrits.Select(pair => pair.Value).ToList();
+            return TryGetRelease(releaseVersion).Patches.Select(pair => pair.Value).ToList();
         }
 
-        public GerritWithMetadata GetGerritForPatch(string patchVersion, int gerritId)
+        public PatchWithMetadata GetReleasePatch(string releaseVersion, int gerritId)
         {
-            GerritWithMetadata gerrit;
-            TryGetPatch(patchVersion).Gerrits.TryGetValue(gerritId, out gerrit);
-            return gerrit;
+            PatchWithMetadata patch;
+            TryGetRelease(releaseVersion).Patches.TryGetValue(gerritId, out patch);
+            return patch;
         }
 
-        public void AddGerritToPatch(string patchVersion, Patch patch)
+        public void AddPatchToRelease(string releaseVersion, Patch patch)
         {
-            var release = TryGetPatch(patchVersion);
+            var release = TryGetRelease(releaseVersion);
             if (release.Release == null)
                 return; // Case of a non existing patch, probably an issue ...
 
-            release.Gerrits.Add(patch.Id, new GerritWithMetadata(patch));
-            Persistence.AddGerritToPatch(release.Release, patch);
+            release.Patches.Add(patch.Id, new PatchWithMetadata(patch));
+            Persistence.AddPatchToRelease(release.Release, patch);
         }
 
-        public void UpdatePatchGerrit(string patchVersion, Patch patch)
+        public void UpdateReleasePatch(string releaseVersion, Patch patch)
         {
-            PatchWithGerrits release;
-            var foundGerrit = TryGetPatchGerrit(patchVersion, patch.Id, out release);
-            if (foundGerrit == null)
+            ReleaseWithPatches release;
+            var foundPatch = TryGetReleasePatch(releaseVersion, patch.Id, out release);
+            if (foundPatch == null)
                 return; // Case of a non existing patch, probably an issue ...
 
-            Persistence.UpdatePatchGerrit(release.Release, patch);
+            Persistence.UpdateReleasePatch(release.Release, patch);
         }
 
-        private PatchWithGerrits TryGetPatch(string patchVersion)
+        private ReleaseWithPatches TryGetRelease(string releaseVersion)
         {
-            PatchWithGerrits patch;
+            ReleaseWithPatches release;
 
-            if (_patchesDico.TryGetValue(patchVersion, out patch))
-                return patch;
+            if (ReleasesDico.TryGetValue(releaseVersion, out release))
+                return release;
 
-            return new PatchWithGerrits();
+            return new ReleaseWithPatches();
         }
 
-        private GerritWithMetadata TryGetPatchGerrit(string patchVersion, int gerritId, out PatchWithGerrits patch)
+        private PatchWithMetadata TryGetReleasePatch(string patchVersion, int gerritId, out ReleaseWithPatches release)
         {
-            patch = TryGetPatch(patchVersion);
-            if (patch == null)
+            release = TryGetRelease(patchVersion);
+            if (release == null)
                 return null;
 
-            GerritWithMetadata gerrit;
-            if (patch.Gerrits.TryGetValue(gerritId, out gerrit))
-                return gerrit;
+            PatchWithMetadata patch;
+            if (release.Patches.TryGetValue(gerritId, out patch))
+                return patch;
 
             return null;
         }
 
         private void Initialize()
         {
-            _patchesDico = new Dictionary<string, PatchWithGerrits>();
-            foreach (var patch in Persistence.GetAllPatches())
+            ReleasesDico = new Dictionary<string, ReleaseWithPatches>();
+            foreach (var patch in Persistence.GetAllReleases())
             {
-                _patchesDico.Add(patch.Version, new PatchWithGerrits(patch, Persistence.GetGerrits(patch.Version).Select(gerrit => new GerritWithMetadata(gerrit)).ToDictionary(gerrit => gerrit.Patch.Id)));
+                ReleasesDico.Add(patch.Version, new ReleaseWithPatches(patch, Persistence.GetPatches(patch.Version).Select(gerrit => new PatchWithMetadata(gerrit)).ToDictionary(gerrit => gerrit.Patch.Id)));
             }
         }
 
-        private class PatchWithGerrits
+        private class ReleaseWithPatches
         {
             public Release Release { get; }
-            public Dictionary<int, GerritWithMetadata> Gerrits { get; }
+            public Dictionary<int, PatchWithMetadata> Patches { get; }
 
-            public PatchWithGerrits(Release release, Dictionary<int, GerritWithMetadata> gerrits)
+            public ReleaseWithPatches(Release release, Dictionary<int, PatchWithMetadata> patches)
             {
                 Release = release;
-                Gerrits = gerrits;
+                Patches = patches;
             }
 
-            public PatchWithGerrits()
+            public ReleaseWithPatches()
             {
-                Gerrits = new Dictionary<int, GerritWithMetadata>();
+                Patches = new Dictionary<int, PatchWithMetadata>();
             }
         }
     }

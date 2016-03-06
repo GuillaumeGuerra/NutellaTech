@@ -3,9 +3,9 @@ using System;
 namespace PatchManager.Services.GerritActions
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class GerritActionAttribute : Attribute
+    public sealed class PatchActionAttribute : Attribute
     {
-        public GerritActionAttribute(string name)
+        public PatchActionAttribute(string name)
         {
             Name = name;
         }

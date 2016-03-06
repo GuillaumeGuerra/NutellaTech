@@ -9,7 +9,7 @@ namespace PatchManager.Services.PersistenceService
     /// </summary>
     internal class DemoPersistenceService : IPersistenceService
     {
-        public IEnumerable<Release> GetAllPatches()
+        public IEnumerable<Release> GetAllReleases()
         {
             return new[]
             {
@@ -40,7 +40,7 @@ namespace PatchManager.Services.PersistenceService
             };
         }
 
-        public IEnumerable<Patch> GetGerrits(string patchVersion)
+        public IEnumerable<Patch> GetPatches(string releaseVersion)
         {
             return new[]
             {
@@ -50,7 +50,7 @@ namespace PatchManager.Services.PersistenceService
                     Title = "Get rid of Jar-Jar once and for all",
                     Jira = new Jira()
                     {
-                        Id = "STR-123_" + patchVersion,
+                        Id = "STR-123_" + releaseVersion,
                         Description = "Jira to get rid of Jar-Jar once and for all",
                     },
                     Asset = RiskOneAsset.Core,
@@ -69,7 +69,7 @@ namespace PatchManager.Services.PersistenceService
                     Title = "Now that Jar-Jar is gone, time to take care of Anakin",
                     Jira = new Jira()
                     {
-                        Id = "STR-456_" + patchVersion,
+                        Id = "STR-456_" + releaseVersion,
                         Description = "Jira to Get rid of Anakin, now that Jar-Jar is gone",
                     },
                     Asset = RiskOneAsset.Official,
@@ -89,7 +89,7 @@ namespace PatchManager.Services.PersistenceService
                         "Revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
                     Jira = new Jira()
                     {
-                        Id = "STR-789_" + patchVersion,
+                        Id = "STR-789_" + releaseVersion,
                         Description = "Jira to revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
                     },
                     Asset = RiskOneAsset.Rates,
@@ -109,7 +109,7 @@ namespace PatchManager.Services.PersistenceService
                         "Rey, we don't know yet if you're Leia's daughter, but you're as pretty as she was, a long time ago, in a galaxy far far away",
                     Jira = new Jira()
                     {
-                        Id = "STR-666_" + patchVersion,
+                        Id = "STR-666_" + releaseVersion,
                         Description = "Let's find another fancy bikini, as it's the only way to decide who is the prettiest"
                     },
                     Asset = RiskOneAsset.Repo,
@@ -125,11 +125,11 @@ namespace PatchManager.Services.PersistenceService
             };
         }
 
-        public void AddGerritToPatch(Release release, Patch patch)
+        public void AddPatchToRelease(Release release, Patch patch)
         {
         }
 
-        public void UpdatePatchGerrit(Release release, Patch patch)
+        public void UpdateReleasePatch(Release release, Patch patch)
         {
         }
     }

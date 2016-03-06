@@ -3,8 +3,8 @@ using PatchManager.Services.GerritService;
 
 namespace PatchManager.Services.GerritActions
 {
-    [GerritAction("merge")]
-    public class MergeAction : IGerritAction
+    [PatchAction("merge")]
+    public class MergeAction : IPatchAction
     {
         public IGerritService Service { get; set; }
 

@@ -2,7 +2,7 @@ using PatchManager.Models;
 
 namespace PatchManager.Services.GerritActions
 {
-    public abstract class TestStatusAction : IGerritAction
+    public abstract class TestStatusAction : IPatchAction
     {
         public TestStatus TestStatus { get; set; }
 

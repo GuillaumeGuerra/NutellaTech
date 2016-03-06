@@ -2,7 +2,7 @@ using PatchManager.Models;
 
 namespace PatchManager.Services.GerritActions
 {
-    [GerritAction("accept")]
+    [PatchAction("accept")]
     public class AcceptPatchAction : PatchStatusAction
     {
         public AcceptPatchAction() : base(PatchStatus.Accepted) { }

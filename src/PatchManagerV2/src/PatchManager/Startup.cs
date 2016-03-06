@@ -93,13 +93,13 @@ namespace PatchManager
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                if (type.GetInterface(typeof(IGerritAction).Name) != null && !type.IsAbstract)
+                if (type.GetInterface(typeof(IPatchAction).Name) != null && !type.IsAbstract)
                 {
-                    var attribute = type.GetCustomAttribute<GerritActionAttribute>();
+                    var attribute = type.GetCustomAttribute<PatchActionAttribute>();
                     if (attribute == null)
                         throw new InvalidOperationException(string.Format("Missing GerritAction attribute on type [{0}]", type.Name));
 
-                    builder.RegisterType(type).Named<IGerritAction>(attribute.Name.ToUpper());
+                    builder.RegisterType(type).Named<IPatchAction>(attribute.Name.ToUpper());
                 }
             }
         }
