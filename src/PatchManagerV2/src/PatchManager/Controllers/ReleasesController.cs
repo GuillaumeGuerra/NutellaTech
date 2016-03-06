@@ -60,7 +60,7 @@ namespace PatchManager.Controllers
         [Route("{releaseVersion}/gerrits/")]
         public Patch PostGerritForRelease([FromRoute] string releaseVersion, [FromBody] Patch patch)
         {
-            patch.Status.Patch = PatchStatus.Asked;
+            patch.Status.Registration = RegistrationStatus.Asked;
             patch.Status.Test = TestStatus.ToTest;
 
             Model.AddPatchToRelease(releaseVersion, patch);

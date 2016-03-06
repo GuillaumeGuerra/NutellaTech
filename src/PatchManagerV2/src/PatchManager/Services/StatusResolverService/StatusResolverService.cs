@@ -22,7 +22,7 @@ namespace PatchManager.Services.StatusResolverService
             if (patch.Patch == null)
                 return;
             if (patch.Patch.Status == null)
-                patch.Patch.Status = new GerritStatus();
+                patch.Patch.Status = new PatchStatus();
 
             ResolveGerritIfNecessary(patch);
             ResolveJiraIfNecessary(patch);
