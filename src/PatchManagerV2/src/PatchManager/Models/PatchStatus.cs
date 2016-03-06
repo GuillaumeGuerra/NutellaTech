@@ -1,15 +1,15 @@
 namespace PatchManager.Models
 {
-    public class GerritStatus
+    public class PatchStatus
     {
-        public PatchStatus Patch { get; set; }
+        public RegistrationStatus Registration { get; set; }
         public JiraStatus Jira { get; set; }
         public MergeStatus Merge { get; set; }
         public TestStatus Test { get; set; }
 
-        public GerritStatus()
+        public PatchStatus()
         {
-            Patch = PatchStatus.Unknown;
+            Registration = RegistrationStatus.Unknown;
             Jira = JiraStatus.Unknown;
             Merge = MergeStatus.Unknown;
             Test = TestStatus.Unknown;

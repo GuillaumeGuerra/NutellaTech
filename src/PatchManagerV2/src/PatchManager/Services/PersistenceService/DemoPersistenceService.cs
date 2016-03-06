@@ -55,9 +55,9 @@ namespace PatchManager.Services.PersistenceService
                     },
                     Asset = RiskOneAsset.Core,
                     Owner = "Kylo Ren",
-                    Status = new GerritStatus()
+                    Status = new PatchStatus()
                     {
-                        Patch = PatchStatus.Accepted,
+                        Registration = RegistrationStatus.Accepted,
                         Jira = JiraStatus.InProgress,
                         Merge = MergeStatus.MissingReviews,
                         Test = TestStatus.ToTest
@@ -74,9 +74,9 @@ namespace PatchManager.Services.PersistenceService
                     },
                     Asset = RiskOneAsset.Official,
                     Owner = "Finn",
-                    Status = new GerritStatus()
+                    Status = new PatchStatus()
                     {
-                        Patch = PatchStatus.Refused,
+                        Registration = RegistrationStatus.Refused,
                         Jira = JiraStatus.Open,
                         Merge = MergeStatus.ReadyForMerge,
                         Test = TestStatus.Tested
@@ -94,9 +94,9 @@ namespace PatchManager.Services.PersistenceService
                     },
                     Asset = RiskOneAsset.Rates,
                     Owner = "Rey",
-                    Status = new GerritStatus()
+                    Status = new PatchStatus()
                     {
-                        Patch = PatchStatus.Asked,
+                        Registration = RegistrationStatus.Asked,
                         Jira = JiraStatus.Resolved,
                         Merge = MergeStatus.Merged,
                         Test = TestStatus.Issue
@@ -114,9 +114,9 @@ namespace PatchManager.Services.PersistenceService
                     },
                     Asset = RiskOneAsset.Repo,
                     Owner = "Poe Dameron",
-                    Status = new GerritStatus()
+                    Status = new PatchStatus()
                     {
-                        Patch = PatchStatus.Asked,
+                        Registration = RegistrationStatus.Asked,
                         Jira = JiraStatus.Resolved,
                         Merge = MergeStatus.Merged,
                         Test = TestStatus.Issue
