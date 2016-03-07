@@ -14,17 +14,20 @@
                 <div layout-gt-sm="row">
                     <md-input-container>
                         <label>Gerrit Id</label>
+                        <md-icon md-font-library="material-icons">add</md-icon>
                         <input ng-model="newGerrit.gerrit.id" type="number">
                     </md-input-container>
                     <md-button class="md-icon-button" ng-click="searchForGerrit()">
-                        <md-icon md-svg-src="images/cross.svg"></md-icon>
+                        <md-icon md-font-library="material-icons">search</md-icon>
                     </md-button>
                     <md-input-container>
                         <label>Owner</label>
+                        <md-icon md-font-library="material-icons">face</md-icon>
                         <input ng-model="newGerrit.owner" type="text">
                     </md-input-container>
                     <md-input-container>
                         <label>Asset</label>
+                        <md-icon md-font-library="material-icons">group</md-icon>
                         <md-select ng-model="newGerrit.asset">
                             <md-option>Core</md-option>
                             <md-option>Credit</md-option>

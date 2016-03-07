@@ -41,7 +41,7 @@ namespace PatchManager
         //TODO : use tabs in the gerrit addtion page, to separate gerrit and jira informations
         //DONE : add the team asset for each gerrit 
         //TODO : provide a quick searh feature
-        //TODO : refactor the names : release => patch => user inputs + gerrit api data + jira api data
+        //DONE : refactor the names : release => patch => user inputs + gerrit api data + jira api data
         //TODO : create features usable by RM only, such as release creation
         //TODO : give a quick switch to define which description to show in the cards : jira or gerrit
 
