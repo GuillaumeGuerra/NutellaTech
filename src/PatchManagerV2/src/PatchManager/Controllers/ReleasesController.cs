@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Autofac;
 using Microsoft.AspNet.Mvc;
 using PatchManager.Models;
-using PatchManager.Services.GerritActions;
 using PatchManager.Services.ModelService;
+using PatchManager.Services.PatchActions;
 using PatchManager.Services.StatusResolverService;
 
 namespace PatchManager.Controllers
@@ -91,13 +91,16 @@ namespace PatchManager.Controllers
         [Route("{releaseVersion}/gerrits/{gerritId}/action/preview")]
         public Patch PreviewGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId)
         {
-            var gerrit = new PatchWithMetadata(new Patch()
+            var patch = new PatchWithMetadata(new Patch()
             {
-                Id = gerritId
+                Gerrit = new Gerrit()
+                {
+                    Id = gerritId
+                }
             });
-            StatusResolver.Resolve(gerrit);
+            StatusResolver.Resolve(patch);
 
-            return gerrit.Patch;
+            return patch.Patch;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace PatchManager.Services.StatusResolverService
     public interface IStatusResolverService
     {
         /// <summary>
-        /// Fetch the last updates on gerrit and jira for a given gerrit
+        /// Fetch the last updates on gerrit and jira for a given patch
         /// </summary>
         /// <param name="patch"></param>
         void Resolve(PatchWithMetadata patch);

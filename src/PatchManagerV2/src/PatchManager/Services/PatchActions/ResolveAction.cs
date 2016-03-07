@@ -1,7 +1,7 @@
 using PatchManager.Models;
 using PatchManager.Services.JiraService;
 
-namespace PatchManager.Services.GerritActions
+namespace PatchManager.Services.PatchActions
 {
     [PatchAction("resolve")]
     public class ResolveAction : IPatchAction

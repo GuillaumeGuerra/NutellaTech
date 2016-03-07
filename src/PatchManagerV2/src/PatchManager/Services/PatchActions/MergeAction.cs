@@ -1,7 +1,7 @@
 using PatchManager.Models;
 using PatchManager.Services.GerritService;
 
-namespace PatchManager.Services.GerritActions
+namespace PatchManager.Services.PatchActions
 {
     [PatchAction("merge")]
     public class MergeAction : IPatchAction
@@ -18,7 +18,7 @@ namespace PatchManager.Services.GerritActions
             if (patch.Status.Merge != MergeStatus.ReadyForMerge)
                 return false;
 
-            if (Service.Merge(patch.Id))
+            if (Service.Merge(patch.Gerrit.Id))
                 patch.Status.Merge = MergeStatus.Merged;
 
             return true;

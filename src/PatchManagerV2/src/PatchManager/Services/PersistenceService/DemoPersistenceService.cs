@@ -46,8 +46,11 @@ namespace PatchManager.Services.PersistenceService
             {
                 new Patch()
                 {
-                    Id = 123,
-                    Title = "Get rid of Jar-Jar once and for all",
+                    Gerrit = new Gerrit()
+                    {
+                        Id = 123,
+                        Description = "Get rid of Jar-Jar once and for all"
+                    },
                     Jira = new Jira()
                     {
                         Id = "STR-123_" + releaseVersion,
@@ -65,8 +68,11 @@ namespace PatchManager.Services.PersistenceService
                 },
                 new Patch()
                 {
-                    Id = 456,
-                    Title = "Now that Jar-Jar is gone, time to take care of Anakin",
+                    Gerrit = new Gerrit()
+                    {
+                        Id = 456,
+                        Description = "Now that Jar-Jar is gone, time to take care of Anakin"
+                    },
                     Jira = new Jira()
                     {
                         Id = "STR-456_" + releaseVersion,
@@ -84,9 +90,11 @@ namespace PatchManager.Services.PersistenceService
                 },
                 new Patch()
                 {
-                    Id = 789,
-                    Title =
-                        "Revert of the deletion of Han Solo, finally the character is nice, I don't want him dead",
+                    Gerrit = new Gerrit()
+                    {
+                        Id = 789,
+                        Description = "Revert of the deletion of Han Solo, finally the character is nice, I don't want him dead"
+                    },
                     Jira = new Jira()
                     {
                         Id = "STR-789_" + releaseVersion,
@@ -104,9 +112,11 @@ namespace PatchManager.Services.PersistenceService
                 },
                 new Patch()
                 {
-                    Id = 666,
-                    Title =
-                        "Rey, we don't know yet if you're Leia's daughter, but you're as pretty as she was, a long time ago, in a galaxy far far away",
+                    Gerrit = new Gerrit()
+                    {
+                        Id = 666,
+                        Description = "Rey, we don't know yet if you're Leia's daughter, but you're as pretty as she was, a long time ago, in a galaxy far far away"
+                    },
                     Jira = new Jira()
                     {
                         Id = "STR-666_" + releaseVersion,

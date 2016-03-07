@@ -1,6 +1,6 @@
 using System;
 
-namespace PatchManager.Services.GerritActions
+namespace PatchManager.Services.PatchActions
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class PatchActionAttribute : Attribute

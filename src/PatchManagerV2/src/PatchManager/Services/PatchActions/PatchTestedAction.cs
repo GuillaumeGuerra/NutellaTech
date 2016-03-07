@@ -1,6 +1,6 @@
 using PatchManager.Models;
 
-namespace PatchManager.Services.GerritActions
+namespace PatchManager.Services.PatchActions
 {
     [PatchAction("tested")]
     public class PatchTestedAction : TestStatusAction

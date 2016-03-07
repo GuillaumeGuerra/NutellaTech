@@ -21,6 +21,7 @@ namespace PatchManager.Services.StatusResolverService
         {
             if (patch.Patch == null)
                 return;
+
             if (patch.Patch.Status == null)
                 patch.Patch.Status = new PatchStatus();
 
@@ -51,10 +52,10 @@ namespace PatchManager.Services.StatusResolverService
                 return;
             }
 
-            var gerritMetadata = Gerrit.GetGerritInformation(patch.Patch.Id);
+            var gerritMetadata = Gerrit.GetGerritInformation(patch.Patch.Gerrit.Id);
 
-            patch.Patch.Author = gerritMetadata.Owner;
-            patch.Patch.Title = gerritMetadata.Title;
+            patch.Patch.Gerrit.Author = gerritMetadata.Owner;
+            patch.Patch.Gerrit.Description = gerritMetadata.Title;
             patch.Patch.Status.Merge = gerritMetadata.Status;
 
             if (patch.Patch.Jira == null || patch.Patch.Jira.Id != gerritMetadata.JiraId)
@@ -65,7 +66,7 @@ namespace PatchManager.Services.StatusResolverService
                 };
                 
                 // Don't forget to update the jira status, to force a call to jira API
-                // If the jira status was already merged, we wouldn't refresh it, so as we know the associated jira has changed, let's be defensive and force a refresh
+                // If the jira status was already merged, we wouldn't refresh it, so as we know the associated jira has changed, let's be careful and force a refresh
                 patch.Patch.Status.Jira = JiraStatus.Unknown;
             }
         }

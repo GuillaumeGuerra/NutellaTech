@@ -11,7 +11,7 @@ namespace PatchManager.Services.ModelService
 
         List<PatchWithMetadata> GetReleasePatches(string releaseVersion);
 
-        PatchWithMetadata GetReleasePatch(string releaseVersion, int gerritId);
+        PatchWithMetadata GetReleasePatch(string releaseVersion, int patchId);
 
         void AddPatchToRelease(string releaseVersion, Patch patch);
 

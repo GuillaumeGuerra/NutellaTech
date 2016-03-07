@@ -33,10 +33,10 @@ namespace PatchManager.Services.ModelService
             return TryGetRelease(releaseVersion).Patches.Select(pair => pair.Value).ToList();
         }
 
-        public PatchWithMetadata GetReleasePatch(string releaseVersion, int gerritId)
+        public PatchWithMetadata GetReleasePatch(string releaseVersion, int patchId)
         {
             PatchWithMetadata patch;
-            TryGetRelease(releaseVersion).Patches.TryGetValue(gerritId, out patch);
+            TryGetRelease(releaseVersion).Patches.TryGetValue(patchId, out patch);
             return patch;
         }
 
@@ -46,14 +46,14 @@ namespace PatchManager.Services.ModelService
             if (release.Release == null)
                 return; // Case of a non existing patch, probably an issue ...
 
-            release.Patches.Add(patch.Id, new PatchWithMetadata(patch));
+            release.Patches.Add(patch.Gerrit.Id, new PatchWithMetadata(patch));
             Persistence.AddPatchToRelease(release.Release, patch);
         }
 
         public void UpdateReleasePatch(string releaseVersion, Patch patch)
         {
             ReleaseWithPatches release;
-            var foundPatch = TryGetReleasePatch(releaseVersion, patch.Id, out release);
+            var foundPatch = TryGetReleasePatch(releaseVersion, patch.Gerrit.Id, out release);
             if (foundPatch == null)
                 return; // Case of a non existing patch, probably an issue ...
 
@@ -70,14 +70,14 @@ namespace PatchManager.Services.ModelService
             return new ReleaseWithPatches();
         }
 
-        private PatchWithMetadata TryGetReleasePatch(string patchVersion, int gerritId, out ReleaseWithPatches release)
+        private PatchWithMetadata TryGetReleasePatch(string releaseVersion, int patchId, out ReleaseWithPatches release)
         {
-            release = TryGetRelease(patchVersion);
+            release = TryGetRelease(releaseVersion);
             if (release == null)
                 return null;
 
             PatchWithMetadata patch;
-            if (release.Patches.TryGetValue(gerritId, out patch))
+            if (release.Patches.TryGetValue(patchId, out patch))
                 return patch;
 
             return null;
@@ -86,9 +86,9 @@ namespace PatchManager.Services.ModelService
         private void Initialize()
         {
             ReleasesDico = new Dictionary<string, ReleaseWithPatches>();
-            foreach (var patch in Persistence.GetAllReleases())
+            foreach (var release in Persistence.GetAllReleases())
             {
-                ReleasesDico.Add(patch.Version, new ReleaseWithPatches(patch, Persistence.GetPatches(patch.Version).Select(gerrit => new PatchWithMetadata(gerrit)).ToDictionary(gerrit => gerrit.Patch.Id)));
+                ReleasesDico.Add(release.Version, new ReleaseWithPatches(release, Persistence.GetPatches(release.Version).Select(gerrit => new PatchWithMetadata(gerrit)).ToDictionary(gerrit => gerrit.Patch.Gerrit.Id)));
             }
         }
 

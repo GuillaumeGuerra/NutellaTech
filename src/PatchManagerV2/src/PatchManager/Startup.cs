@@ -11,11 +11,11 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using PatchManager.Config;
 using Autofac.Extensions.DependencyInjection;
-using PatchManager.Services.GerritActions;
 using PatchManager.Services.ModelService;
 using PatchManager.Services.PersistenceService;
 using PatchManager.Services.GerritService;
 using PatchManager.Services.JiraService;
+using PatchManager.Services.PatchActions;
 using PatchManager.Services.StatusResolverService;
 
 namespace PatchManager
