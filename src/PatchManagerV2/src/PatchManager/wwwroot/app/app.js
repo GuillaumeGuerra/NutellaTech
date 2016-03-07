@@ -7,9 +7,8 @@ var app = angular.module('PatchManager', [
     'ngMaterial',
 
     // Custom modules 
-    'booksServices',
     'releasesServices',
-    'gerritsServices'
+    'patchesServices'
 
     // 3rd Party Modules
 
@@ -20,10 +19,6 @@ app.config(['$routeProvider',
       $routeProvider.
         when('/home', {
             templateUrl: 'app/partials/home.html'
-        }).
-        when('/addBook', {
-            templateUrl: 'app/partials/add-book.html',
-            controller: 'addBookController'
         }).
         otherwise({
             redirectTo: '/home'

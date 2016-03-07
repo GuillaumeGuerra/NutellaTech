@@ -1,4 +1,4 @@
-﻿<md-dialog aria-label="Mango (Fruit)" ng-cloak="">
+﻿<md-dialog ng-cloak="">
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -14,7 +14,7 @@
                 <div layout-gt-sm="row">
                     <md-input-container>
                         <label>Gerrit Id</label>
-                        <input ng-model="newGerrit.id" type="number">
+                        <input ng-model="newGerrit.gerrit.id" type="number">
                     </md-input-container>
                     <md-button class="md-icon-button" ng-click="searchForGerrit()">
                         <md-icon md-svg-src="images/cross.svg"></md-icon>
@@ -41,7 +41,7 @@
                     <div layout-gt-xs="column" flex="20">
                         <md-input-container flex-gt-xs="" style="margin: 0px">
                             <label>Gerrit Id</label>
-                            <input ng-model="newGerrit.id" disabled="" />
+                            <input ng-model="newGerrit.gerrit.id" disabled="" />
                         </md-input-container>
                         <md-input-container flex-gt-xs="" style="margin: 0px">
                             <label>Status</label>
@@ -51,11 +51,11 @@
                     <div layout-gt-xs="column" flex>
                         <md-input-container flex-gt-xs="" style="margin: 0px">
                             <label>Author</label>
-                            <input ng-model="newGerrit.author" disabled="" />
+                            <input ng-model="newGerrit.gerrit.author" disabled="" />
                         </md-input-container>
                         <md-input-container flex-gt-xs="" style="margin: 0px">
                             <label>Gerrit Description</label>
-                            <textarea ng-model="newGerrit.title" rows="5" md-select-on-focus="" disabled></textarea>
+                            <textarea ng-model="newGerrit.gerrit.description" rows="5" md-select-on-focus="" disabled></textarea>
                         </md-input-container>
                     </div>
                 </div>

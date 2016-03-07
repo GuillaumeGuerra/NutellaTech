@@ -35,7 +35,7 @@ namespace PatchManager.Controllers
         }
 
         [HttpGet]
-        [Route("{releaseVersion}/gerrits")]
+        [Route("{releaseVersion}/patches")]
         public IEnumerable<Patch> GetReleaseGerrits([FromRoute] string releaseVersion)
         {
             foreach (var gerrit in Model.GetReleasePatches(releaseVersion))
@@ -46,10 +46,10 @@ namespace PatchManager.Controllers
         }
 
         [HttpGet]
-        [Route("{releaseVersion}/gerrits/{gerritId}")]
-        public Patch GetReleaseGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId)
+        [Route("{releaseVersion}/patches/{patchId}")]
+        public Patch GetReleaseGerrit([FromRoute] string releaseVersion, [FromRoute] int patchId)
         {
-            var gerrit = Model.GetReleasePatch(releaseVersion, gerritId);
+            var gerrit = Model.GetReleasePatch(releaseVersion, patchId);
 
             StatusResolver.Resolve(gerrit);
 
@@ -57,7 +57,7 @@ namespace PatchManager.Controllers
         }
 
         [HttpPost]
-        [Route("{releaseVersion}/gerrits/")]
+        [Route("{releaseVersion}/patches/")]
         public Patch PostGerritForRelease([FromRoute] string releaseVersion, [FromBody] Patch patch)
         {
             patch.Status.Registration = RegistrationStatus.Asked;
@@ -69,10 +69,10 @@ namespace PatchManager.Controllers
         }
 
         [HttpPost]
-        [Route("{releaseVersion}/gerrits/{gerritId}/action/{actionToPerform}")]
-        public Patch ApplyActionToGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId, [FromRoute] string actionToPerform)
+        [Route("{releaseVersion}/patches/{patchId}/action/{actionToPerform}")]
+        public Patch ApplyActionToGerrit([FromRoute] string releaseVersion, [FromRoute] int patchId, [FromRoute] string actionToPerform)
         {
-            var current = Model.GetReleasePatch(releaseVersion, gerritId);
+            var current = Model.GetReleasePatch(releaseVersion, patchId);
             if (current == null)
                 return null;
 
@@ -88,14 +88,14 @@ namespace PatchManager.Controllers
         }
 
         [HttpGet]
-        [Route("{releaseVersion}/gerrits/{gerritId}/action/preview")]
-        public Patch PreviewGerrit([FromRoute] string releaseVersion, [FromRoute] int gerritId)
+        [Route("{releaseVersion}/patches/{patchId}/action/preview")]
+        public Patch PreviewGerrit([FromRoute] string releaseVersion, [FromRoute] int patchId)
         {
             var patch = new PatchWithMetadata(new Patch()
             {
                 Gerrit = new Gerrit()
                 {
-                    Id = gerritId
+                    Id = patchId
                 }
             });
             StatusResolver.Resolve(patch);

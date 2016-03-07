@@ -1,14 +1,12 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
 /// <reference path="app/app.js" />
-/// <reference path="app/Controllers/bookListController.js" />
-/// <reference path="app/controllers/editbookcontroller.js" />
 /// <reference path="app/controllers/navbarcontroller.js" />
-/// <reference path="app/controllers/patchcontroller - copy.js" />
-/// <reference path="app/controllers/patchcontroller.js" />
+/// <reference path="app/Controllers/newGerritController.js" />
+/// <reference path="app/Controllers/releaseController.js" />
 /// <reference path="app/services/booksservice.js" />
 /// <reference path="app/Services/gerritsService.js" />
-/// <reference path="app/services/patchesservice.js" />
+/// <reference path="app/Services/releasesService.js" />
 /// <reference path="lib/angular/angular.js" />
 /// <reference path="lib/angular-animate/angular-animate.js" />
 /// <reference path="lib/angular-aria/angular-aria.js" />

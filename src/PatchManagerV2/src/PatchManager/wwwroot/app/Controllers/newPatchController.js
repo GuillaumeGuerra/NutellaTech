@@ -2,11 +2,11 @@
 
 angular
     .module('PatchManager')
-    .controller('newGerritController', newGerritController);
+    .controller('newPatchController', newPatchController);
 
-newGerritController.$inject = ['$scope', '$routeParams', '$mdDialog', 'Gerrits'];
+newPatchController.$inject = ['$scope', '$routeParams', '$mdDialog', 'Patches'];
 
-function newGerritController($scope, $routeParams, $mdDialog, gerrits) {
+function newPatchController($scope, $routeParams, $mdDialog, patches) {
     $scope.hide = function () {
         $mdDialog.hide();
     };
@@ -26,13 +26,9 @@ function newGerritController($scope, $routeParams, $mdDialog, gerrits) {
             "owner": $scope.newGerrit.owner
         }
 
-        console.log("saved owner is " + $scope.userInput.owner);
-        console.log("initial owner is " + $scope.newGerrit.owner);
-
-        gerrits.get({ gerritId: $scope.newGerrit.id, releaseVersion: $routeParams.releaseVersion, isAction: 'action', action: 'preview' }).$promise.then(
+        patches.get({ patchId: $scope.newGerrit.gerrit.id, releaseVersion: $routeParams.releaseVersion, isAction: 'action', action: 'preview' }).$promise.then(
             function (result) {
                 console.log(result);
-                console.log("restored owner is " + $scope.userInput.owner);
 
                 result.asset = $scope.userInput.asset;
                 result.owner = $scope.userInput.owner;

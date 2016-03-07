@@ -32,47 +32,47 @@
 
             <div class='md-padding' layout="row" layout-wrap>
 
-                <md-card ng-repeat="gerrit in gerrits" style="width: 300px">
+                <md-card ng-repeat="patch in patches" style="width: 300px">
                     <md-card-header>
                         <md-card-avatar>
                             <img class="md-user-avatar" src="images/avatar.png">
                         </md-card-avatar>
                         <md-card-header-text>
                             <div layout="row">
-                                <span class="md-title">{{gerrit.jira.id}}</span>
+                                <span class="md-title">{{patch.jira.id}}</span>
                                 <span flex></span>
-                                <span class="md-title">{{gerrit.id}}</span>
+                                <span class="md-title">{{patch.gerrit.id}}</span>
                             </div>
                             <div layout="row">
-                                <span class="md-subhead">{{gerrit.asset}}</span>
+                                <span class="md-subhead">{{patch.asset}}</span>
                                 <span flex></span>
-                                <span class="md-subhead">{{gerrit.owner}}</span>
+                                <span class="md-subhead">{{patch.owner}}</span>
                             </div>
                         </md-card-header-text>
                     </md-card-header>
                     <md-card-content>
-                        <p>{{gerrit.title}}</p>
+                        <p>{{patch.gerrit.description}}</p>
                     </md-card-content>
                     <md-card-footer>
                         <div layout="row" layout-align="space-between stretch" layout-wrap>
 
                             <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{gerrit.status.patch}}</md-button>
+                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.registration}}</md-button>
                                 <md-menu-content width="4">
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'accept')" ng-disabled="gerrit.status.patch == 'Accepted'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'accept')" ng-disabled="patch.status.patch == 'Accepted'">
                                             <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
                                             Accept
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'ask')" ng-disabled="gerrit.status.patch == 'Asked'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'ask')" ng-disabled="patch.status.patch == 'Asked'">
                                             <md-icon md-svg-icon="images/question.svg" md-menu-align-target></md-icon>
                                             Asked
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'refuse')" ng-disabled="gerrit.status.patch == 'Refused'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'refuse')" ng-disabled="patch.status.patch == 'Refused'">
                                             <md-icon md-svg-icon="images/cross.svg" md-menu-align-target></md-icon>
                                             Refuse
                                         </md-button>
@@ -81,10 +81,10 @@
                             </md-menu>
 
                             <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{gerrit.status.jira}}</md-button>
+                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.jira}}</md-button>
                                 <md-menu-content width="4">
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'resolve')" ng-disabled="gerrit.status.jira == 'Resolved'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'resolve')" ng-disabled="patch.status.jira == 'Resolved'">
                                             <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
                                             Resolve
                                         </md-button>
@@ -93,10 +93,10 @@
                             </md-menu>
 
                             <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{gerrit.status.merge}}</md-button>
+                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.merge}}</md-button>
                                 <md-menu-content width="4">
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'merge')" ng-disabled="gerrit.status.merge == 'Merged'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'merge')" ng-disabled="patch.status.merge == 'Merged'">
                                             <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
                                             Merge
                                         </md-button>
@@ -105,22 +105,22 @@
                             </md-menu>
 
                             <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{gerrit.status.test}}</md-button>
+                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.test}}</md-button>
                                 <md-menu-content width="4">
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'tested')" ng-disabled="gerrit.status.test == 'Tested'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'tested')" ng-disabled="patch.status.test == 'Tested'">
                                             <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
                                             Test Completed
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'toTest')" ng-disabled="gerrit.status.test == 'ToTest'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'toTest')" ng-disabled="patch.status.test == 'ToTest'">
                                             <md-icon md-svg-icon="images/question.svg" md-menu-align-target></md-icon>
                                             To Test
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(gerrit,'issueFound')" ng-disabled="gerrit.status.test == 'Issue'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'issueFound')" ng-disabled="patch.status.test == 'Issue'">
                                             <md-icon md-svg-icon="images/cross.svg" md-menu-align-target></md-icon>
                                             Issue
                                         </md-button>
