@@ -217,5 +217,3 @@ pip-log.txt
 *.dll
 src/XOneBlotter/src/XOneBlotter/node_modules/*
 src/XOneBlotter/src/XOneBlotter/wwwroot/lib
-src/PatchManagerV2/src/PatchManager/node_modules
-src/PatchManagerV2/src/PatchManager/wwwroot/lib/
