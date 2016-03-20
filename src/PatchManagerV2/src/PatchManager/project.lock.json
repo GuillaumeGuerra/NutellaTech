@@ -1499,6 +1499,19 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "PatchManager.Model/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1"
+      },
+      "PatchManager.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.3",
+          "Newtonsoft.Json": "6.0.4",
+          "PatchManager.Model": "1.0.0"
+        }
+      },
       "System.Collections/4.0.0": {
         "type": "package",
         "compile": {
@@ -3221,6 +3234,19 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "PatchManager.Model/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1"
+      },
+      "PatchManager.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.3",
+          "Newtonsoft.Json": "6.0.4",
+          "PatchManager.Model": "1.0.0"
         }
       },
       "System.Collections/4.0.0": {
@@ -4947,6 +4973,19 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "PatchManager.Model/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1"
+      },
+      "PatchManager.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.3",
+          "Newtonsoft.Json": "6.0.4",
+          "PatchManager.Model": "1.0.0"
+        }
+      },
       "System.Collections/4.0.0": {
         "type": "package",
         "compile": {
@@ -5173,6 +5212,14 @@
     }
   },
   "libraries": {
+    "PatchManager.Model/1.0.0": {
+      "type": "project",
+      "path": "../../wrap/PatchManager.Model/project.json"
+    },
+    "PatchManager.Services/1.0.0": {
+      "type": "project",
+      "path": "../../wrap/PatchManager.Services/project.json"
+    },
     "Autofac/4.0.0-rc1-177": {
       "type": "package",
       "sha512": "cTSfTca0qWl3Zd68iMl2bH8e4RyGL/Q7EUT0PmAzCSoitSlrHu4zmByhP/f+KGGSuRqWHFYoMEEOanvTviEr4g==",
@@ -7185,6 +7232,9 @@
       "System.Net.Http >= 4.0.0",
       "Microsoft.AspNet.WebApi.Client >= 5.2.3"
     ],
-    "DNX,Version=v4.5.1": []
+    "DNX,Version=v4.5.1": [
+      "PatchManager.Model >= 1.0.0-*",
+      "PatchManager.Services >= 1.0.0-*"
+    ]
   }
 }

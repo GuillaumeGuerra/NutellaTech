@@ -11,12 +11,8 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using PatchManager.Config;
 using Autofac.Extensions.DependencyInjection;
-using PatchManager.Services.ModelService;
-using PatchManager.Services.PersistenceService;
-using PatchManager.Services.GerritService;
-using PatchManager.Services.JiraService;
+using PatchManager.Model.Services;
 using PatchManager.Services.PatchActions;
-using PatchManager.Services.StatusResolverService;
 
 namespace PatchManager
 {
@@ -44,11 +40,12 @@ namespace PatchManager
         //DONE : refactor the names : release => patch => user inputs + gerrit api data + jira api data
         //TODO : create features usable by RM only, such as release creation
         //TODO : give a quick switch to define which description to show in the cards : jira or gerrit
+        //TOO : write at least a simple implementation for the persistence service, using json files for instance
 
 
         public static IContainer Container { get; private set; }
         public static IConfigurationRoot Configuration { get; set; }
-        public static SettingsConfiguration Settings { get; set; }
+        //public static SettingsConfiguration Settings { get; set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -60,7 +57,7 @@ namespace PatchManager
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            Settings = Configuration.Get<SettingsConfiguration>();
+            SettingsConfiguration.Settings = Configuration.Get<SettingsConfiguration>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

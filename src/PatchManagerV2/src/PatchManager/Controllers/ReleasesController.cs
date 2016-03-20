@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Autofac;
 using Microsoft.AspNet.Mvc;
+using PatchManager.Model.Services;
 using PatchManager.Models;
-using PatchManager.Services.ModelService;
+using PatchManager.Services.Model;
 using PatchManager.Services.PatchActions;
-using PatchManager.Services.StatusResolverService;
 
 namespace PatchManager.Controllers
 {

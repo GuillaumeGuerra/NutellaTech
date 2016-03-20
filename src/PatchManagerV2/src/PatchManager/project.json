@@ -33,6 +33,8 @@
       "frameworkAssemblies": {
       },
       "dependencies": {
+        "PatchManager.Model": "1.0.0-*",
+        "PatchManager.Services": "1.0.0-*"
       }
     }
   },

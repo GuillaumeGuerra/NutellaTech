@@ -19,5 +19,9 @@
     <DnxInvisibleContent Include=".bowerrc" />
     <DnxInvisibleContent Include="package.json" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PatchManager.Model\PatchManager.Model.csproj" />
+    <ProjectReference Include="..\..\PatchManager.Services\PatchManager.Services.csproj" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

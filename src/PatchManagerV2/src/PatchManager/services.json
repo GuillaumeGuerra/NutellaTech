@@ -1,22 +1,22 @@
 ﻿{
   "Persistence": {
-    "type": "PatchManager.Services.PersistenceService.DemoPersistenceService",
+    "type": "PatchManager.Services.Persistence.DemoPersistenceService, PatchManager.Services",
     "isSingleton": false
   },
   "Model": {
-    "type": "PatchManager.Services.ModelService.ModelService",
+    "type": "PatchManager.Services.Model.ModelService, PatchManager.Services",
     "isSingleton": true
   },
   "Gerrit": {
-    "type": "PatchManager.Services.GerritService.DemoGerritService",
+    "type": "PatchManager.Services.Gerrit.DemoGerritService, PatchManager.Services",
     "isSingleton": false
   },
   "Jira": {
-    "type": "PatchManager.Services.JiraService.DemoJiraService",
+    "type": "PatchManager.Services.Jira.DemoJiraService, PatchManager.Services",
     "isSingleton": false
   },
   "Resolver": {
-    "type": "PatchManager.Services.StatusResolverService.StatusResolverService",
+    "type": "PatchManager.Services.StatusResolver.StatusResolverService, PatchManager.Services",
     "isSingleton": false
   }
 }

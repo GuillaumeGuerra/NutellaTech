@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../PatchManager.Services/PatchManager.Services.csproj",
+      "bin": {
+        "assembly": "../../PatchManager.Services/obj/{configuration}/PatchManager.Services.dll",
+        "pdb": "../../PatchManager.Services/obj/{configuration}/PatchManager.Services.pdb"
+      },
+      "dependencies": {
+        "PatchManager.Model": "1.0.0-*",
+        "Microsoft.AspNet.WebApi.Client": "5.2.3",
+        "Newtonsoft.Json": "6.0.4"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net451": {
+      "wrappedProject": "../../PatchManager.Model/PatchManager.Model.csproj",
+      "bin": {
+        "assembly": "../../PatchManager.Model/obj/{configuration}/PatchManager.Model.dll",
+        "pdb": "../../PatchManager.Model/obj/{configuration}/PatchManager.Model.pdb"
+      }
+    }
+  }
+}
