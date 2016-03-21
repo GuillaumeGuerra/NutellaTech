@@ -10,7 +10,7 @@ namespace PatchManager.Services.Context
     public class PatchManagerContextService : IPatchManagerContextService
     {
         public DateTime Now => DateTime.Now;
-        public SettingsConfiguration Settings { get; private set; }
+        public SettingsConfiguration Settings { get; }
 
         public PatchManagerContextService(SettingsConfiguration settings)
         {

@@ -88,7 +88,7 @@ namespace PatchManager
 
         private void RegisterActions(ContainerBuilder builder)
         {
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (var type in typeof(PatchActionAttribute).Assembly.GetTypes())
             {
                 if (type.GetInterface(typeof(IPatchAction).Name) != null && !type.IsAbstract)
                 {
