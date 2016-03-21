@@ -3,6 +3,7 @@ using System.Net.Http;
 using PatchManager.Config;
 using PatchManager.Model.Services;
 using PatchManager.Models;
+using PatchManager.Services.Context;
 
 namespace PatchManager.Services.Jira
 {
@@ -10,10 +11,17 @@ namespace PatchManager.Services.Jira
     {
         private const string GetJiraUrl = "rest/api/2/issue/{jiraId}";
 
+        public IPatchManagerContextService Context { get; set; }
+
+        public JiraService(IPatchManagerContextService context)
+        {
+            Context = context;
+        }
+
         public JiraInformation GetJiraInformation(string jiraId)
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri(SettingsConfiguration.Settings.JiraUrl);
+            client.BaseAddress = new Uri(Context.Settings.JiraUrl);
             var response = client.GetAsync(FormatGetJiraQuery(jiraId)).Result.Content.ReadAsAsync<Rootobject>().Result;
 
             return new JiraInformation()

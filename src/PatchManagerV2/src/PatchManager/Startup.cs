@@ -12,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using PatchManager.Config;
 using Autofac.Extensions.DependencyInjection;
 using PatchManager.Model.Services;
+using PatchManager.Services.Context;
 using PatchManager.Services.PatchActions;
 
 namespace PatchManager
@@ -45,7 +46,6 @@ namespace PatchManager
 
         public static IContainer Container { get; private set; }
         public static IConfigurationRoot Configuration { get; set; }
-        //public static SettingsConfiguration Settings { get; set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -56,8 +56,6 @@ namespace PatchManager
                 .AddJsonFile("settings.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-
-            SettingsConfiguration.Settings = Configuration.Get<SettingsConfiguration>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -71,6 +69,8 @@ namespace PatchManager
             var conf = Configuration.Get<ServicesConfiguration>();
 
             var builder = new ContainerBuilder();
+
+            builder.RegisterType(typeof(PatchManagerContextService)).As<IPatchManagerContextService>().SingleInstance().WithParameter("settings", Configuration.Get<SettingsConfiguration>());
 
             RegisterCustomService<IPersistenceService>(builder, conf.Persistence);
             RegisterCustomService<IModelService>(builder, conf.Model);

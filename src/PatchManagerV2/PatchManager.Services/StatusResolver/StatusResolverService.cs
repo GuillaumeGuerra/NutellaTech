@@ -2,17 +2,20 @@
 using PatchManager.Config;
 using PatchManager.Model.Services;
 using PatchManager.Models;
+using PatchManager.Services.Context;
 using PatchManager.Services.Model;
 
 namespace PatchManager.Services.StatusResolver
 {
     public class StatusResolverService : IStatusResolverService
     {
+        public IPatchManagerContextService Context { get; set; }
         public IGerritService Gerrit { get; set; }
         public IJiraService Jira { get; set; }
 
-        public StatusResolverService(IGerritService gerrit, IJiraService jira)
+        public StatusResolverService(IPatchManagerContextService context, IGerritService gerrit, IJiraService jira)
         {
+            Context = context;
             Gerrit = gerrit;
             Jira = jira;
         }
@@ -28,7 +31,7 @@ namespace PatchManager.Services.StatusResolver
             ResolveGerritIfNecessary(patch);
             ResolveJiraIfNecessary(patch);
 
-            patch.LastRefresh = DateTime.Now;
+            patch.LastRefresh = Context.Now;
         }
 
         private void ResolveJiraIfNecessary(PatchWithMetadata patch)
@@ -64,7 +67,7 @@ namespace PatchManager.Services.StatusResolver
                 {
                     Id = gerritMetadata.JiraId
                 };
-                
+
                 // Don't forget to update the jira status, to force a call to jira API
                 // If the jira status was already merged, we wouldn't refresh it, so as we know the associated jira has changed, let's be careful and force a refresh
                 patch.Patch.Status.Jira = JiraStatus.Unknown;
@@ -73,7 +76,7 @@ namespace PatchManager.Services.StatusResolver
 
         public void ResolveIfOutdated(PatchWithMetadata patch)
         {
-            if (patch.LastRefresh < DateTime.Now.AddMinutes(-SettingsConfiguration.Settings.TimeoutInMinutesToResolveGerritStatus))
+            if (patch.LastRefresh < Context.Now.AddMinutes(-Context.Settings.TimeoutInMinutesToResolveGerritStatus))
                 Resolve(patch);
         }
     }

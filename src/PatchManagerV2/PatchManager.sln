@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CC834201-22D9-4294-B850-874F1893BBD1}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatchManager.Model", "PatchManager.Model\PatchManager.Model.csproj", "{BE10762F-F027-4A89-A114-FA9C4564CE01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatchManager.Services.Tests", "PatchManager.Services.Tests\PatchManager.Services.Tests.csproj", "{85BED96F-249E-4EDA-8322-15E201900635}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatchManager.TestFramework", "PatchManager.TestFramework\PatchManager.TestFramework.csproj", "{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{85BED96F-249E-4EDA-8322-15E201900635}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85BED96F-249E-4EDA-8322-15E201900635}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85BED96F-249E-4EDA-8322-15E201900635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,5 +55,6 @@ Global
 		{65C87F28-61D6-47A7-92EE-2B3AF4AF1DBE} = {CC834201-22D9-4294-B850-874F1893BBD1}
 		{BE10762F-F027-4A89-A114-FA9C4564CE01} = {CC834201-22D9-4294-B850-874F1893BBD1}
 		{85BED96F-249E-4EDA-8322-15E201900635} = {CC834201-22D9-4294-B850-874F1893BBD1}
+		{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1} = {CC834201-22D9-4294-B850-874F1893BBD1}
 	EndGlobalSection
 EndGlobal

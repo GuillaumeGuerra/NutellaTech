@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85BED96F-249E-4EDA-8322-15E201900635}</ProjectGuid>
+    <ProjectGuid>{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PatchManager.Services.Tests</RootNamespace>
-    <AssemblyName>PatchManager.Services.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>PatchManager.TestFramework</RootNamespace>
+    <AssemblyName>PatchManager.TestFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,14 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,11 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StatusResolverServiceTests.cs" />
+    <Compile Include="Overridable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="PatchManagerContextMock.cs" />
+    <Compile Include="TestContextExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PatchManager.Model\PatchManager.Model.csproj">
@@ -63,13 +54,6 @@
       <Project>{65C87F28-61D6-47A7-92EE-2B3AF4AF1DBE}</Project>
       <Name>PatchManager.Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PatchManager.TestFramework\PatchManager.TestFramework.csproj">
-      <Project>{5CAC8CDF-3FC5-48E9-B197-8E18B3DF2BA1}</Project>
-      <Name>PatchManager.TestFramework</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Framework\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

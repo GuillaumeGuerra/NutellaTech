@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PatchManagerContext\PatchManagerContextService.cs" />
+    <Compile Include="PatchManagerContext\IPatchManagerContextService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Gerrit\DemoGerritService.cs" />
     <Compile Include="Jira\DemoJiraService.cs" />
