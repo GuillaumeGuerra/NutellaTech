@@ -15,11 +15,16 @@ namespace PatchManager.Services.PatchActions
 
         public bool Apply(Patch patch)
         {
-            if (patch.Status.Jira == JiraStatus.Resolved)
+            if (patch.Status.Jira == JiraStatus.Resolved || patch.Status.Jira == JiraStatus.Closed)
                 return false;
 
             if (Service.Resolve(patch.Jira.Id))
                 patch.Status.Jira = JiraStatus.Resolved;
+            else
+            {
+                // We don't know what happened here, so we'll move the status back to Unknown
+                patch.Status.Jira = JiraStatus.Unknown;
+            }
 
             return true;
         }

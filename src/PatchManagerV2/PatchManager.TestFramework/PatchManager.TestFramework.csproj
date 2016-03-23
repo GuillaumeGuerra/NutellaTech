@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,10 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Overridable.cs" />
+    <Compile Include="Mock\StrictMock.cs" />
+    <Compile Include="Reflection\EnumHelper.cs" />
+    <Compile Include="Context\Overridable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PatchManagerContextMock.cs" />
-    <Compile Include="TestContextExtensions.cs" />
+    <Compile Include="Context\PatchManagerContextMock.cs" />
+    <Compile Include="Context\TestContextExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PatchManager.Model\PatchManager.Model.csproj">
@@ -54,6 +60,9 @@
       <Project>{65C87F28-61D6-47A7-92EE-2B3AF4AF1DBE}</Project>
       <Name>PatchManager.Services</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

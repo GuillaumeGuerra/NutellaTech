@@ -27,7 +27,7 @@ namespace PatchManager
         //TODO : show the refresh and refresh all buttons in a 3 points menu on the top right corner of the cards
         //DONE : review the "Register gerrit" form using material api
         //TODO : handle authentication, to use RM credentials in Gerrit and Jira
-        //TODO : split the api into a dedicated project without DNX, and write proper UTs
+        //DONE : split the api into a dedicated project without DNX, and write proper UTs
         //TODO : think about what can be threaded, to perform asynchronous save into the model
         //TODO : handle exceptions in the website, and show a popup with the error message
         //TODO : show a progress bar when background actions are ongoing, freeze specific buttons that can't be run in the same time

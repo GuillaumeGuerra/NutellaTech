@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PatchManager.Config;
 using PatchManager.Services.Context;
 
-namespace PatchManager.Services.Tests.Framework
+namespace PatchManager.TestFramework.Context
 {
     public class PatchManagerContextMock : IPatchManagerContextService
     {

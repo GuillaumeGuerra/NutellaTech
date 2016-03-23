@@ -1,6 +1,6 @@
 using System;
 
-namespace PatchManager.Services.Tests.Framework
+namespace PatchManager.TestFramework.Context
 {
     public class Overridable<T>
     {
