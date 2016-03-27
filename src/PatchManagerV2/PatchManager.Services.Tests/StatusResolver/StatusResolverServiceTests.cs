@@ -45,7 +45,7 @@ namespace PatchManager.Services.Tests.StatusResolver
                         JiraId = "TheJiraId",
                         Owner = "Yoda",
                         Title = "Yoda has very large ears",
-                        Status = MergeStatus.MissingBuild
+                        Status = GerritStatus.MissingBuild
                     });
 
                 var actualPatch = new PatchWithMetadata(new Patch()
@@ -80,7 +80,7 @@ namespace PatchManager.Services.Tests.StatusResolver
                         Status = new PatchStatus()
                         {
                             Jira = JiraStatus.Closed,
-                            Merge = MergeStatus.Merged
+                            Gerrit = GerritStatus.Merged
                         }
                     }));
             }
@@ -112,7 +112,7 @@ namespace PatchManager.Services.Tests.StatusResolver
                             JiraId = "TheJiraId",
                             Owner = "Yoda",
                             Title = "Yoda has very large ears",
-                            Status = MergeStatus.MissingBuild
+                            Status = GerritStatus.MissingBuild
                         });
                 }
 

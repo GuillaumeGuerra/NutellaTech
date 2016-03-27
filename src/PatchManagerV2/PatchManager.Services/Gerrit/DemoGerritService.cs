@@ -17,13 +17,13 @@ namespace PatchManager.Services.Gerrit
                 "Han has been upgraded, he went from scum to rebel hero",
                 "New fancy haircut for Leia"
             };
-            var values = Enum.GetValues(typeof(MergeStatus));
+            var values = Enum.GetValues(typeof(GerritStatus));
             return new GerritInformation()
             {
                 JiraId = "STW-" + random.Next(100),
                 Owner = owners[random.Next(owners.Length)],
                 Title = titles[random.Next(titles.Length)],
-                Status = (MergeStatus) values.GetValue(random.Next(values.Length))
+                Status = (GerritStatus) values.GetValue(random.Next(values.Length))
             };
         }
 

@@ -7,6 +7,6 @@ namespace PatchManager.Services.Gerrit
         public string JiraId { get; set; }
         public string Title { get; set; }
         public string Owner { get; set; }
-        public MergeStatus Status { get; set; }
+        public GerritStatus Status { get; set; }
     }
 }

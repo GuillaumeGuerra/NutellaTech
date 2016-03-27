@@ -93,10 +93,10 @@
                             </md-menu>
 
                             <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.merge}}</md-button>
+                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.gerrit}}</md-button>
                                 <md-menu-content width="4">
                                     <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'merge')" ng-disabled="patch.status.merge == 'Merged'">
+                                        <md-button ng-click="applyActionToGerrit(patch,'merge')" ng-disabled="patch.status.gerrit == 'Merged'">
                                             <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
                                             Merge
                                         </md-button>

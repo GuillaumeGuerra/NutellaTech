@@ -1,6 +1,6 @@
 namespace PatchManager.Models
 {
-    public enum MergeStatus
+    public enum GerritStatus
     {
         MissingReviews,
         MissingBuild,

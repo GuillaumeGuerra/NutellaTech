@@ -63,7 +63,7 @@ namespace PatchManager.Services.Persistence
                     {
                         Registration = RegistrationStatus.Accepted,
                         Jira = JiraStatus.InProgress,
-                        Merge = MergeStatus.MissingReviews,
+                        Gerrit = GerritStatus.MissingReviews,
                         Test = TestStatus.ToTest
                     }
                 },
@@ -85,7 +85,7 @@ namespace PatchManager.Services.Persistence
                     {
                         Registration = RegistrationStatus.Refused,
                         Jira = JiraStatus.Open,
-                        Merge = MergeStatus.ReadyForMerge,
+                        Gerrit = GerritStatus.ReadyForMerge,
                         Test = TestStatus.Tested
                     }
                 },
@@ -107,7 +107,7 @@ namespace PatchManager.Services.Persistence
                     {
                         Registration = RegistrationStatus.Asked,
                         Jira = JiraStatus.Resolved,
-                        Merge = MergeStatus.Merged,
+                        Gerrit = GerritStatus.Merged,
                         Test = TestStatus.Issue
                     }
                 },
@@ -129,7 +129,7 @@ namespace PatchManager.Services.Persistence
                     {
                         Registration = RegistrationStatus.Asked,
                         Jira = JiraStatus.Resolved,
-                        Merge = MergeStatus.Merged,
+                        Gerrit = GerritStatus.Merged,
                         Test = TestStatus.Issue
                     }
                 },

@@ -49,7 +49,7 @@
     <Compile Include="Jira.cs" />
     <Compile Include="JiraInformation.cs" />
     <Compile Include="JiraStatus.cs" />
-    <Compile Include="MergeStatus.cs" />
+    <Compile Include="GerritStatus.cs" />
     <Compile Include="Patch.cs" />
     <Compile Include="PatchStatus.cs" />
     <Compile Include="PatchWithMetadata.cs" />

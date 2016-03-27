@@ -49,7 +49,7 @@ namespace PatchManager.Services.StatusResolver
 
         private void ResolveGerritIfNecessary(PatchWithMetadata patch)
         {
-            if (patch.Patch.Status.Merge == MergeStatus.Merged)
+            if (patch.Patch.Status.Gerrit == GerritStatus.Merged)
             {
                 // In that case, the gerrit cannot be updated any more, so there's no reason to fetch new information
                 return;
@@ -59,7 +59,7 @@ namespace PatchManager.Services.StatusResolver
 
             patch.Patch.Gerrit.Author = gerritMetadata.Owner;
             patch.Patch.Gerrit.Description = gerritMetadata.Title;
-            patch.Patch.Status.Merge = gerritMetadata.Status;
+            patch.Patch.Status.Gerrit = gerritMetadata.Status;
 
             if (patch.Patch.Jira == null || patch.Patch.Jira.Id != gerritMetadata.JiraId)
             {

@@ -15,11 +15,16 @@ namespace PatchManager.Services.PatchActions
 
         public bool Apply(Patch patch)
         {
-            if (patch.Status.Merge != MergeStatus.ReadyForMerge)
+            if (patch.Status.Gerrit != GerritStatus.ReadyForMerge)
                 return false;
 
             if (Service.Merge(patch.Gerrit.Id))
-                patch.Status.Merge = MergeStatus.Merged;
+                patch.Status.Gerrit = GerritStatus.Merged;
+            else
+            {
+                // We don't know what happened here, so we'll move the status back to Unknown
+                patch.Status.Gerrit = GerritStatus.Unknown;
+            }
 
             return true;
         }
