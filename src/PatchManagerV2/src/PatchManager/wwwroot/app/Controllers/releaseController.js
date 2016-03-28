@@ -28,7 +28,7 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog) {
     $scope.refreshGerrit = function (gerrit) {
         console.log("refreshing gerrit " + gerrit.gerrit.id);
 
-        patches.get({ gerritId: gerrit.id, releaseVersion: $routeParams.releaseVersion }).$promise.then(function (result) {
+        patches.get({ patchId: gerrit.gerrit.id, releaseVersion: $routeParams.releaseVersion }).$promise.then(function (result) {
 
             console.log("Refreshing statuses for gerrit " + result.gerrit.id);
             gerrit.status = result.status;
