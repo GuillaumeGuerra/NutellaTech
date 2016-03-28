@@ -24,21 +24,6 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
                 Assert.That(allReleases, Is.Not.Null);
                 Assert.That(allReleases.Count(), Is.EqualTo(0));
             });
-
-            //using (var directory = new TemporaryDirectory())
-            //{
-            //    var context = new PatchManagerContextMock()
-            //        .WithSettings(new SettingsConfiguration()
-            //        {
-            //            PersistenceDirectoryPath = directory.Location
-            //        });
-
-            //    var service = new LocalFilesPersistenceService(context);
-
-            //    var allReleases = service.GetAllReleases();
-            //    Assert.That(allReleases, Is.Not.Null);
-            //    Assert.That(allReleases.Count(), Is.EqualTo(0));
-            //}
         }
 
         [Test]
@@ -53,24 +38,6 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
                 Assert.That(allReleases, Is.Not.Null);
                 Assert.That(allReleases.Count(), Is.EqualTo(0));
             });
-
-            //using (var directory = new TemporaryDirectory())
-            //{
-            //    var context = new PatchManagerContextMock()
-            //        .WithSettings(new SettingsConfiguration()
-            //        {
-            //            PersistenceDirectoryPath = directory.Location
-            //        });
-
-            //    var service = new LocalFilesPersistenceService(context);
-
-            //    // File should have .json extension, this one has to be ignored by the service
-            //    File.WriteAllText(Path.Combine(directory.Location, "wrongName.wrongExtension"), "{\"version\":\"42.0\"}");
-
-            //    var allReleases = service.GetAllReleases();
-            //    Assert.That(allReleases, Is.Not.Null);
-            //    Assert.That(allReleases.Count(), Is.EqualTo(0));
-            //}
         }
 
         [Test]
@@ -96,21 +63,6 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
                 var ex = Assert.Throws<InvalidOperationException>(() => service.GetAllReleases().ToList());
                 Assert.That(ex.Message, Is.EqualTo($"Unable to read json content from file [{Path.Combine(directory.Location, "20.2.json")}]"));
             });
-
-            //using (var directory = new TemporaryDirectory())
-            //{
-            //    var context = new PatchManagerContextMock()
-            //        .WithSettings(new SettingsConfiguration()
-            //        {
-            //            PersistenceDirectoryPath = directory.Location
-            //        });
-
-            //    File.WriteAllText(Path.Combine(directory.Location, "20.2.json"), "even Yoda can't read this json ...");
-
-            //    var service = new LocalFilesPersistenceService(context);
-            //    var ex = Assert.Throws<InvalidOperationException>(() => service.GetAllReleases().ToList());
-            //    Assert.That(ex.Message, Is.EqualTo($"Unable to read json content from file [{Path.Combine(directory.Location, "20.2.json")}]"));
-            //}
         }
 
         [Test]
@@ -195,7 +147,32 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
         [Test]
         public void ShouldCreateDirectoryAndAddFileWhenAddingFileToDirectory()
         {
+            RunTestOnTemporaryDirectory((service, directory) =>
+            {
+                // To have a consistent setup
+                File.WriteAllText(Path.Combine(directory.Location, "42.0.json"), "{\"version\":\"42.0\"}");
 
+                Assert.That(Directory.Exists(Path.Combine(directory.Location, "42.0")), Is.False);
+                var allReleases = service.GetAllReleases().ToList();
+                Assert.That(allReleases.Count, Is.EqualTo(1));
+
+                // TODO : add properties
+                var addedFirstPatch = new Patch()
+                {
+                    Gerrit = new Models.Gerrit()
+                    {
+                        Id = 123
+                    }
+                };
+                service.AddPatchToRelease(allReleases[0],addedFirstPatch);
+
+                // The patches directory should have been created by now
+                Assert.That(Directory.Exists(Path.Combine(directory.Location, "42.0")), Is.False);
+                
+                // TODO : assert a file exists, with the right name
+                // TODO : test the content of the patch
+                // TODO : add another patch and assert it (file and content)
+            });
         }
 
         private void RunTestOnTemporaryDirectory(Action<LocalFilesPersistenceService,TemporaryDirectory> action)
