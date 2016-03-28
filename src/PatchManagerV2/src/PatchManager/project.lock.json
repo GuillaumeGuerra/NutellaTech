@@ -1499,6 +1499,13 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "PatchManager.Framework/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1",
+        "dependencies": {
+          "Newtonsoft.Json": "8.0.3"
+        }
+      },
       "PatchManager.Model/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.1"
@@ -1507,8 +1514,10 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.1",
         "dependencies": {
+          "Autofac": "3.5.2",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
           "Newtonsoft.Json": "6.0.4",
+          "PatchManager.Framework": "1.0.0",
           "PatchManager.Model": "1.0.0"
         }
       },
@@ -3236,6 +3245,13 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "PatchManager.Framework/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1",
+        "dependencies": {
+          "Newtonsoft.Json": "8.0.3"
+        }
+      },
       "PatchManager.Model/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.1"
@@ -3244,8 +3260,10 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.1",
         "dependencies": {
+          "Autofac": "3.5.2",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
           "Newtonsoft.Json": "6.0.4",
+          "PatchManager.Framework": "1.0.0",
           "PatchManager.Model": "1.0.0"
         }
       },
@@ -4973,6 +4991,13 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "PatchManager.Framework/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5.1",
+        "dependencies": {
+          "Newtonsoft.Json": "8.0.3"
+        }
+      },
       "PatchManager.Model/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.1"
@@ -4981,8 +5006,10 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.1",
         "dependencies": {
+          "Autofac": "3.5.2",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
           "Newtonsoft.Json": "6.0.4",
+          "PatchManager.Framework": "1.0.0",
           "PatchManager.Model": "1.0.0"
         }
       },
@@ -5212,6 +5239,10 @@
     }
   },
   "libraries": {
+    "PatchManager.Framework/1.0.0": {
+      "type": "project",
+      "path": "../../wrap/PatchManager.Framework/project.json"
+    },
     "PatchManager.Model/1.0.0": {
       "type": "project",
       "path": "../../wrap/PatchManager.Model/project.json"

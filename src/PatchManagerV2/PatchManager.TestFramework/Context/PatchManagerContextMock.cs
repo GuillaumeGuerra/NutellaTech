@@ -15,7 +15,8 @@ namespace PatchManager.TestFramework.Context
         {
             TimeoutInMinutesToResolveGerritStatus = -5,
             GerritUrl = "http://yodaisold.com",
-            JiraUrl = "http://obiwantoo.com"
+            JiraUrl = "http://obiwantoo.com",
+            PersistenceDirectoryPath = "d:/here_is_jar-jar_,_please_get_rid_of_the_moron"
         });
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using PatchManager.Config;
 
 namespace PatchManager.TestFramework.Context
 {
@@ -13,6 +14,12 @@ namespace PatchManager.TestFramework.Context
         public static PatchManagerContextMock WithFrozenSystemDate(this PatchManagerContextMock context)
         {
             return WithFrozenSystemDate(context, DateTime.Now);
+        }
+
+        public static PatchManagerContextMock WithSettings(this PatchManagerContextMock context, SettingsConfiguration settings)
+        {
+            context.SettingsProperty.Override(settings);
+            return context;
         }
     }
 }

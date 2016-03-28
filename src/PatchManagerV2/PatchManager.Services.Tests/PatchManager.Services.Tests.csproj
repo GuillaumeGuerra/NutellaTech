@@ -52,11 +52,27 @@
     <Compile Include="Actions\ResolveActionTests.cs" />
     <Compile Include="Actions\TestStatusActionTests.cs" />
     <Compile Include="Actions\RegistrationStatusActionTests.cs" />
+    <Compile Include="Persistence\LocalFiles\LocalFilesPersistenceServiceTests.cs" />
     <Compile Include="StatusResolver\StatusResolverServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Persistence\LocalFiles\Data\Folder1\42.0.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Persistence\LocalFiles\Data\Folder1\42.2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Persistence\LocalFiles\Data\Folder1\42.1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Persistence\LocalFiles\Data\Folder1\42.2\456.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Persistence\LocalFiles\Data\Folder1\42.2\123.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PatchManager.Model\PatchManager.Model.csproj">
@@ -72,7 +88,9 @@
       <Name>PatchManager.TestFramework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Persistence\LocalFiles\Data\Folder1\42.1\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -10,7 +10,9 @@
       "dependencies": {
         "PatchManager.Model": "1.0.0-*",
         "Microsoft.AspNet.WebApi.Client": "5.2.3",
-        "Newtonsoft.Json": "6.0.4"
+        "Newtonsoft.Json": "6.0.4",
+        "Autofac": "3.5.2",
+        "PatchManager.Framework": "1.0.0-*"
       }
     }
   }

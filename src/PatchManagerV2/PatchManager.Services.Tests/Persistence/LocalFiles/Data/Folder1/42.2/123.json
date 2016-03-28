@@ -1,0 +1,16 @@
+﻿{
+  "owner": "Rey",
+  "gerrit": {
+    "id": 123,
+    "description": "Did you know that Jar-Jar ruined the entire trilogy ??",
+    "author": "Finn"
+  },
+  //No Jira
+  "status": {
+    "registration": "Accepted",
+    "jira": "Unknown",
+    "gerrit": "Merged",
+    "test": "ToTest"
+  },
+  "asset": "Core"
+}
