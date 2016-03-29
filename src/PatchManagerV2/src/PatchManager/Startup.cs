@@ -42,6 +42,7 @@ namespace PatchManager
         //TODO : create features usable by RM only, such as release creation
         //TODO : give a quick switch to define which description to show in the cards : jira or gerrit
         //DONE : write at least a simple implementation for the persistence service, using json files for instance
+        //TODO : be able to open an existing patch in the new patch window, to be able to change the owner and the asset of the patch
 
 
         public static IContainer Container { get; private set; }
