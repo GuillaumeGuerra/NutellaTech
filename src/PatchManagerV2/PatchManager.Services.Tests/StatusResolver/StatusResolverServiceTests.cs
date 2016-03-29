@@ -124,8 +124,8 @@ namespace PatchManager.Services.Tests.StatusResolver
                 var initialLastRefresh = _context.Now.AddMinutes(-lastRefresh);
                 actualPatch.LastRefresh = initialLastRefresh;
 
-                new StatusResolverService(_context, gerrit.Object, jira.Object).ResolveIfOutdated(actualPatch);
-
+                Assert.That(new StatusResolverService(_context, gerrit.Object, jira.Object).ResolveIfOutdated(actualPatch), Is.EqualTo(expectedResolve));
+                
                 if (expectedResolve)
                     Assert.That(actualPatch.LastRefresh, Is.EqualTo(_context.Now));
                 else

@@ -14,6 +14,7 @@ namespace PatchManager.Model.Services
         /// In case the last update for gerrit and jira information were refreshed long enough ago, a resolution will happen
         /// </summary>
         /// <param name="patch"></param>
-        void ResolveIfOutdated(PatchWithMetadata patch);
+        /// <returns>true if the Resolve happened</returns>
+        bool ResolveIfOutdated(PatchWithMetadata patch);
     }
 }

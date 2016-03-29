@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
 using Microsoft.AspNet.Mvc;
 using PatchManager.Model.Services;
@@ -14,11 +15,13 @@ namespace PatchManager.Controllers
     {
         public IModelService Model { get; set; }
         public IStatusResolverService StatusResolver { get; set; }
+        public IPersistenceService Persistence { get; set; }
 
-        public ReleasesController(IModelService model, IStatusResolverService statusResolver)
+        public ReleasesController(IModelService model, IStatusResolverService statusResolver, IPersistenceService persistence)
         {
             Model = model;
             StatusResolver = statusResolver;
+            Persistence = persistence;
         }
 
         [HttpGet]
@@ -38,10 +41,13 @@ namespace PatchManager.Controllers
         [Route("{releaseVersion}/patches")]
         public IEnumerable<Patch> GetReleaseGerrits([FromRoute] string releaseVersion)
         {
-            foreach (var gerrit in Model.GetReleasePatches(releaseVersion))
+            var release = Model.GetRelease(releaseVersion);
+            foreach (var patch in Model.GetReleasePatches(releaseVersion))
             {
-                StatusResolver.ResolveIfOutdated(gerrit);
-                yield return gerrit.Patch;
+                if (StatusResolver.ResolveIfOutdated(patch))
+                    // NB : do not access the patch variable inside the task, or you will run into nasty race condition with the foreach enumeration
+                    Task.Factory.StartNew(tmp => Persistence.UpdateReleasePatch(release, (Patch)tmp), patch.Patch);
+                yield return patch.Patch;
             }
         }
 
@@ -49,11 +55,13 @@ namespace PatchManager.Controllers
         [Route("{releaseVersion}/patches/{patchId}")]
         public Patch GetReleaseGerrit([FromRoute] string releaseVersion, [FromRoute] int patchId)
         {
-            var gerrit = Model.GetReleasePatch(releaseVersion, patchId);
+            var release = Model.GetRelease(releaseVersion);
+            var patch = Model.GetReleasePatch(releaseVersion, patchId);
 
-            StatusResolver.Resolve(gerrit);
+            StatusResolver.Resolve(patch);
+            Task.Factory.StartNew(() => Persistence.UpdateReleasePatch(release, patch.Patch));
 
-            return gerrit.Patch;
+            return patch.Patch;
         }
 
         [HttpPost]

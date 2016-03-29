@@ -19,7 +19,7 @@ namespace PatchManager
 {
     public class Startup
     {
-        //TODO : update the model when the status resolver decided to refresh jira and gerrit status
+        //DONE : update the model when the status resolver decided to refresh jira and gerrit status
         //TODO : add logs
         //TODO : find a way to log all exceptions in a single location
         //TODO : implement actual gerrit and jira services
@@ -28,7 +28,7 @@ namespace PatchManager
         //DONE : review the "Register gerrit" form using material api
         //TODO : handle authentication, to use RM credentials in Gerrit and Jira
         //DONE : split the api into a dedicated project without DNX, and write proper UTs
-        //TODO : think about what can be threaded, to perform asynchronous save into the model
+        //DONE : think about what can be threaded, to perform asynchronous save into the model
         //TODO : handle exceptions in the website, and show a popup with the error message
         //TODO : show a progress bar when background actions are ongoing, freeze specific buttons that can't be run in the same time
         //TODO : provide multiple views in the client : "gerrit gathering" (no other status than accepted or not), "merge" (filter non accepted patches, show only merge and jira status), "test" (only test status)
@@ -41,7 +41,7 @@ namespace PatchManager
         //DONE : refactor the names : release => patch => user inputs + gerrit api data + jira api data
         //TODO : create features usable by RM only, such as release creation
         //TODO : give a quick switch to define which description to show in the cards : jira or gerrit
-        //TOO : write at least a simple implementation for the persistence service, using json files for instance
+        //DONE : write at least a simple implementation for the persistence service, using json files for instance
 
 
         public static IContainer Container { get; private set; }

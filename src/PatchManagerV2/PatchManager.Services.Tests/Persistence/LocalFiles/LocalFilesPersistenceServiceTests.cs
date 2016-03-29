@@ -16,8 +16,6 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
     [TestFixture]
     public class LocalFilesPersistenceServiceTests
     {
-        // TODO : update a patch when the gerrit file doesn't exist
-
         [Test]
         public void ShouldLoadNoPatchesWhenDirectoryIsEmpty()
         {

@@ -74,10 +74,15 @@ namespace PatchManager.Services.StatusResolver
             }
         }
 
-        public void ResolveIfOutdated(PatchWithMetadata patch)
+        public bool ResolveIfOutdated(PatchWithMetadata patch)
         {
             if (patch.LastRefresh < Context.Now.AddMinutes(-Context.Settings.TimeoutInMinutesToResolveGerritStatus))
+            {
                 Resolve(patch);
+                return true;
+            }
+
+            return false;
         }
     }
 }
