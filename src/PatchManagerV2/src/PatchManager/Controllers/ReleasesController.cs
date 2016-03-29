@@ -106,6 +106,8 @@ namespace PatchManager.Controllers
                     Id = patchId
                 }
             });
+
+            // Do not update the persistence layer here, as the gerrit doesn't exist yet ...
             StatusResolver.Resolve(patch);
 
             return patch.Patch;
