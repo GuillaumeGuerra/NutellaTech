@@ -75,6 +75,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PatchManager.Framework\PatchManager.Framework.csproj">
+      <Project>{B23A9310-2332-4D18-BA3A-08C12791DFC8}</Project>
+      <Name>PatchManager.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PatchManager.Model\PatchManager.Model.csproj">
       <Project>{BE10762F-F027-4A89-A114-FA9C4564CE01}</Project>
       <Name>PatchManager.Model</Name>

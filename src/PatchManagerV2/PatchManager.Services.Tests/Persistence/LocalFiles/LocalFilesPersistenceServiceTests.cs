@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using PatchManager.Config;
+using PatchManager.Framework;
 using PatchManager.Models;
 using PatchManager.Services.Persistence;
 using PatchManager.TestFramework.Context;
@@ -15,6 +16,8 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
     [TestFixture]
     public class LocalFilesPersistenceServiceTests
     {
+        // TODO : update a patch when the gerrit file doesn't exist
+
         [Test]
         public void ShouldLoadNoPatchesWhenDirectoryIsEmpty()
         {
@@ -59,7 +62,7 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
             RunTestOnTemporaryDirectory((service, directory) =>
             {
                 File.WriteAllText(Path.Combine(directory.Location, "20.2.json"), "even Yoda can't read this json ...");
-                
+
                 var ex = Assert.Throws<InvalidOperationException>(() => service.GetAllReleases().ToList());
                 Assert.That(ex.Message, Is.EqualTo($"Unable to read json content from file [{Path.Combine(directory.Location, "20.2.json")}]"));
             });
@@ -126,7 +129,6 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
             Assert.That(firstPatch.Status.Test, Is.EqualTo(TestStatus.ToTest));
             Assert.That(firstPatch.Asset, Is.EqualTo(RiskOneAsset.Core));
 
-            // TODO
             var secondPatch = actualPatches[1];
             Assert.That(secondPatch.Owner, Is.EqualTo("Poe"));
             Assert.That(secondPatch.Gerrit, Is.Not.Null);
@@ -152,30 +154,266 @@ namespace PatchManager.Services.Tests.Persistence.LocalFiles
                 // To have a consistent setup
                 File.WriteAllText(Path.Combine(directory.Location, "42.0.json"), "{\"version\":\"42.0\"}");
 
-                Assert.That(Directory.Exists(Path.Combine(directory.Location, "42.0")), Is.False);
+                var expectedPatchesDirectory = Path.Combine(directory.Location, "42.0");
+
+                // It's important to make sure the related directory doesn't exist
+                // We expect the service to create it, when the first patch is added
+                Assert.That(Directory.Exists(expectedPatchesDirectory), Is.False);
                 var allReleases = service.GetAllReleases().ToList();
                 Assert.That(allReleases.Count, Is.EqualTo(1));
 
-                // TODO : add properties
-                var addedFirstPatch = new Patch()
+                // So far, we should have no patch in it
+                Assert.That(service.GetPatches("42.0").Count(), Is.EqualTo(0));
+
+                var expectedAddedFirstPatch = new Patch()
                 {
                     Gerrit = new Models.Gerrit()
                     {
-                        Id = 123
-                    }
+                        Id = 123,
+                        Description = "I killed my father, should I kiss my mother now ?",
+                        Author = "Kylo Ren"
+                    },
+                    Asset = RiskOneAsset.Pricing,
+                    Jira = new Models.Jira()
+                    {
+                        Id = "STW-42",
+                        Description = "Oedipus complex !!!"
+                    },
+                    Status = new PatchStatus()
+                    {
+                        Jira = JiraStatus.InProgress,
+                        Gerrit = GerritStatus.MissingBuild,
+                        Registration = RegistrationStatus.Refused,
+                        Test = TestStatus.ToTest
+                    },
+                    Owner = "Leader Snoke"
                 };
-                service.AddPatchToRelease(allReleases[0],addedFirstPatch);
+                service.AddPatchToRelease(allReleases[0], expectedAddedFirstPatch);
 
                 // The patches directory should have been created by now
-                Assert.That(Directory.Exists(Path.Combine(directory.Location, "42.0")), Is.False);
-                
-                // TODO : assert a file exists, with the right name
-                // TODO : test the content of the patch
-                // TODO : add another patch and assert it (file and content)
+                Assert.That(Directory.Exists(expectedPatchesDirectory), Is.True);
+                // We should also have created the json file, named after the gerrit id
+                Assert.That(File.Exists(Path.Combine(expectedPatchesDirectory, "123.json")), Is.True);
+                // No other files than this one are expected
+                Assert.That(Directory.GetFiles(expectedPatchesDirectory).Length, Is.EqualTo(1));
+
+                // Let's make sure the load of the patch happens properly
+                var actualPatches = service.GetPatches("42.0").ToList();
+                Assert.That(actualPatches.Count, Is.EqualTo(1));
+                var actualAddedFirstPatch = actualPatches[0];
+                ComparePatches(expectedAddedFirstPatch, actualAddedFirstPatch);
+
+                // Now we'll add another one, to check the addition works also when the directory already exists
+                var expectedAddedSecondPatch = new Patch()
+                {
+                    Gerrit = new Models.Gerrit()
+                    {
+                        Id = 321,
+                        Description = "Did you see how I woke up at the exact perfect moment ??",
+                        Author = "R2D2"
+                    },
+                    Asset = RiskOneAsset.Pricing,
+                    Jira = new Models.Jira()
+                    {
+                        Id = "STW-42",
+                        Description = "I had a long night, now I'm ready for episode VIII and IX"
+                    },
+                    Status = new PatchStatus()
+                    {
+                        Jira = JiraStatus.Approved,
+                        Gerrit = GerritStatus.BuildFailed,
+                        Registration = RegistrationStatus.Reverted,
+                        Test = TestStatus.Issue
+                    },
+                    Owner = "C3PO"
+                };
+                service.AddPatchToRelease(allReleases[0], expectedAddedSecondPatch);
+
+                // Once again, we should have created the file
+                Assert.That(File.Exists(Path.Combine(expectedPatchesDirectory, "321.json")), Is.True);
+                // The previous one should still be there
+                Assert.That(File.Exists(Path.Combine(expectedPatchesDirectory, "123.json")), Is.True);
+                // And we should have no other files
+                Assert.That(Directory.GetFiles(expectedPatchesDirectory).Length, Is.EqualTo(2));
+
+                actualPatches = service.GetPatches("42.0").OrderBy(patch => patch.Gerrit.Id).ToList();
+                Assert.That(actualPatches.Count, Is.EqualTo(2));
+
+                // To make sure the first patch hasn't been altered, we'll assert both patch again
+                ComparePatches(expectedAddedFirstPatch, actualPatches[0]);
+                ComparePatches(expectedAddedSecondPatch, actualPatches[1]);
             });
         }
 
-        private void RunTestOnTemporaryDirectory(Action<LocalFilesPersistenceService,TemporaryDirectory> action)
+        [Test]
+        public void ShouldOverridePatchFileContentWhenUpdatingAPatch()
+        {
+            RunTestOnTemporaryDirectory((service, directory) =>
+            {
+                // To have a consistent setup
+                File.WriteAllText(Path.Combine(directory.Location, "42.0.json"), "{\"version\":\"42.0\"}");
+                Directory.CreateDirectory(Path.Combine(directory.Location, "42.0"));
+
+                // Now we create one file for the patch (id=123) that we'll update
+                var initialFileContent = "{\"gerrit\":{\"id\":123}}";
+                var patchDirectoryPath = Path.Combine(directory.Location, "42.0");
+                var initialFilePath = Path.Combine(patchDirectoryPath, "123.json");
+                File.WriteAllText(initialFilePath, initialFileContent);
+
+                // To make sure the release setup is ok
+                var actualReleases = service.GetAllReleases().ToList();
+                Assert.That(actualReleases.Count, Is.EqualTo(1));
+                Assert.That(actualReleases[0].Version, Is.EqualTo("42.0"));
+
+                // Same for the patch one
+                var actualPatches = service.GetPatches("42.0").ToList();
+                Assert.That(actualPatches.Count, Is.EqualTo(1));
+                Assert.That(actualPatches[0].Gerrit.Id, Is.EqualTo(123));
+
+                var expectedUpdatePatch = new Patch()
+                {
+                    Gerrit = new Models.Gerrit()
+                    {
+                        Id = 123, // Make sure we have the same patch id, otherwise the update won't work
+                        Description = "I have a nice way to move, but it ain't easy for stairs",
+                        Author = "BB-8"
+                    },
+                    Asset = RiskOneAsset.Pricing,
+                    Jira = new Models.Jira()
+                    {
+                        Id = "STW-42",
+                        Description = "I'm basically disabled :("
+                    },
+                    Status = new PatchStatus()
+                    {
+                        Jira = JiraStatus.InProgress,
+                        Gerrit = GerritStatus.MissingBuild,
+                        Registration = RegistrationStatus.Refused,
+                        Test = TestStatus.ToTest
+                    },
+                    Owner = "Poe Dameron"
+                };
+
+                service.UpdateReleasePatch(new Release() { Version = "42.0" }, expectedUpdatePatch);
+
+                // The file should still be there
+                Assert.That(File.Exists(initialFilePath), Is.True);
+                // We should not have created new files
+                Assert.That(Directory.GetFiles(patchDirectoryPath).Length, Is.EqualTo(1));
+                // Its content should have changed
+                Assert.That(File.ReadAllText(initialFilePath), Is.Not.EqualTo(initialFileContent));
+
+                actualPatches = service.GetPatches("42.0").ToList();
+                Assert.That(actualPatches.Count, Is.EqualTo(1));
+                ComparePatches(expectedUpdatePatch, actualPatches[0]);
+            });
+        }
+
+        [Test]
+        public void ShouldThrowWhenCreatingTheSamePatchTwice()
+        {
+            RunTestOnTemporaryDirectory((service, directory) =>
+            {
+                // To have a consistent setup
+                File.WriteAllText(Path.Combine(directory.Location, "42.0.json"), "{\"version\":\"42.0\"}");
+                Directory.CreateDirectory(Path.Combine(directory.Location, "42.0"));
+
+                // Now we create one file for the patch (id=123) that we'll update
+                File.WriteAllText(Path.Combine(directory.Location, "42.0/123.json"), "{\"gerrit\":{\"id\":123}}");
+
+                // To make sure the release setup is ok
+                var actualReleases = service.GetAllReleases().ToList();
+                Assert.That(actualReleases.Count, Is.EqualTo(1));
+                Assert.That(actualReleases[0].Version, Is.EqualTo("42.0"));
+
+                // Same for the patch one
+                var actualPatches = service.GetPatches("42.0").ToList();
+                Assert.That(actualPatches.Count, Is.EqualTo(1));
+                Assert.That(actualPatches[0].Gerrit.Id, Is.EqualTo(123));
+
+                // Now we'll try to add another patch with the same gerrit id
+                var patchAddedTwice = new Patch()
+                {
+                    Gerrit = new Models.Gerrit()
+                    {
+                        Id = 123 // To make sure it's the same id
+                    }
+                };
+                var ex = Assert.Throws<InvalidOperationException>(() => service.AddPatchToRelease(actualReleases[0], patchAddedTwice));
+                Assert.That(ex.Message, Is.EqualTo("Patch [123] has already been added to release [42.0]"));
+            });
+        }
+
+        [Test]
+        public void ShouldThrowWhenUpdatingAnUnknownPatch()
+        {
+            RunTestOnTemporaryDirectory((service, directory) =>
+            {
+                // To have a consistent setup
+                File.WriteAllText(Path.Combine(directory.Location, "42.0.json"), "{\"version\":\"42.0\"}");
+                Directory.CreateDirectory(Path.Combine(directory.Location, "42.0"));
+                
+                // To make sure the release setup is ok
+                var actualReleases = service.GetAllReleases().ToList();
+                Assert.That(actualReleases.Count, Is.EqualTo(1));
+                Assert.That(actualReleases[0].Version, Is.EqualTo("42.0"));
+
+                // Same for the patch one (we shouldn't have any)
+                var actualPatches = service.GetPatches("42.0").ToList();
+                Assert.That(actualPatches.Count, Is.EqualTo(0));
+
+                // Now we'll try to add another patch with the same gerrit id
+                var unknownPatchUpdated = new Patch()
+                {
+                    Gerrit = new Models.Gerrit()
+                    {
+                        Id = 123 // To make sure it's the same id
+                    }
+                };
+                var ex = Assert.Throws<InvalidOperationException>(() => service.UpdateReleasePatch(actualReleases[0], unknownPatchUpdated));
+                Assert.That(ex.Message, Is.EqualTo("Unable to update patch [123] for release [42.0], it hasn't been added yet"));
+            });
+        }
+
+
+        private void ComparePatches(Patch expected, Patch actual)
+        {
+            Assert.That(actual.Owner, Is.EqualTo(expected.Owner));
+
+            if (expected.Gerrit != null)
+            {
+                Assert.That(actual.Gerrit, Is.Not.Null);
+                Assert.That(actual.Gerrit.Id, Is.EqualTo(expected.Gerrit.Id));
+                Assert.That(actual.Gerrit.Description, Is.EqualTo(expected.Gerrit.Description));
+                Assert.That(actual.Gerrit.Author, Is.EqualTo(expected.Gerrit.Author));
+            }
+            else
+                Assert.That(actual.Gerrit, Is.Null);
+
+            if (expected.Jira != null)
+            {
+                Assert.That(actual.Jira, Is.Not.Null);
+                Assert.That(actual.Jira.Id, Is.EqualTo(expected.Jira.Id));
+                Assert.That(actual.Jira.Description, Is.EqualTo(expected.Jira.Description));
+            }
+            else
+                Assert.That(actual.Jira, Is.Null);
+
+            if (expected.Status != null)
+            {
+                Assert.That(actual.Status, Is.Not.Null);
+                Assert.That(actual.Status.Registration, Is.EqualTo(expected.Status.Registration));
+                Assert.That(actual.Status.Jira, Is.EqualTo(expected.Status.Jira));
+                Assert.That(actual.Status.Gerrit, Is.EqualTo(expected.Status.Gerrit));
+                Assert.That(actual.Status.Test, Is.EqualTo(expected.Status.Test));
+            }
+            else
+                Assert.That(actual.Status, Is.Null);
+
+            Assert.That(actual.Asset, Is.EqualTo(expected.Asset));
+        }
+
+        private void RunTestOnTemporaryDirectory(Action<LocalFilesPersistenceService, TemporaryDirectory> action)
         {
             using (var directory = new TemporaryDirectory())
             {
