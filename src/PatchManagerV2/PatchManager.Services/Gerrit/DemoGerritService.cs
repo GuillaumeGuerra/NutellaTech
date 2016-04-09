@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using PatchManager.Model.Services;
 using PatchManager.Models;
 
@@ -9,7 +10,10 @@ namespace PatchManager.Services.Gerrit
         public GerritInformation GetGerritInformation(int gerritId)
         {
             var random = new Random((int)DateTime.Now.Ticks);
-            var owners = new[] {"Obi-Wan Kenobi", "Luke Skywalker", "Han Solo", "Leia Organa", "R2D2", "C3PO"};
+
+            Thread.Sleep(random.Next(4) * 1000);
+
+            var owners = new[] { "Obi-Wan Kenobi", "Luke Skywalker", "Han Solo", "Leia Organa", "R2D2", "C3PO" };
             var titles = new[]
             {
                 "Code cleanup : Jar-Jar has been erased",
@@ -23,7 +27,7 @@ namespace PatchManager.Services.Gerrit
                 JiraId = "STW-" + random.Next(100),
                 Owner = owners[random.Next(owners.Length)],
                 Title = titles[random.Next(titles.Length)],
-                Status = (GerritStatus) values.GetValue(random.Next(values.Length))
+                Status = (GerritStatus)values.GetValue(random.Next(values.Length))
             };
         }
 

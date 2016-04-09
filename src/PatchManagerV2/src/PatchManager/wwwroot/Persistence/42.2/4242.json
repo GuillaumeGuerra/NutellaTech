@@ -7,11 +7,11 @@
   },
   "jira": {
     "id": "STW-87",
-    "description": "Palpatine could use some botox injection once in a while"
+    "description": "Han, you're dead now, but you got to date Leia, lucky you"
   },
   "status": {
     "registration": "Asked",
-    "jira": "InProgress",
+    "jira": "Approved",
     "gerrit": "Merged",
     "test": "ToTest"
   },

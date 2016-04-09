@@ -15,11 +15,8 @@
                     <md-input-container>
                         <label>Gerrit Id</label>
                         <md-icon md-font-library="material-icons">add</md-icon>
-                        <input ng-model="newGerrit.gerrit.id" type="number">
+                        <input ng-model="gerritId" type="number">
                     </md-input-container>
-                    <md-button class="md-icon-button" ng-click="searchForGerrit()">
-                        <md-icon md-font-library="material-icons">search</md-icon>
-                    </md-button>
                     <md-input-container>
                         <label>Owner</label>
                         <md-icon md-font-library="material-icons">face</md-icon>
@@ -37,6 +34,7 @@
                             <md-option>Repo</md-option>
                         </md-select>
                     </md-input-container>
+                    <md-progress-circular md-mode="{{loadingMode}}"></md-progress-circular>
                 </div>
             </md-content>
             <md-content layout-padding="">

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using PatchManager.Model.Services;
 using PatchManager.Models;
 
@@ -9,6 +10,9 @@ namespace PatchManager.Services.Jira
         public JiraInformation GetJiraInformation(string jiraId)
         {
             var random = new Random((int)DateTime.Now.Ticks);
+
+            Thread.Sleep(random.Next(4) * 1000);
+
             var values = Enum.GetValues(typeof(JiraStatus));
             var titles = new[]
             {
