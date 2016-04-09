@@ -2,7 +2,7 @@
   "locked": false,
   "version": 2,
   "targets": {
-    "DNX,Version=v4.5.1": {
+    "DNX,Version=v4.5.2": {
       "Autofac/4.0.0-rc1-177": {
         "type": "package",
         "frameworkAssemblies": [
@@ -1745,7 +1745,7 @@
         }
       }
     },
-    "DNX,Version=v4.5.1/win7-x86": {
+    "DNX,Version=v4.5.2/win7-x86": {
       "Autofac/4.0.0-rc1-177": {
         "type": "package",
         "frameworkAssemblies": [
@@ -3491,7 +3491,7 @@
         }
       }
     },
-    "DNX,Version=v4.5.1/win7-x64": {
+    "DNX,Version=v4.5.2/win7-x64": {
       "Autofac/4.0.0-rc1-177": {
         "type": "package",
         "frameworkAssemblies": [
@@ -7263,7 +7263,7 @@
       "System.Net.Http >= 4.0.0",
       "Microsoft.AspNet.WebApi.Client >= 5.2.3"
     ],
-    "DNX,Version=v4.5.1": [
+    "DNX,Version=v4.5.2": [
       "PatchManager.Model >= 1.0.0-*",
       "PatchManager.Services >= 1.0.0-*"
     ]

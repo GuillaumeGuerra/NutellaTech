@@ -29,7 +29,7 @@
   },
 
   "frameworks": {
-    "dnx451": {
+    "dnx452": {
       "frameworkAssemblies": {
       },
       "dependencies": {

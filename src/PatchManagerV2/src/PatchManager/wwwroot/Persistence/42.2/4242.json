@@ -1,0 +1,19 @@
+{
+  "owner": "guillaume Guerra",
+  "gerrit": {
+    "id": 4242,
+    "description": "Luke is now able to handle a lightsaber",
+    "author": "C3PO"
+  },
+  "jira": {
+    "id": "STW-87",
+    "description": "Palpatine could use some botox injection once in a while"
+  },
+  "status": {
+    "registration": "Asked",
+    "jira": "InProgress",
+    "gerrit": "Merged",
+    "test": "ToTest"
+  },
+  "asset": "Core"
+}
