@@ -16,14 +16,10 @@ function newPatchController($scope, $routeParams, $mdDialog, patches) {
     $scope.gerritId = undefined;
     $scope.newGerrit = {};
     $scope.newGerrit.gerrit = {};
-    $scope.loadingMode = '';
+    $scope.isProgressBarVisible = false;
 
-    $scope.showSpinner = function(isLoading) {
-        if (isLoading)
-            $scope.loadingMode = 'indeterminate';
-        else
-            $scope.loadingMode = '';
-
+    $scope.showSpinner = function (isLoading) {
+        $scope.isProgressBarVisible = isLoading;
     };
 
     $scope.hide = function () {

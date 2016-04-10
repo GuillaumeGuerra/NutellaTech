@@ -13,20 +13,27 @@ angular
     .module('PatchManager')
     .controller('releaseController', releaseController);
 
-releaseController.$inject = ['$scope', '$routeParams', 'Releases', 'Patches', '$mdDialog','$mdToast'];
+releaseController.$inject = ['$scope', '$routeParams', 'Releases', 'Patches', '$mdDialog', '$mdToast', '$mdBottomSheet'];
 
-function releaseController($scope, $routeParams, releases, patches, $mdDialog, $mdToast) {
+function releaseController($scope, $routeParams, releases, patches, $mdDialog, $mdToast, $mdBottomSheet) {
 
     console.log("getting all the gerrits related to release " + $routeParams.releaseVersion);
 
     var originatorEv;
 
     $scope.showSpinner = function (patch, isLoading) {
+        patch.isProgressBarVisible = isLoading;
         if (isLoading)
             patch.loadingMode = 'indeterminate';
         else
             patch.loadingMode = '';
+    };
 
+    $scope.shouldShowSpinner = function(patch) {
+        if (patch.isProgressBarVisible == undefined)
+            return false;
+        else
+            return patch.isProgressBarVisible;
     };
 
     $scope.release = releases.get({ releaseVersion: $routeParams.releaseVersion });
@@ -65,7 +72,7 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog, $
         console.log("Applying action " + actionToApply + " to patch " + patch.gerrit.id);
 
         $scope.showSpinner(patch, true);
-        patch.$action({ releaseVersion: $routeParams.releaseVersion, action: actionToApply }).then(function(result) {
+        patch.$action({ releaseVersion: $routeParams.releaseVersion, action: actionToApply }).then(function (result) {
             $scope.showSimpleToast('Action [' + actionToApply + '] has been properly appied to patch ' + patch.gerrit.id);
             $scope.showSpinner(patch, false);
         });
@@ -104,4 +111,20 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog, $
             .hideDelay(3000)
         );
     };
+
+    $scope.showQuickActions = function () {
+        console.log('showing quick actions');
+        $mdBottomSheet.show({
+            templateUrl: 'app/partials/release-quick-actions.html',
+            controller: 'releaseController',
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true,
+            escapeToClose: true
+        });
+    };
+
+    $scope.hideQuickActions = function () {
+        $mdBottomSheet.hide();
+    }
 }

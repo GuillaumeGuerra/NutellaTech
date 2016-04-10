@@ -1,177 +1,164 @@
 ﻿<div ng-cloak="">
-    <!--<div class="alert alert-danger" ng-hide="release.isCurrent===true">
-        <strong>Beware !</strong> This is not the current release !
-    </div>-->
-    <md-content>
+    <section layout="row" layout-align="center center">
 
-        <section layout="row" layout-align="center center">
+        <md-input-container>
+            <label>Release Manager</label>
+            <input ng-model="release.releaseManager" ng-disabled="true">
+            <!--<md-button class="md-primary" ng-href="mailto:{{release.releaseManagerMail}}" target="_blank">{{release.releaseManager}}</md-button>-->
+        </md-input-container>
 
-            <md-input-container>
-                <label>Release Manager</label>
-                <input ng-model="release.releaseManager" ng-disabled="true">
-                <!--<md-button class="md-primary" ng-href="mailto:{{release.releaseManagerMail}}" target="_blank">{{release.releaseManager}}</md-button>-->
-            </md-input-container>
+        <md-input-container>
+            <label>Version</label>
+            <input ng-model="release.version" ng-disabled="true">
+        </md-input-container>
 
-            <md-input-container>
-                <label>Version</label>
-                <input ng-model="release.version" ng-disabled="true">
-            </md-input-container>
+        <md-input-container>
+            <label>Date</label>
+            <input ng-model="release.date" ng-disabled="true">
+        </md-input-container>
+    </section>
 
-            <md-input-container>
-                <label>Date</label>
-                <input ng-model="release.date" ng-disabled="true">
-            </md-input-container>
-        </section>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="">
+        <md-button class="md-raised md-warn" ng-click="showQuickActions()">Quick Actions</md-button>
+        <md-button style="float: left;" class="md-raised md-primary" ng-click="refreshAllPatches()">Refresh All</md-button>
+        <md-button style="float: right;" class="md-raised md-warn" ng-click="ShowNewPatchModalShowAdvanced($event)"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</md-button>
+    </section>
 
-        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="">
-            <md-button style="float: left;" class="md-raised md-primary" ng-click="refreshAllPatches()">Refresh All</md-button>
-            <md-button style="float: right;" class="md-raised md-warn" ng-click="ShowNewPatchModalShowAdvanced($event)"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</md-button>
-        </section>
+    <section layout-align="center center">
 
-        <section layout-align="center center">
+        <div class='md-padding' layout="row" layout-wrap>
 
-            <div class='md-padding' layout="row" layout-wrap>
-
-                <md-card ng-repeat="patch in patches" style="width: 300px">
-                    <md-card-header>
-                        <md-card-avatar>
-                            <img class="md-user-avatar" src="images/avatar.png">
-                        </md-card-avatar>
-                        <md-card-header-text>
-                            <div layout="row">
-                                <span class="md-title">{{patch.jira.id}}</span>
-                                <span flex></span>
-                                <span class="md-title">{{patch.gerrit.id}}</span>
-                            </div>
-                            <div layout="row">
-                                <span class="md-subhead">{{patch.asset}}</span>
-                                <span flex></span>
-                                <span class="md-subhead">{{patch.owner}}</span>
-                            </div>
-                        </md-card-header-text>
-                    </md-card-header>
-                    <md-card-content>
-                        <p>{{patch.gerrit.description}}</p>
-                    </md-card-content>
-                    <md-card-footer style="padding: 0px; ">
-                        <div layout="row" layout-align="space-between stretch" layout-wrap>
-
-                            <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.registration}}</md-button>
-                                <md-menu-content width="4">
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'accept')" ng-disabled="patch.status.patch == 'Accepted'">
-                                            <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
-                                            Accept
-                                        </md-button>
-                                    </md-menu-item>
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'ask')" ng-disabled="patch.status.patch == 'Asked'">
-                                            <md-icon md-svg-icon="images/question.svg" md-menu-align-target></md-icon>
-                                            Asked
-                                        </md-button>
-                                    </md-menu-item>
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'refuse')" ng-disabled="patch.status.patch == 'Refused'">
-                                            <md-icon md-svg-icon="images/cross.svg" md-menu-align-target></md-icon>
-                                            Refuse
-                                        </md-button>
-                                    </md-menu-item>
-                                </md-menu-content>
-                            </md-menu>
-
-                            <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.jira}}</md-button>
-                                <md-menu-content width="4">
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'resolve')" ng-disabled="patch.status.jira == 'Resolved'">
-                                            <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
-                                            Resolve
-                                        </md-button>
-                                    </md-menu-item>
-                                </md-menu-content>
-                            </md-menu>
-
-                            <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.gerrit}}</md-button>
-                                <md-menu-content width="4">
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'merge')" ng-disabled="patch.status.gerrit == 'Merged'">
-                                            <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
-                                            Merge
-                                        </md-button>
-                                    </md-menu-item>
-                                </md-menu-content>
-                            </md-menu>
-
-                            <md-menu>
-                                <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.test}}</md-button>
-                                <md-menu-content width="4">
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'tested')" ng-disabled="patch.status.test == 'Tested'">
-                                            <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
-                                            Test Completed
-                                        </md-button>
-                                    </md-menu-item>
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'toTest')" ng-disabled="patch.status.test == 'ToTest'">
-                                            <md-icon md-svg-icon="images/question.svg" md-menu-align-target></md-icon>
-                                            To Test
-                                        </md-button>
-                                    </md-menu-item>
-                                    <md-menu-item>
-                                        <md-button ng-click="applyActionToGerrit(patch,'issueFound')" ng-disabled="patch.status.test == 'Issue'">
-                                            <md-icon md-svg-icon="images/cross.svg" md-menu-align-target></md-icon>
-                                            Issue
-                                        </md-button>
-                                    </md-menu-item>
-                                </md-menu-content>
-                            </md-menu>
-
+            <md-card ng-repeat="patch in patches" style="width: 300px">
+                <md-card-header>
+                    <md-card-avatar>
+                        <img class="md-user-avatar" src="images/avatar.png">
+                    </md-card-avatar>
+                    <md-card-header-text>
+                        <div layout="row">
+                            <span class="md-title">{{patch.jira.id}}</span>
+                            <span flex></span>
+                            <span class="md-title">{{patch.gerrit.id}}</span>
                         </div>
+                        <div layout="row">
+                            <span class="md-subhead">{{patch.asset}}</span>
+                            <span flex></span>
+                            <span class="md-subhead">{{patch.owner}}</span>
+                        </div>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <p>{{patch.gerrit.description}}</p>
+                </md-card-content>
+                <md-card-footer style="padding: 0px; ">
+                    <div layout="row" layout-align="space-between stretch" layout-wrap>
 
-                        <div layout="row" style="padding: 0">
-                            <md-progress-circular md-mode="{{patch.loadingMode}}"></md-progress-circular>
-
-                            <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
-                                            md-direction="left" flex>
-                                <md-fab-trigger class="align-with-text">
-                                    <md-button aria-label="menu" class="md-fab md-primary">
-                                        <md-icon md-font-library="material-icons">menu</md-icon>
+                        <md-menu>
+                            <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.registration}}</md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'accept')" ng-disabled="patch.status.patch == 'Accepted'">
+                                        <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
+                                        Accept
                                     </md-button>
-                                </md-fab-trigger>
-                                <md-toolbar>
-                                    <md-fab-actions class="md-toolbar-tools">
-                                        <md-button aria-label="refresh" class="md-icon-button" ng-click="refreshPatch(patch)">
-                                            <md-icon md-font-library="material-icons">refresh</md-icon>
-                                            <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Refresh</md-tooltip>-->
-                                        </md-button>
-                                        <md-button aria-label="edit" class="md-icon-button" ng-disabled="true">
-                                            <md-icon md-font-library="material-icons">mode_edit</md-icon>
-                                            <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Edit</md-tooltip>-->
-                                        </md-button>
-                                        <md-button aria-label="delete" class="md-icon-button" ng-disabled="true">
-                                            <md-icon md-font-library="material-icons">delete</md-icon>
-                                            <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Delete</md-tooltip>-->
-                                        </md-button>
-                                    </md-fab-actions>
-                                </md-toolbar>
-                            </md-fab-toolbar>
-                        </div>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'ask')" ng-disabled="patch.status.patch == 'Asked'">
+                                        <md-icon md-svg-icon="images/question.svg" md-menu-align-target></md-icon>
+                                        Asked
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'refuse')" ng-disabled="patch.status.patch == 'Refused'">
+                                        <md-icon md-svg-icon="images/cross.svg" md-menu-align-target></md-icon>
+                                        Refuse
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
 
-                    </md-card-footer>
+                        <md-menu>
+                            <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.jira}}</md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'resolve')" ng-disabled="patch.status.jira == 'Resolved'">
+                                        <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
+                                        Resolve
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
 
-                    <!--<md-card-actions layout="row" layout-align="space-between center">
-                        <md-button class="md-raised md-primary">Accept</md-button>
-                        <md-button class="md-raised md-warn">Refuse</md-button>
-                        <md-button class="md-fab md-mini md-primary" aria-label="Refresh" ng-click="refreshGerrit(gerrit)">
-                            <md-icon md-svg-src="images/refresh.svg"></md-icon>
-                        </md-button>
-                    </md-card-actions>-->
-                </md-card>
-            </div>
-        </section>
-    </md-content>
+                        <md-menu>
+                            <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.gerrit}}</md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'merge')" ng-disabled="patch.status.gerrit == 'Merged'">
+                                        <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
+                                        Merge
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+
+                        <md-menu>
+                            <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.test}}</md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'tested')" ng-disabled="patch.status.test == 'Tested'">
+                                        <md-icon md-svg-icon="images/check.svg" md-menu-align-target></md-icon>
+                                        Test Completed
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'toTest')" ng-disabled="patch.status.test == 'ToTest'">
+                                        <md-icon md-svg-icon="images/question.svg" md-menu-align-target></md-icon>
+                                        To Test
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button ng-click="applyActionToGerrit(patch,'issueFound')" ng-disabled="patch.status.test == 'Issue'">
+                                        <md-icon md-svg-icon="images/cross.svg" md-menu-align-target></md-icon>
+                                        Issue
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+
+                    </div>
+
+                    <div layout="row" style="padding: 0">
+                        <md-progress-circular md-mode="patch.loadingMode" ng-show="patch.isProgressBarVisible"></md-progress-circular><!--md-mode="patch.loadingMode"--> <!--ng-show="{{patch.isProgressBarVisible}}"-->
+
+                        <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
+                                        md-direction="left" flex>
+                            <md-fab-trigger class="align-with-text">
+                                <md-button aria-label="menu" class="md-fab md-primary">
+                                    <md-icon md-font-library="material-icons">menu</md-icon>
+                                </md-button>
+                            </md-fab-trigger>
+                            <md-toolbar>
+                                <md-fab-actions class="md-toolbar-tools">
+                                    <md-button aria-label="refresh" class="md-icon-button" ng-click="refreshPatch(patch)">
+                                        <md-icon md-font-library="material-icons">refresh</md-icon>
+                                        <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Refresh</md-tooltip>-->
+                                    </md-button>
+                                    <md-button aria-label="edit" class="md-icon-button" ng-disabled="true">
+                                        <md-icon md-font-library="material-icons">mode_edit</md-icon>
+                                        <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Edit</md-tooltip>-->
+                                    </md-button>
+                                    <md-button aria-label="delete" class="md-icon-button" ng-disabled="true">
+                                        <md-icon md-font-library="material-icons">delete</md-icon>
+                                        <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Delete</md-tooltip>-->
+                                    </md-button>
+                                </md-fab-actions>
+                            </md-toolbar>
+                        </md-fab-toolbar>
+                    </div>
+
+                </md-card-footer>
+            </md-card>
+        </div>
+    </section>
 
 </div>
 

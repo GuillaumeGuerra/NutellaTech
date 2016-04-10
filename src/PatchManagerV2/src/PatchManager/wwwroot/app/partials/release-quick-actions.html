@@ -1,0 +1,17 @@
+﻿<md-bottom-sheet class="md-list md-has-header" ng-cloak>
+    <md-subheader>What do you want to do ?</md-subheader>
+    <md-list>
+        <md-list-item>
+            <md-button class="md-list-item-content" ng-click="hideQuickActions();refreshAllPatches()">
+                <md-icon md-font-library="material-icons">refresh</md-icon>
+                <span class="md-inline-list-icon-label">Refresh All</span>
+            </md-button>
+        </md-list-item>
+        <md-list-item>
+            <md-button class="md-list-item-content" ng-click="hideQuickActions();ShowNewPatchModalShowAdvanced($event)">
+                <md-icon md-font-library="material-icons">add</md-icon>
+                <span class="md-inline-list-icon-label">Register patch</span>
+            </md-button>
+        </md-list-item>
+    </md-list>
+</md-bottom-sheet>

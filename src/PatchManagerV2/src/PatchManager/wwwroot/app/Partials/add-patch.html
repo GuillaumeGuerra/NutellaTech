@@ -34,7 +34,7 @@
                             <md-option>Repo</md-option>
                         </md-select>
                     </md-input-container>
-                    <md-progress-circular md-mode="{{loadingMode}}"></md-progress-circular>
+                    <md-progress-circular md-mode="indeterminate" ng-show="isProgressBarVisible"></md-progress-circular>
                 </div>
             </md-content>
             <md-content layout-padding="">
