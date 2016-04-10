@@ -21,17 +21,27 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog) {
 
     var originatorEv;
 
+    $scope.showSpinner = function (patch, isLoading) {
+        if (isLoading)
+            patch.loadingMode = 'indeterminate';
+        else
+            patch.loadingMode = '';
+
+    };
+
     $scope.release = releases.get({ releaseVersion: $routeParams.releaseVersion });
 
     $scope.patches = patches.query({ releaseVersion: $routeParams.releaseVersion });
 
-    $scope.refreshGerrit = function (gerrit) {
-        console.log("refreshing gerrit " + gerrit.gerrit.id);
+    $scope.refreshPatch = function (patch) {
+        console.log("refreshing patch " + patch.gerrit.id);
 
-        patches.get({ patchId: gerrit.gerrit.id, releaseVersion: $routeParams.releaseVersion }).$promise.then(function (result) {
+        $scope.showSpinner(patch, true);
+        patches.get({ patchId: patch.gerrit.id, releaseVersion: $routeParams.releaseVersion }).$promise.then(function (result) {
 
             console.log("Refreshing statuses for gerrit " + result.gerrit.id);
-            gerrit.status = result.status;
+            patch.status = result.status;
+            $scope.showSpinner(patch, false);
         });
     };
 

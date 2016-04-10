@@ -7,11 +7,11 @@
   },
   "jira": {
     "id": "STW-87",
-    "description": "Han, you're dead now, but you got to date Leia, lucky you"
+    "description": "Darth Vader you stink"
   },
   "status": {
     "registration": "Asked",
-    "jira": "Approved",
+    "jira": "Closed",
     "gerrit": "Merged",
     "test": "ToTest"
   },

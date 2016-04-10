@@ -1,0 +1,19 @@
+{
+  "owner": "Guillaume Guerra",
+  "gerrit": {
+    "id": 23423,
+    "description": "Han has been upgraded, he went from scum to rebel hero",
+    "author": "Luke Skywalker"
+  },
+  "jira": {
+    "id": "STW-6",
+    "description": "Han, you're dead now, but you got to date Leia, lucky you"
+  },
+  "status": {
+    "registration": "Asked",
+    "jira": "Closed",
+    "gerrit": "Merged",
+    "test": "ToTest"
+  },
+  "asset": "Official"
+}

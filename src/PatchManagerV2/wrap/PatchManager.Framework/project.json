@@ -10,6 +10,16 @@
       "dependencies": {
         "Newtonsoft.Json": "8.0.3"
       }
+    },
+    "net452": {
+      "wrappedProject": "../../PatchManager.Framework/PatchManager.Framework.csproj",
+      "bin": {
+        "assembly": "../../PatchManager.Framework/obj/{configuration}/PatchManager.Framework.dll",
+        "pdb": "../../PatchManager.Framework/obj/{configuration}/PatchManager.Framework.pdb"
+      },
+      "dependencies": {
+        "Newtonsoft.Json": "8.0.3"
+      }
     }
   }
 }

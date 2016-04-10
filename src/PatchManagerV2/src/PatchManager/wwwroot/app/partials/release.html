@@ -53,7 +53,7 @@
                     <md-card-content>
                         <p>{{patch.gerrit.description}}</p>
                     </md-card-content>
-                    <md-card-footer>
+                    <md-card-footer style="padding: 0px; ">
                         <div layout="row" layout-align="space-between stretch" layout-wrap>
 
                             <md-menu>
@@ -129,6 +129,36 @@
                             </md-menu>
 
                         </div>
+
+                        <div layout="row" style="padding: 0">
+                            <md-progress-circular md-mode="{{patch.loadingMode}}"></md-progress-circular>
+
+                            <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
+                                            md-direction="left" flex>
+                                <md-fab-trigger class="align-with-text">
+                                    <md-button aria-label="menu" class="md-fab md-primary">
+                                        <md-icon md-font-library="material-icons">menu</md-icon>
+                                    </md-button>
+                                </md-fab-trigger>
+                                <md-toolbar>
+                                    <md-fab-actions class="md-toolbar-tools">
+                                        <md-button aria-label="refresh" class="md-icon-button" ng-click="refreshPatch(patch)">
+                                            <md-icon md-font-library="material-icons">refresh</md-icon>
+                                            <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Refresh</md-tooltip>-->
+                                        </md-button>
+                                        <md-button aria-label="edit" class="md-icon-button">
+                                            <md-icon md-font-library="material-icons">mode_edit</md-icon>
+                                            <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Edit</md-tooltip>-->
+                                        </md-button>
+                                        <md-button aria-label="delete" class="md-icon-button">
+                                            <md-icon md-font-library="material-icons">delete</md-icon>
+                                            <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Delete</md-tooltip>-->
+                                        </md-button>
+                                    </md-fab-actions>
+                                </md-toolbar>
+                            </md-fab-toolbar>
+                        </div>
+
                     </md-card-footer>
 
                     <!--<md-card-actions layout="row" layout-align="space-between center">

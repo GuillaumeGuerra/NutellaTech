@@ -1,0 +1,19 @@
+{
+  "owner": null,
+  "gerrit": {
+    "id": 23,
+    "description": "Han has been upgraded, he went from scum to rebel hero",
+    "author": "C3PO"
+  },
+  "jira": {
+    "id": "STW-22",
+    "description": "Darth Vader you stink"
+  },
+  "status": {
+    "registration": "Asked",
+    "jira": "Open",
+    "gerrit": "ReadyForMerge",
+    "test": "ToTest"
+  },
+  "asset": "Official"
+}
