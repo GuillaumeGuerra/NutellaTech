@@ -1508,11 +1508,11 @@
       },
       "PatchManager.Model/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1"
+        "framework": ".NETFramework,Version=v4.5.2"
       },
       "PatchManager.Services/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5.2",
         "dependencies": {
           "Autofac": "3.5.2",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
@@ -3254,11 +3254,11 @@
       },
       "PatchManager.Model/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1"
+        "framework": ".NETFramework,Version=v4.5.2"
       },
       "PatchManager.Services/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5.2",
         "dependencies": {
           "Autofac": "3.5.2",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",
@@ -5000,11 +5000,11 @@
       },
       "PatchManager.Model/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1"
+        "framework": ".NETFramework,Version=v4.5.2"
       },
       "PatchManager.Services/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5.2",
         "dependencies": {
           "Autofac": "3.5.2",
           "Microsoft.AspNet.WebApi.Client": "5.2.3",

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using PatchManager.Framework;
 using PatchManager.Model.Services;
 using PatchManager.Models;
 
@@ -9,9 +10,9 @@ namespace PatchManager.Services.Gerrit
     {
         public GerritInformation GetGerritInformation(int gerritId)
         {
-            var random = new Random((int)DateTime.Now.Ticks);
+            WaitHelper.Sleep();
 
-            Thread.Sleep(random.Next(4) * 1000);
+            var random = new Random((int)DateTime.Now.Ticks);
 
             var owners = new[] { "Obi-Wan Kenobi", "Luke Skywalker", "Han Solo", "Leia Organa", "R2D2", "C3PO" };
             var titles = new[]
@@ -33,6 +34,8 @@ namespace PatchManager.Services.Gerrit
 
         public bool Merge(int gerritId)
         {
+            WaitHelper.Sleep();
+
             return true;
         }
     }

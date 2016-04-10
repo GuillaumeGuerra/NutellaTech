@@ -1,6 +1,7 @@
 ﻿{
   "Persistence": {
-    "type": "PatchManager.Services.Persistence.LocalFilesPersistenceService, PatchManager.Services",
+    //"type": "PatchManager.Services.Persistence.LocalFilesPersistenceService, PatchManager.Services",
+    "type": "PatchManager.Services.Persistence.DemoPersistenceService, PatchManager.Services",
     "isSingleton": false
   },
   "Model": {

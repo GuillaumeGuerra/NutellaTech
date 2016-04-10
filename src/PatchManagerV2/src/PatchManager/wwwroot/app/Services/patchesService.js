@@ -9,6 +9,6 @@ patchesServices.factory('Patches', ['$resource',
           { releaseVersion: '@version', patchId: '@gerrit.id', isAction: '', action: '' },
           {
               query: { method: 'GET', params: {}, isArray: true },
-              action: { method: 'POST', params: { isAction: 'action'} },
+              action: { method: 'POST', params: { isAction: 'action'} }
           });
   }]);

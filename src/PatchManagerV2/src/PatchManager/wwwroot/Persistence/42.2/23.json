@@ -2,17 +2,17 @@
   "owner": null,
   "gerrit": {
     "id": 23,
-    "description": "Han has been upgraded, he went from scum to rebel hero",
-    "author": "C3PO"
+    "description": "New fancy haircut for Leia",
+    "author": "Luke Skywalker"
   },
   "jira": {
-    "id": "STW-22",
+    "id": "STW-53",
     "description": "Darth Vader you stink"
   },
   "status": {
     "registration": "Asked",
-    "jira": "Open",
-    "gerrit": "ReadyForMerge",
+    "jira": "Closed",
+    "gerrit": "BuildFailed",
     "test": "ToTest"
   },
   "asset": "Official"

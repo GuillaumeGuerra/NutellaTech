@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using PatchManager.Framework;
 using PatchManager.Model.Services;
 using PatchManager.Models;
 
@@ -9,9 +10,9 @@ namespace PatchManager.Services.Jira
     {
         public JiraInformation GetJiraInformation(string jiraId)
         {
-            var random = new Random((int)DateTime.Now.Ticks);
+            WaitHelper.Sleep();
 
-            Thread.Sleep(random.Next(4) * 1000);
+            var random = new Random((int)DateTime.Now.Ticks);
 
             var values = Enum.GetValues(typeof(JiraStatus));
             var titles = new[]
@@ -22,13 +23,15 @@ namespace PatchManager.Services.Jira
             };
             return new JiraInformation()
             {
-                Status = (JiraStatus) values.GetValue(random.Next(values.Length)),
+                Status = (JiraStatus)values.GetValue(random.Next(values.Length)),
                 Description = titles[random.Next(titles.Length)],
             };
         }
 
         public bool Resolve(string jiraId)
         {
+            WaitHelper.Sleep();
+
             return true;
         }
     }

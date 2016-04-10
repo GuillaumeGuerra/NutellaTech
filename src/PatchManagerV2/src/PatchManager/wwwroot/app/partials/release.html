@@ -24,8 +24,8 @@
         </section>
 
         <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="">
-            <md-button style="float: left;" class="md-raised md-primary" ng-click="refreshAllGerrits()">Refresh All</md-button>
-            <md-button style="float: right;" class="md-raised md-warn" ng-click="showAdvanced($event)"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</md-button>
+            <md-button style="float: left;" class="md-raised md-primary" ng-click="refreshAllPatches()">Refresh All</md-button>
+            <md-button style="float: right;" class="md-raised md-warn" ng-click="ShowNewPatchModalShowAdvanced($event)"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</md-button>
         </section>
 
         <section layout-align="center center">
@@ -146,11 +146,11 @@
                                             <md-icon md-font-library="material-icons">refresh</md-icon>
                                             <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Refresh</md-tooltip>-->
                                         </md-button>
-                                        <md-button aria-label="edit" class="md-icon-button">
+                                        <md-button aria-label="edit" class="md-icon-button" ng-disabled="true">
                                             <md-icon md-font-library="material-icons">mode_edit</md-icon>
                                             <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Edit</md-tooltip>-->
                                         </md-button>
-                                        <md-button aria-label="delete" class="md-icon-button">
+                                        <md-button aria-label="delete" class="md-icon-button" ng-disabled="true">
                                             <md-icon md-font-library="material-icons">delete</md-icon>
                                             <!--<md-tooltip md-direction="bottom" md-visible="tooltipVisible">Delete</md-tooltip>-->
                                         </md-button>

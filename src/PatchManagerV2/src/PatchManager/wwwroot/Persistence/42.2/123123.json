@@ -2,16 +2,16 @@
   "owner": "my ass",
   "gerrit": {
     "id": 123123,
-    "description": "Code cleanup : Jar-Jar has been erased",
-    "author": "Obi-Wan Kenobi"
+    "description": "New fancy haircut for Leia",
+    "author": "R2D2"
   },
   "jira": {
-    "id": "STW-37",
-    "description": "Palpatine could use some botox injection once in a while"
+    "id": "STW-65",
+    "description": "Han, you're dead now, but you got to date Leia, lucky you"
   },
   "status": {
     "registration": "Asked",
-    "jira": "Closed",
+    "jira": "InProgress",
     "gerrit": "Merged",
     "test": "Tested"
   },

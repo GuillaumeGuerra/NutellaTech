@@ -13,9 +13,9 @@ angular
     .module('PatchManager')
     .controller('releaseController', releaseController);
 
-releaseController.$inject = ['$scope', '$routeParams', 'Releases', 'Patches', '$mdDialog'];
+releaseController.$inject = ['$scope', '$routeParams', 'Releases', 'Patches', '$mdDialog','$mdToast'];
 
-function releaseController($scope, $routeParams, releases, patches, $mdDialog) {
+function releaseController($scope, $routeParams, releases, patches, $mdDialog, $mdToast) {
 
     console.log("getting all the gerrits related to release " + $routeParams.releaseVersion);
 
@@ -45,11 +45,11 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog) {
         });
     };
 
-    $scope.refreshAllGerrits = function () {
+    $scope.refreshAllPatches = function () {
         console.log("Refreshing all gerrits");
 
         $scope.patches.forEach(function (patch) {
-            $scope.refreshGerrit(patch);
+            $scope.refreshPatch(patch);
         });
     };
 
@@ -61,10 +61,14 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog) {
         $scope.patches.push($scope.newGerrit);
     }
 
-    $scope.applyActionToGerrit = function (gerrit, actionToApply) {
-        console.log("Applying action " + actionToApply + " to gerrit " + gerrit.gerrit.id);
+    $scope.applyActionToGerrit = function (patch, actionToApply) {
+        console.log("Applying action " + actionToApply + " to patch " + patch.gerrit.id);
 
-        gerrit.$action({ releaseVersion: $routeParams.releaseVersion, action: actionToApply });
+        $scope.showSpinner(patch, true);
+        patch.$action({ releaseVersion: $routeParams.releaseVersion, action: actionToApply }).then(function(result) {
+            $scope.showSimpleToast('Action [' + actionToApply + '] has been properly appied to patch ' + patch.gerrit.id);
+            $scope.showSpinner(patch, false);
+        });
     }
 
     $scope.openMenu = function ($mdOpenMenu, ev) {
@@ -74,7 +78,7 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog) {
         $mdOpenMenu(ev);
     };
 
-    $scope.showAdvanced = function (ev) {
+    $scope.ShowNewPatchModalShowAdvanced = function (ev) {
         $mdDialog.show({
             controller: newPatchController,
             templateUrl: 'app/partials/add-patch.html',
@@ -90,5 +94,14 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog) {
         }, function () {
             console.log("New gerrit creation cancelled");
         });
+    };
+
+    $scope.showSimpleToast = function (message) {
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent(message)
+            .position('bottom left')
+            .hideDelay(3000)
+        );
     };
 }

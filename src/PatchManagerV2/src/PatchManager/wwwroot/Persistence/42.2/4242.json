@@ -2,16 +2,16 @@
   "owner": "guillaume Guerra",
   "gerrit": {
     "id": 4242,
-    "description": "Luke is now able to handle a lightsaber",
-    "author": "C3PO"
+    "description": "Code cleanup : Jar-Jar has been erased",
+    "author": "R2D2"
   },
   "jira": {
-    "id": "STW-87",
-    "description": "Darth Vader you stink"
+    "id": "STW-98",
+    "description": "Palpatine could use some botox injection once in a while"
   },
   "status": {
     "registration": "Asked",
-    "jira": "Closed",
+    "jira": "Resolved",
     "gerrit": "Merged",
     "test": "ToTest"
   },

@@ -3,15 +3,15 @@
   "gerrit": {
     "id": 23423,
     "description": "Han has been upgraded, he went from scum to rebel hero",
-    "author": "Luke Skywalker"
+    "author": "Han Solo"
   },
   "jira": {
-    "id": "STW-6",
-    "description": "Han, you're dead now, but you got to date Leia, lucky you"
+    "id": "STW-32",
+    "description": "Palpatine could use some botox injection once in a while"
   },
   "status": {
     "registration": "Asked",
-    "jira": "Closed",
+    "jira": "InProgress",
     "gerrit": "Merged",
     "test": "ToTest"
   },

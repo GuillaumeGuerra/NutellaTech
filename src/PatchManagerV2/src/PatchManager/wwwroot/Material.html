@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
 
-    <link rel="stylesheet" href="lib/angular-material/angular-material.min.css"/>
+    <link rel="stylesheet" href="lib/angular-material/angular-material.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--<link href="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
@@ -18,36 +19,42 @@
     <script src="app/app.js"></script>
     <script src="app/services/releasesService.js"></script>
     <script src="app/services/patchesService.js"></script>
-    <script src="app/Controllers/navbarController.js"></script>
+    <script src="app/Controllers/sidenavController.js"></script>
     <script src="app/Controllers/releaseController.js"></script>
     <script src="app/Controllers/newPatchController.js"></script>
+    <script src="app/Controllers/homeController.js"></script>
 
 </head>
 
-<body ng-cloak layout="column">
+<body ng-cloak layout="column" ng-controller="homeController">
 
-<md-toolbar>
-    <h3>Patch Manager</h3>
-</md-toolbar>
+    <md-toolbar layout="row">
+        <md-button class="menu" ng-click="toggleSidenav()">
+            <md-icon md-font-library="material-icons">menu</md-icon>
+        </md-button>
+        <h3>Patch Manager</h3>
+    </md-toolbar>
 
-<div flex class="container" layout="row">
-    <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2">
-        <md-list ng-cloak="" class="listdemoListControls" ng-controller="navbarController">
-            <md-list-item ng-click="selectRelease(currentRelease.version)" class="secondary-button-padding">
-                <p>Current ({{currentRelease.version}})</p>
-            </md-list-item>
-            <md-list-item ng-repeat="release in allReleases" ng-click="selectRelease(release.version)">
-                <p>{{release.version}}</p>
-            </md-list-item>
+    <div flex class="container" layout="row">
+        
+        <md-sidenav ng-click="toggleSidenav()" md-component-id="left" md-is-locked-open="false" class="md-whiteframe-4dp">
+            <md-list ng-cloak="" class="listdemoListControls" ng-controller="sidenavController">
+                <md-list-item ng-click="selectRelease(currentRelease.version)" class="secondary-button-padding">
+                    <p>Current ({{currentRelease.version}})</p>
+                </md-list-item>
+                <md-list-item ng-repeat="release in allReleases" ng-click="selectRelease(release.version)">
+                    <p>{{release.version}}</p>
+                </md-list-item>
 
-            <md-divider></md-divider>
+                <md-divider></md-divider>
 
-        </md-list>
-    </md-sidenav>
-    <md-content flex id="content" class="lightgreen">
-        <div ng-view/>
-    </md-content>
-</div>
+            </md-list>
+        </md-sidenav>
+
+        <md-content flex id="content">
+            <div ng-view />
+        </md-content>
+    </div>
 
 </body>
 

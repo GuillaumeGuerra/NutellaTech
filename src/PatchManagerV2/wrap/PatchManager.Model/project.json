@@ -1,7 +1,7 @@
 {
   "version": "1.0.0-*",
   "frameworks": {
-    "net451": {
+    "net452": {
       "wrappedProject": "../../PatchManager.Model/PatchManager.Model.csproj",
       "bin": {
         "assembly": "../../PatchManager.Model/obj/{configuration}/PatchManager.Model.dll",

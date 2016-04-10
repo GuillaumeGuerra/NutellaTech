@@ -2,11 +2,11 @@
 
 angular
     .module('PatchManager')
-    .controller('navbarController', navbarController);
+    .controller('sidenavController', sidenavController);
 
-navbarController.$inject = ['$scope', "$location", 'Releases'];
+sidenavController.$inject = ['$scope', "$location", 'Releases'];
 
-function navbarController($scope, $location, releases) {
+function sidenavController($scope, $location, releases) {
 
     console.log("fetching all releases !!");
 
