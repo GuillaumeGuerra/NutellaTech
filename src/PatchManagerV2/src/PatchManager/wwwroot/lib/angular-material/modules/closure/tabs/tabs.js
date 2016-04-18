@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0-rc2
+ * v1.1.0-rc4
  */
 goog.provide('ng.material.components.tabs');
 goog.require('ng.material.components.icon');
@@ -1167,9 +1167,10 @@ function MdTabs () {
             '</div> ' +
           '</md-tabs-canvas> ' +
         '</md-tabs-wrapper> ' +
-        '<md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent && $mdTabsCtrl.selectedIndex >= 0"> ' +
+        '<md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent && $mdTabsCtrl.selectedIndex >= 0" class="_md"> ' +
           '<md-tab-content ' +
               'id="tab-content-{{::tab.id}}" ' +
+              'class="_md" ' +
               'role="tabpanel" ' +
               'aria-labelledby="tab-item-{{::tab.id}}" ' +
               'md-swipe-left="$mdTabsCtrl.swipeContent && $mdTabsCtrl.incrementIndex(1)" ' +

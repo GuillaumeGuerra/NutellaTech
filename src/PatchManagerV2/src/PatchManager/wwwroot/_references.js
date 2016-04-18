@@ -6,6 +6,7 @@
 /// <reference path="app/Controllers/releaseController.js" />
 /// <reference path="app/controllers/sidenavcontroller.js" />
 /// <reference path="app/Services/patchesService.js" />
+/// <reference path="app/services/patchmanagercontextservice.js" />
 /// <reference path="app/Services/releasesService.js" />
 /// <reference path="lib/angular/angular.js" />
 /// <reference path="lib/angular-animate/angular-animate.js" />

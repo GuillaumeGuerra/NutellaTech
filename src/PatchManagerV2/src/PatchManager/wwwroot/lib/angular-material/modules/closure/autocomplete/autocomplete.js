@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0-rc2
+ * v1.1.0-rc4
  */
 goog.provide('ng.material.components.autocomplete');
 goog.require('ng.material.components.icon');
@@ -466,7 +466,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       case $mdConstant.KEY_CODE.ESCAPE:
         event.stopPropagation();
         event.preventDefault();
-        clearValue();
+        if ($scope.searchText) clearValue();
 
         // Force the component to blur if they hit escape
         doBlur(true);

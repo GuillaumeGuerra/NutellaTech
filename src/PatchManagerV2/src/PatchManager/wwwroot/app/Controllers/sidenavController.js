@@ -4,9 +4,9 @@ angular
     .module('PatchManager')
     .controller('sidenavController', sidenavController);
 
-sidenavController.$inject = ['$scope', "$location", 'Releases'];
+sidenavController.$inject = ['$scope', "$location", 'Releases', 'PatchManagerContext'];
 
-function sidenavController($scope, $location, releases) {
+function sidenavController($scope, $location, releases, context) {
 
     console.log("fetching all releases !!");
 
@@ -28,6 +28,20 @@ function sidenavController($scope, $location, releases) {
         console.log("Selecting release " + releaseVersion);
 
         $location.url('/releases/' + releaseVersion);
-    }
+    };
+
+    $scope.settings = context.settings;
+
+    $scope.$watch(
+        function () { return $scope.settings.showCards; },
+        function (newValue, oldValue) {
+            if (newValue === true) {
+                $scope.settings.viewType = 'Grid';
+                $scope.settings.viewTypeIcon = 'view_headline';
+            } else {
+                $scope.settings.viewType = 'Cards';
+                $scope.settings.viewTypeIcon = 'view_module';
+            }
+        });
 };
 

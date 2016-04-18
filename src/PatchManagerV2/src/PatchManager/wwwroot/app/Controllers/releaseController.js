@@ -13,13 +13,16 @@ angular
     .module('PatchManager')
     .controller('releaseController', releaseController);
 
-releaseController.$inject = ['$scope', '$routeParams', 'Releases', 'Patches', '$mdDialog', '$mdToast', '$mdBottomSheet'];
+releaseController.$inject = ['$scope', '$routeParams', 'Releases', 'Patches', '$mdDialog', '$mdToast', '$mdBottomSheet', 'PatchManagerContext'];
 
-function releaseController($scope, $routeParams, releases, patches, $mdDialog, $mdToast, $mdBottomSheet) {
+function releaseController($scope, $routeParams, releases, patches, $mdDialog, $mdToast, $mdBottomSheet, context) {
 
     console.log("getting all the gerrits related to release " + $routeParams.releaseVersion);
 
     var originatorEv;
+
+    $scope.settings = context.settings;
+    $scope.resolvedSettings = {};
 
     $scope.showSpinner = function (patch, isLoading) {
         patch.isProgressBarVisible = isLoading;
@@ -29,7 +32,7 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog, $
             patch.loadingMode = '';
     };
 
-    $scope.shouldShowSpinner = function(patch) {
+    $scope.shouldShowSpinner = function (patch) {
         if (patch.isProgressBarVisible == undefined)
             return false;
         else
@@ -126,5 +129,49 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog, $
 
     $scope.hideQuickActions = function () {
         $mdBottomSheet.hide();
-    }
+    };
+
+    $scope.shouldShowPatch = function (patch) {
+        if ($scope.settings.mode === "Patches Gathering")
+            return true;
+        else if ($scope.settings.mode === "Merges") {
+            if (patch.status.gerrit !== 'ReadyForMerge' && $scope.settings.hideNonReadyGerrits)
+                return false;
+            if (patch.status.registration === 'Refused' && !$scope.settings.showRejected)
+                return false;
+        }
+        else {
+
+            if (patch.status.test === 'Tested' && $scope.settings.hideTestedGerrits)
+                return false;
+            if (patch.status.merge !== 'Merged' && $scope.settings.hideNonMergedGerrits)
+                return false;
+        }
+
+        return true;
+    };
+
+    $scope.$watch(
+        function () { return $scope.settings; },
+        function (newValue, oldValue) {
+            console.log("Settings updated, resolving new values");
+
+            if ($scope.settings.mode === "Patches Gathering") {
+                $scope.resolvedSettings.showRegistrationStatus = true;
+                $scope.resolvedSettings.showMergeStatus = false;
+                $scope.resolvedSettings.showJiraStatus = false;
+                $scope.resolvedSettings.showTestStatus = false;
+            }
+            else if ($scope.settings.mode === "Merges") {
+                $scope.resolvedSettings.showRegistrationStatus = true;
+                $scope.resolvedSettings.showMergeStatus = true;
+                $scope.resolvedSettings.showJiraStatus = true;
+                $scope.resolvedSettings.showTestStatus = false;
+            } else {
+                $scope.resolvedSettings.showRegistrationStatus = false;
+                $scope.resolvedSettings.showMergeStatus = false;
+                $scope.resolvedSettings.showJiraStatus = false;
+                $scope.resolvedSettings.showTestStatus = true;
+            }
+        }, true);
 }

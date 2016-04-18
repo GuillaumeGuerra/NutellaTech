@@ -16,19 +16,15 @@
             <label>Date</label>
             <input ng-model="release.date" ng-disabled="true">
         </md-input-container>
-    </section>
 
-    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap="">
         <md-button class="md-raised md-warn" ng-click="showQuickActions()">Quick Actions</md-button>
-        <md-button style="float: left;" class="md-raised md-primary" ng-click="refreshAllPatches()">Refresh All</md-button>
-        <md-button style="float: right;" class="md-raised md-warn" ng-click="ShowNewPatchModalShowAdvanced($event)"><span class="glyphicon glyphicon-plus"></span> Add Gerrit</md-button>
     </section>
 
     <section layout-align="center center">
 
         <div class='md-padding' layout="row" layout-wrap>
 
-            <md-card ng-repeat="patch in patches" style="width: 300px">
+            <md-card ng-repeat="patch in patches | filter : shouldShowPatch" style="width: 300px">
                 <md-card-header>
                     <md-card-avatar>
                         <img class="md-user-avatar" src="images/avatar.png">
@@ -52,7 +48,7 @@
                 <md-card-footer style="padding: 0px; ">
                     <div layout="row" layout-align="space-between stretch" layout-wrap>
 
-                        <md-menu>
+                        <md-menu ng-show="resolvedSettings.showRegistrationStatus">
                             <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.registration}}</md-button>
                             <md-menu-content width="4">
                                 <md-menu-item>
@@ -76,7 +72,7 @@
                             </md-menu-content>
                         </md-menu>
 
-                        <md-menu>
+                        <md-menu ng-show="resolvedSettings.showJiraStatus">
                             <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.jira}}</md-button>
                             <md-menu-content width="4">
                                 <md-menu-item>
@@ -88,7 +84,7 @@
                             </md-menu-content>
                         </md-menu>
 
-                        <md-menu>
+                        <md-menu ng-show="resolvedSettings.showGerritStatus">
                             <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.gerrit}}</md-button>
                             <md-menu-content width="4">
                                 <md-menu-item>
@@ -100,7 +96,7 @@
                             </md-menu-content>
                         </md-menu>
 
-                        <md-menu>
+                        <md-menu ng-show="resolvedSettings.showTestStatus">
                             <md-button class="md-raised md-primary" ng-click="openMenu($mdOpenMenu, $event)">{{patch.status.test}}</md-button>
                             <md-menu-content width="4">
                                 <md-menu-item>

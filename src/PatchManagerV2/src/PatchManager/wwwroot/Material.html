@@ -16,6 +16,7 @@
     <script src="app/app.js"></script>
     <script src="app/services/releasesService.js"></script>
     <script src="app/services/patchesService.js"></script>
+    <script src="app/services/patchManagerContext.js"></script>
     <script src="app/Controllers/sidenavController.js"></script>
     <script src="app/Controllers/releaseController.js"></script>
     <script src="app/Controllers/newPatchController.js"></script>
@@ -36,7 +37,7 @@
 
         <md-sidenav md-component-id="left" md-is-locked-open="false" class="md-whiteframe-4dp">
             <md-list ng-cloak="" class="listdemoListControls" ng-controller="sidenavController">
-                
+
                 <md-subheader class="md-no-sticky">Choose the release</md-subheader>
                 <md-list-item ng-click="selectRelease(currentRelease.version)" class="secondary-button-padding">
                     <p>Current ({{currentRelease.version}})</p>
@@ -48,7 +49,7 @@
                     </md-select>
                 </md-list-item>
 
-                <md-divider/>
+                <md-divider />
 
                 <md-subheader class="md-no-sticky">Filters</md-subheader>
                 <md-list-item>
@@ -59,21 +60,30 @@
                         <md-option>Tests</md-option>
                     </md-select>
                 </md-list-item>
-                <md-list-item  ng-show="settings.mode=='Merges'">
+                <md-list-item ng-show="settings.mode==='Merges'">
                     <p>Show Rejected</p>
                     <md-checkbox class="md-secondary" ng-model="settings.showRejected"></md-checkbox>
                 </md-list-item>
-                <md-list-item ng-show="settings.mode=='Tests'">
-                    <p>Hide Tested Gerrits</p>
-                    <md-checkbox class="md-secondary" ng-model="settings.hideTestedGerrits"></md-checkbox>
-                </md-list-item>
-                <md-list-item ng-show="settings.mode=='Merges'">
+                <md-list-item ng-show="settings.mode==='Merges'">
                     <p>Hide Non Ready Gerrits</p>
                     <md-checkbox class="md-secondary" ng-model="settings.hideNonReadyGerrits"></md-checkbox>
                 </md-list-item>
-                <md-list-item ng-show="settings.mode=='Tests'">
+                <md-list-item ng-show="settings.mode==='Tests'">
+                    <p>Hide Tested Gerrits</p>
+                    <md-checkbox class="md-secondary" ng-model="settings.hideTestedGerrits"></md-checkbox>
+                </md-list-item>
+                <md-list-item ng-show="settings.mode==='Tests'">
                     <p>Hide Non Merged Gerrits</p>
                     <md-checkbox class="md-secondary" ng-model="settings.hideNonMergedGerrits"></md-checkbox>
+                </md-list-item>
+
+                <md-divider />
+
+                <md-subheader class="md-no-sticky">Settings</md-subheader>
+                <md-list-item>
+                    <md-icon md-font-library="material-icons">{{settings.viewTypeIcon}}</md-icon>
+                    <p>View : {{ settings.viewType }}</p>
+                    <md-switch class="md-secondary" ng-model="settings.showCards"></md-switch>
                 </md-list-item>
 
             </md-list>

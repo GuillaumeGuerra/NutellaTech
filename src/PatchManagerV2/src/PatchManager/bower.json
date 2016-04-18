@@ -9,7 +9,7 @@
     "angular-resource": "1.4.6",
     "angular-route": "1.4.6",
     "angular": "1.4.6",
-    "angular-material": "1.1.0-rc2"
+    "angular-material": "1.1.0-rc4"
   },
   "resolutions": {
     "angular": "^1.4.8"

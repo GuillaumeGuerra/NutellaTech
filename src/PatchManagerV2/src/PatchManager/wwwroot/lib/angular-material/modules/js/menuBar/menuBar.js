@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.0-rc2
+ * v1.1.0-rc4
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -387,7 +387,8 @@ function MenuBarDirective($mdUtil, $mdTheming) {
         }
       });
 
-      return function postLink(scope, el, attrs, ctrl) {
+      return function postLink(scope, el, attr, ctrl) {
+        el.addClass('_md');     // private md component indicator for styling
         $mdTheming(scope, el);
         ctrl.init();
       };

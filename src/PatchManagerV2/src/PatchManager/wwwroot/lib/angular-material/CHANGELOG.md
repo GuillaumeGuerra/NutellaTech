@@ -1,3 +1,85 @@
+<a name"1.1.0-rc4"></a>
+### 1.1.0-rc4 (2016-04-15)
+
+
+#### Features
+
+* **select:** Adding md-select-header directive to md-select. ([62754242](https://github.com/angular/material/commit/62754242), closes [#7782](https://github.com/angular/material/issues/7782))
+
+
+#### Bug Fixes
+
+* **colors:**
+  * using default palette and defined palettes from $mdTheming ([61b742ef](https://github.com/angular/material/commit/61b742ef), closes [#8036](https://github.com/angular/material/issues/8036), [#8061](https://github.com/angular/material/issues/8061))
+  * coverts COLOR_PALETTES to colorPalettes ([246ae54b](https://github.com/angular/material/commit/246ae54b), closes [#8051](https://github.com/angular/material/issues/8051))
+* **list:** Correct avatar/icon size/spacing. ([05b8c1e9](https://github.com/angular/material/commit/05b8c1e9), closes [#8053](https://github.com/angular/material/issues/8053))
+* **menu:** Typo in hover deregistration. ([9f663524](https://github.com/angular/material/commit/9f663524), closes [#7947](https://github.com/angular/material/issues/7947), [#8045](https://github.com/angular/material/issues/8045))
+* **sidenav:** add support for  legacy API ([fbf17dbf](https://github.com/angular/material/commit/fbf17dbf))
+* **subheader:** transform span to div to allow custom styling. ([01952ec5](https://github.com/angular/material/commit/01952ec5), closes [#8063](https://github.com/angular/material/issues/8063), [#8069](https://github.com/angular/material/issues/8069))
+
+
+<a name"1.1.0-rc3"></a>
+### 1.1.0-rc3 (2016-04-13)
+
+#### Features
+
+* **colors:** directive and service to use any color from any palette on any element ([ced4e0c2](https://github.com/angular/material/commit/ced4e0c2), closes [#1269](https://github.com/angular/material/issues/1269), [#7791](https://github.com/angular/material/issues/7791))
+* **progress:** add the ability to disable the progressbars ([18bfae10](https://github.com/angular/material/commit/18bfae10), closes [#7862](https://github.com/angular/material/issues/7862))
+* **theme:** allow global disable of theming generation ([cb694048](https://github.com/angular/material/commit/cb694048), closes [#7959](https://github.com/angular/material/issues/7959))
+
+
+
+#### Breaking Changes
+
+* `<a>`: anchor tags in md components inherit theme colors
+* Content: `background-color: '{{background-default}}'`
+* Subheader: `background-color: '{{background-default}}'`
+* Button: use accent palette A700 for hover and focused
+* Checkbox: ripple use accent palette A700
+* Input: use primary-color instead of primary-500
+* LinearProgress: background-color: '{{accent-A100}}'
+* RadioButton: container uses  color: '{{accent-A700}}';
+* Select: accent uses color: '{{accent-color}}';
+* Slider: focus reing uses  `background-color: '{{accent-A200-0.2}}';`
+* Toast: uses `color: '{{accent-color}}';` instead of `color: '{{accent-A200}}';` 
+
+
+#### Bug Fixes
+
+* **a:** default accent color removed ([59dfce63](https://github.com/angular/material/commit/59dfce63), closes [#7891](https://github.com/angular/material/issues/7891))
+* **aria:** $mdAria should not use texts from aria-hidden nodes ([b3cb84d3](https://github.com/angular/material/commit/b3cb84d3), closes [#7376](https://github.com/angular/material/issues/7376), [#7957](https://github.com/angular/material/issues/7957))
+* **autocomplete:**
+  * don't show the loading bar when hitting escape on an empty input ([e821ae32](https://github.com/angular/material/commit/e821ae32), closes [#7927](https://github.com/angular/material/issues/7927), [#7934](https://github.com/angular/material/issues/7934))
+  * don't apply a background if the autocomplete has a floating label ([44cf4a93](https://github.com/angular/material/commit/44cf4a93), closes [#7841](https://github.com/angular/material/issues/7841), [#7848](https://github.com/angular/material/issues/7848))
+* **build:** prevent npm publishing ([fb4670fd](https://github.com/angular/material/commit/fb4670fd), closes [#7393](https://github.com/angular/material/issues/7393))
+* **components:** wrong use of accent and primary colors ([da48b6c9](https://github.com/angular/material/commit/da48b6c9), closes [#7890](https://github.com/angular/material/issues/7890))
+* **css:** use classname to identify md components for styling ([9aac20fa](https://github.com/angular/material/commit/9aac20fa), closes [#7942](https://github.com/angular/material/issues/7942))
+* **demo:** bottomSheet grid icon buttons are clipped ([15424bac](https://github.com/angular/material/commit/15424bac), closes [#8018](https://github.com/angular/material/issues/8018))
+* **icon:** icons should have a minimum height. ([1dc0c17f](https://github.com/angular/material/commit/1dc0c17f), closes [#7599](https://github.com/angular/material/issues/7599), [#7860](https://github.com/angular/material/issues/7860))
+* **input:** prevent the input from jumping when it becomes disabled ([4bff2bbe](https://github.com/angular/material/commit/4bff2bbe), closes [#7640](https://github.com/angular/material/issues/7640), [#7919](https://github.com/angular/material/issues/7919))
+* **list:**
+  * add target to copiedAttrs ([1227b0a6](https://github.com/angular/material/commit/1227b0a6), closes [#7831](https://github.com/angular/material/issues/7831))
+  * clickable list-items should show a focus effect. ([1fc29394](https://github.com/angular/material/commit/1fc29394), closes [#7960](https://github.com/angular/material/issues/7960), [#7964](https://github.com/angular/material/issues/7964))
+* **menu:** resolve an error when going from a nested menu item to a regular one ([e3fc728f](https://github.com/angular/material/commit/e3fc728f), closes [#7819](https://github.com/angular/material/issues/7819), [#7826](https://github.com/angular/material/issues/7826))
+* **progress-circular:** use a non-flushable requestAnimationFrame ([f687d106](https://github.com/angular/material/commit/f687d106), closes [#7936](https://github.com/angular/material/issues/7936))
+* **release:**
+  * specifies upstream URL when pushing to material repo ([bbaa5b80](https://github.com/angular/material/commit/bbaa5b80), closes [#7852](https://github.com/angular/material/issues/7852))
+  * adds `newVersion` value to node string to update package.json ([0fc0f3e4](https://github.com/angular/material/commit/0fc0f3e4), closes [#7810](https://github.com/angular/material/issues/7810))
+* **rtl-mixin:** changed ltr override to initial ([8968c999](https://github.com/angular/material/commit/8968c999), closes [#7423](https://github.com/angular/material/issues/7423))
+* **select:**
+  * prevent selectedLabels from being passed $scope by $watch ([d0bacdfe](https://github.com/angular/material/commit/d0bacdfe), closes [#7830](https://github.com/angular/material/issues/7830))
+  * md-checkbox inside md-list-item using incorrect text color. ([a3f63cbd](https://github.com/angular/material/commit/a3f63cbd), closes [#7893](https://github.com/angular/material/issues/7893))
+* **sidenav:**
+  * animation when width is explicitly defined ([57ab6d9c](https://github.com/angular/material/commit/57ab6d9c), closes [#7483](https://github.com/angular/material/issues/7483), [#7605](https://github.com/angular/material/issues/7605))
+  * mdSideNav should support deferred or instant component lookups ([877551c5](https://github.com/angular/material/commit/877551c5), closes [#7900](https://github.com/angular/material/issues/7900))
+* **tabs:** not selected tab text color as spec ([ccfef921](https://github.com/angular/material/commit/ccfef921), closes [#7920](https://github.com/angular/material/issues/7920))
+* **tests:** disable gridlist test ([317c1c8d](https://github.com/angular/material/commit/317c1c8d))
+* **themes:**
+  * anchor should inherit theme to support colors ([81b44a47](https://github.com/angular/material/commit/81b44a47))
+  * anchor theme colors are scoped to _md components ([901c3fc6](https://github.com/angular/material/commit/901c3fc6))
+* **theming:** theming should probably parse background hue names. ([79eba382](https://github.com/angular/material/commit/79eba382), closes [#7510](https://github.com/angular/material/issues/7510), [#8022](https://github.com/angular/material/issues/8022))
+
+
 <a name"1.1.0-rc2"></a>
 ### 1.1.0-rc2 (2016-03-30)
 
