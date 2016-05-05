@@ -24,25 +24,28 @@ namespace PatchManager
         //TODO : find a way to log all exceptions in a single location
         //TODO : implement actual gerrit and jira services
         //TODO : provide a grid view in addition to the card one
-        //TODO : show the refresh and refresh all buttons in a 3 points menu on the top right corner of the cards
+        //DONE : show the refresh and refresh all buttons in a 3 points menu on the top right corner of the cards
         //DONE : review the "Register gerrit" form using material api
         //TODO : handle authentication, to use RM credentials in Gerrit and Jira
         //DONE : split the api into a dedicated project without DNX, and write proper UTs
         //DONE : think about what can be threaded, to perform asynchronous save into the model
         //TODO : handle exceptions in the website, and show a popup with the error message
-        //TODO : show a progress bar when background actions are ongoing, freeze specific buttons that can't be run in the same time
-        //TODO : provide multiple views in the client : "gerrit gathering" (no other status than accepted or not), "merge" (filter non accepted patches, show only merge and jira status), "test" (only test status)
+        //DONE : show a progress bar when background actions are ongoing, freeze specific buttons that can't be run in the same time
+        //DONE : provide multiple views in the client : "gerrit gathering" (no other status than accepted or not), "merge" (filter non accepted patches, show only merge and jira status), "test" (only test status)
         //TODO : think about a way to provide a unique "meta-status" : "gerrit to accept", "gerrit to merge and jira to review", "gerrit to test". it should be a combination of all status into a single meaningful one
-        //TODO : use the proper button class for the search button in the add-gerrit page
+        //DONE : use the proper button class for the search button in the add-gerrit page
         //DONE : add the owner of the gerrit (the one who who pushes the mail), in addition to the actual author of the gerrit, that can be off for instance
-        //TODO : use tabs in the gerrit addtion page, to separate gerrit and jira informations
+        //TODO : use tabs in the gerrit addition page, to separate gerrit and jira informations
         //DONE : add the team asset for each gerrit 
-        //TODO : provide a quick searh feature
+        //TODO : provide a quick search feature
         //DONE : refactor the names : release => patch => user inputs + gerrit api data + jira api data
         //TODO : create features usable by RM only, such as release creation
         //TODO : give a quick switch to define which description to show in the cards : jira or gerrit
         //DONE : write at least a simple implementation for the persistence service, using json files for instance
-        //TODO : be able to open an existing patch in the new patch window, to be able to change the owner and the asset of the patch
+        //TODO : be able to open an existing patch in the new patch window, to change the owner and the asset of the patch
+        //TODO : provide angular intellisense using typescript package
+        //DONE : in the new gerrit window, do not launch a query each time something is typed, but only when nothing was typed for a few milliseconds
+        //DONE : show a spinner when a release is loading
 
 
         public static IContainer Container { get; private set; }

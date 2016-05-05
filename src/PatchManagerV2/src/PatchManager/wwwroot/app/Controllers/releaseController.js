@@ -23,6 +23,7 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog, $
 
     $scope.settings = context.settings;
     $scope.resolvedSettings = {};
+    $scope.patchesLoading = true;
 
     $scope.showSpinner = function (patch, isLoading) {
         patch.isProgressBarVisible = isLoading;
@@ -41,7 +42,11 @@ function releaseController($scope, $routeParams, releases, patches, $mdDialog, $
 
     $scope.release = releases.get({ releaseVersion: $routeParams.releaseVersion });
 
-    $scope.patches = patches.query({ releaseVersion: $routeParams.releaseVersion });
+    patches.query({ releaseVersion: $routeParams.releaseVersion })
+        .$promise.then(function (data) {
+            $scope.patchesLoading = false;
+            $scope.patches = data;
+        });
 
     $scope.refreshPatch = function (patch) {
         console.log("refreshing patch " + patch.gerrit.id);

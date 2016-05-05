@@ -34,10 +34,12 @@
                             <md-option>Repo</md-option>
                         </md-select>
                     </md-input-container>
-                    <md-progress-circular md-mode="indeterminate" ng-show="isProgressBarVisible"></md-progress-circular>
                 </div>
             </md-content>
-            <md-content layout-padding="">
+            <div ng-show="isProgressBarVisible" style="display: flex;min-height: 300px; min-width: 300px;">
+                <md-progress-circular style="margin: auto" md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-content layout-padding="" ng-hide="isProgressBarVisible">
                 <div layout-gt-xs="row">
                     <div layout-gt-xs="column" flex="20">
                         <md-input-container flex-gt-xs="" style="margin: 0px">
@@ -61,7 +63,7 @@
                     </div>
                 </div>
             </md-content>
-            <md-content layout-padding="">
+            <md-content layout-padding="" ng-hide="isProgressBarVisible">
                 <div layout-gt-xs="row">
                     <div layout-gt-xs="column" flex="20">
                         <md-input-container flex-gt-xs="" style="margin: 0px">

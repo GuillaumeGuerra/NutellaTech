@@ -10,13 +10,15 @@ angular
           .dark();
     });;
 
-newPatchController.$inject = ['$scope', '$routeParams', '$mdDialog', 'Patches'];
+newPatchController.$inject = ['$scope', '$routeParams', '$mdDialog', '$timeout', 'Patches'];
 
-function newPatchController($scope, $routeParams, $mdDialog, patches) {
+function newPatchController($scope, $routeParams, $mdDialog, $timeout, patches) {
     $scope.gerritId = undefined;
     $scope.newGerrit = {};
     $scope.newGerrit.gerrit = {};
     $scope.isProgressBarVisible = false;
+    var searchForGerritPromise;
+    var gerritId;
 
     $scope.showSpinner = function (isLoading) {
         $scope.isProgressBarVisible = isLoading;
@@ -34,15 +36,24 @@ function newPatchController($scope, $routeParams, $mdDialog, patches) {
 
     $scope.$watch('gerritId', function (newValue, oldValue) {
         if ($scope.gerritId != undefined) {
-            console.log('Gerrit id modified, calling the WebApi');
-            $scope.searchForGerrit();
+
+            // Cancelling previous timeout promise, in case it was already ongoing
+            if (searchForGerritPromise)
+                $timeout.cancel(searchForGerritPromise);
+
+            gerritId = newValue;
+            searchForGerritPromise = $timeout(function () {
+                console.log('Gerrit id modified, calling the WebApi');
+                $scope.searchForGerrit(gerritId);
+            }, 250); // delay 250 ms
         }
     });
 
-    $scope.searchForGerrit = function () {
-        console.log("Looking for gerrit information for gerrit " + $scope.gerritId);
+    $scope.searchForGerrit = function (gerritId) {
+        console.log("Looking for gerrit information for gerrit " + gerritId);
 
-        $scope.newGerrit.gerrit.id = $scope.gerritId;
+        $scope.newGerrit.gerrit.id = gerritId;
+
         // We have to save those inputs, as they would get overriden by the webapi result (the entire object is replaced with the promise result)
         $scope.userInput = {
             "asset": $scope.newGerrit.asset,
@@ -50,7 +61,7 @@ function newPatchController($scope, $routeParams, $mdDialog, patches) {
         }
 
         $scope.showSpinner(true);
-        patches.get({ patchId: $scope.newGerrit.gerrit.id, releaseVersion: $routeParams.releaseVersion, isAction: 'action', action: 'preview' }).$promise.then(
+        patches.get({ patchId: gerritId, releaseVersion: $routeParams.releaseVersion, isAction: 'action', action: 'preview' }).$promise.then(
             function (result) {
                 console.log(result);
 
