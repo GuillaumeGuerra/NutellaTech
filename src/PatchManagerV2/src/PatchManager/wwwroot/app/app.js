@@ -1,6 +1,9 @@
 ﻿
 'use strict';
 
+// get ag-Grid to create an Angular module and register the ag-Grid directive
+agGrid.initialiseAgGridWithAngular1(angular);
+
 var app = angular.module('PatchManager', [
     // Angular modules 
     'ngRoute',
@@ -8,11 +11,20 @@ var app = angular.module('PatchManager', [
 
     // Custom modules 
     'releasesServices',
-    'patchesServices'
+    'patchesServices',
 
     // 3rd Party Modules
-
+    'agGrid'
 ]);
+
+
+angular
+    .module('PatchManager')
+    .config(function ($mdThemingProvider) {
+        $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('grey').dark();
+        $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
+        $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
+    });
 
 app.config(['$routeProvider',
   function ($routeProvider) {

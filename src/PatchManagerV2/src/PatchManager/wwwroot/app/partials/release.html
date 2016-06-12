@@ -28,7 +28,9 @@
 
         <div ng-hide="patchesLoading" class='md-padding' layout="row" layout-wrap>
 
-            <md-card ng-repeat="patch in patches | filter : shouldShowPatch" style="width: 300px">
+            <md-card ng-repeat="patch in patches | filter : shouldShowPatch"
+                     md-theme="{{settings.cardsTheme}}" md-theme-watch
+                     style="width: 300px" ng-hide="settings.showGrid">
                 <md-card-header>
                     <md-card-avatar>
                         <img class="md-user-avatar" src="images/avatar.png">
@@ -124,7 +126,7 @@
 
                     </div>
                 </md-card-content>
-                <md-card-content style="min-height: 60px;display: flex" ng-show="patch.isProgressBarVisible">
+                <md-card-content style="min-height: 60px; display: flex" ng-show="patch.isProgressBarVisible">
                     <md-progress-circular style="margin: auto" md-mode="indeterminate"></md-progress-circular>
                 </md-card-content>
                 <md-card-footer style="padding: 0px;">
@@ -155,6 +157,10 @@
                     </md-fab-toolbar>
                 </md-card-footer>
             </md-card>
+
+            <div ng-show="settings.showGrid">
+                <div ag-grid="gridOptions" class="ag-fresh" style="height: 100%;width: 100%"></div>
+            </div>
         </div>
     </section>
 

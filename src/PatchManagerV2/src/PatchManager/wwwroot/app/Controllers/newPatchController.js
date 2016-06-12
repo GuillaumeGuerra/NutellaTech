@@ -2,13 +2,7 @@
 
 angular
     .module('PatchManager')
-    .controller('newPatchController', newPatchController).
-    config(function ($mdThemingProvider) {
-        // Configure a dark theme with primary foreground yellow
-        $mdThemingProvider.theme('docs-dark', 'default')
-          .primaryPalette('grey')
-          .dark();
-    });;
+    .controller('newPatchController', newPatchController);
 
 newPatchController.$inject = ['$scope', '$routeParams', '$mdDialog', '$timeout', 'Patches'];
 

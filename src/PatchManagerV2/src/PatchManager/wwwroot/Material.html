@@ -13,6 +13,7 @@
     <script src="./lib/angular-material/angular-material.js" type="text/javascript"></script>
     <script src="lib/angular-resource/angular-resource.js"></script>
     <script src="lib/angular-route/angular-route.js"></script>
+    <script src="lib/ag-grid/dist/ag-grid.js"></script>
     <script src="app/app.js"></script>
     <script src="app/services/releasesService.js"></script>
     <script src="app/services/patchesService.js"></script>
@@ -83,14 +84,23 @@
                 <md-list-item>
                     <md-icon md-font-library="material-icons">{{settings.viewTypeIcon}}</md-icon>
                     <p>View : {{ settings.viewType }}</p>
-                    <md-switch class="md-secondary" ng-model="settings.showCards"></md-switch>
+                    <md-switch class="md-secondary" ng-model="settings.showGrid"></md-switch>
+                </md-list-item>
+                <md-list-item ng-hide="settings.showGrid">
+                    <md-icon md-font-library="material-icons">color_lens</md-icon>
+                    <p>Card theme</p>
+                    <md-select class="md-secondary" ng-model="settings.cardsTheme">
+                        <md-option value="default">Default</md-option>
+                        <md-option value="dark-grey">Grey</md-option>
+                        <md-option value="dark-blue">Blue</md-option>
+                    </md-select>
                 </md-list-item>
 
             </md-list>
         </md-sidenav>
 
         <md-content flex id="content" style="background: lightgray">
-            <div ng-view/>
+            <div ng-view />
         </md-content>
     </div>
 
