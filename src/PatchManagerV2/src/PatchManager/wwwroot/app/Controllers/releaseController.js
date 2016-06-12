@@ -27,14 +27,32 @@
         var originatorEv;
 
         var columnDefs = [
-            { headerName: "Jira", field: "jira.id" },
-            { headerName: "Gerrit", field: "gerrit.id" },
-            { headerName: "Asset", field: "asset" },
-            { headerName: "Owner", field: "owner" }
+            {
+                headerName: 'Patch',
+                children: [
+                    { headerName: "Asset", field: "asset" },
+                    { headerName: "Owner", field: "owner" },
+                    { headerName: "Jira", field: "jira.id" },
+                    { headerName: "Gerrit", field: "gerrit.id" },
+                    { headerName: "Description", field: "gerrit.description" }
+                ]
+            },
+            {
+                headerName: 'Status',
+                children: [
+                    { headerName: "Registration Status", field: "status.registration" },
+                    { headerName: "Jira Status", field: "status.jira" },
+                    { headerName: "Gerrit Status", field: "status.gerrit" },
+                    { headerName: "Test Status", field: "status.test" },
+                ]
+            }
         ];
 
         $scope.gridOptions = {
             columnDefs: columnDefs,
+            enableColResize: true,
+            enableSorting: true,
+            enableFilter: true,
             rowData: []
         };
 

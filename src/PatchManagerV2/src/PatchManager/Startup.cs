@@ -22,7 +22,7 @@ namespace PatchManager
         //TODO : add logs
         //TODO : find a way to log all exceptions in a single location
         //TODO : implement actual gerrit and jira services
-        //TODO : provide a grid view in addition to the card one
+        //IN PROGRESS : provide a grid view in addition to the card one
         //TODO : handle authentication, to use RM credentials in Gerrit and Jira
         //TODO : handle exceptions in the website, and show a popup with the error message
         //TODO : think about a way to provide a unique "meta-status" : "gerrit to accept", "gerrit to merge and jira to review", "gerrit to test". it should be a combination of all status into a single meaningful one
