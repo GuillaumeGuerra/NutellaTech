@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Microsoft.AspNet.Mvc;
@@ -39,21 +40,24 @@ namespace PatchManager.Controllers
 
         [HttpGet]
         [Route("{releaseVersion}/patches")]
-        public IEnumerable<Patch> GetReleaseGerrits([FromRoute] string releaseVersion)
+        public IEnumerable<Patch> GetReleasePatches([FromRoute] string releaseVersion)
         {
             var release = Model.GetRelease(releaseVersion);
-            foreach (var patch in Model.GetReleasePatches(releaseVersion))
+            var patches = Model.GetReleasePatches(releaseVersion);
+
+            Parallel.ForEach(patches, patch =>
             {
                 if (StatusResolver.ResolveIfOutdated(patch))
                     // NB : do not access the patch variable inside the task, or you will run into nasty race condition with the foreach enumeration
                     Task.Factory.StartNew(tmp => Persistence.UpdateReleasePatch(release, (Patch)tmp), patch.Patch);
-                yield return patch.Patch;
-            }
+            });
+
+            return patches.Select(patch => patch.Patch);
         }
 
         [HttpGet]
         [Route("{releaseVersion}/patches/{patchId}")]
-        public Patch GetReleaseGerrit([FromRoute] string releaseVersion, [FromRoute] int patchId)
+        public Patch GetReleasePatch([FromRoute] string releaseVersion, [FromRoute] int patchId)
         {
             var release = Model.GetRelease(releaseVersion);
             var patch = Model.GetReleasePatch(releaseVersion, patchId);
@@ -66,7 +70,7 @@ namespace PatchManager.Controllers
 
         [HttpPost]
         [Route("{releaseVersion}/patches/")]
-        public Patch PostGerritForRelease([FromRoute] string releaseVersion, [FromBody] Patch patch)
+        public Patch PostPatchForRelease([FromRoute] string releaseVersion, [FromBody] Patch patch)
         {
             patch.Status.Registration = RegistrationStatus.Asked;
             patch.Status.Test = TestStatus.ToTest;
@@ -78,7 +82,7 @@ namespace PatchManager.Controllers
 
         [HttpPost]
         [Route("{releaseVersion}/patches/{patchId}/action/{actionToPerform}")]
-        public Patch ApplyActionToGerrit([FromRoute] string releaseVersion, [FromRoute] int patchId, [FromRoute] string actionToPerform)
+        public Patch ApplyActionToPatch([FromRoute] string releaseVersion, [FromRoute] int patchId, [FromRoute] string actionToPerform)
         {
             var current = Model.GetReleasePatch(releaseVersion, patchId);
             if (current == null)
@@ -97,7 +101,7 @@ namespace PatchManager.Controllers
 
         [HttpGet]
         [Route("{releaseVersion}/patches/{patchId}/action/preview")]
-        public Patch PreviewGerrit([FromRoute] string releaseVersion, [FromRoute] int patchId)
+        public Patch PreviewPatch([FromRoute] string releaseVersion, [FromRoute] int patchId)
         {
             var patch = new PatchWithMetadata(new Patch()
             {
