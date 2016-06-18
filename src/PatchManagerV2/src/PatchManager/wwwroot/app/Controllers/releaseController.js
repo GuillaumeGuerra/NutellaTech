@@ -104,7 +104,7 @@
 
             $scope.showSpinner(patch, true);
             patch.$action({ releaseVersion: $routeParams.releaseVersion, action: actionToApply }).then(function (result) {
-                $scope.showSimpleToast('Action [' + actionToApply + '] has been properly appied to patch ' + patch.gerrit.id);
+                $scope.showSimpleToast('Action [' + actionToApply + '] has been properly applied to patch ' + patch.gerrit.id);
                 $scope.showSpinner(patch, false);
             });
         }
