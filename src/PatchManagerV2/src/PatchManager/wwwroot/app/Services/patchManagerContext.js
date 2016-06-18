@@ -8,9 +8,9 @@
                 {
                     settings:
                         {
-                            viewTypeIcon: "view_module",
-                            viewType: "Grid",
-                            showGrid: true,
+                            viewTypeIcon: "view_headline",
+                            viewType: "Cards",
+                            showGrid: false,
                             cardsTheme: "default",
                             mode: "Patches Gathering",
                             showRejected: false,

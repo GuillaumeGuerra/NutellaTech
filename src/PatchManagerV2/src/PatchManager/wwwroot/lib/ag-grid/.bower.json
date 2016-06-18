@@ -1,6 +1,6 @@
 {
   "name": "ag-grid",
-  "version": "4.2.6",
+  "version": "4.2.7",
   "homepage": "http://www.ag-grid.com/",
   "authors": [
     "Niall Crosby <niall.crosby@ag-grid.com>"
@@ -31,14 +31,13 @@
   ],
   "devDependencies": {},
   "dependencies": {},
-  "_release": "4.2.6",
+  "_release": "4.2.7",
   "_resolution": {
     "type": "version",
-    "tag": "4.2.6",
-    "commit": "09904b23fbe82d7d3df7b736687792cb1051f215"
+    "tag": "4.2.7",
+    "commit": "1373916c3899254cb1993a3856e3c7f871fedf67"
   },
   "_source": "https://github.com/ceolter/angular-grid.git",
-  "_target": "~4.2.6",
-  "_originalSource": "ag-grid",
-  "_direct": true
+  "_target": "4.2.7",
+  "_originalSource": "ag-grid"
 }
