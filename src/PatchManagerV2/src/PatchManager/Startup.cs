@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Reflection;
 using Autofac;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.StaticFiles;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using PatchManager.Config;
-using Autofac.Extensions.DependencyInjection;
 using PatchManager.Model.Services;
 using PatchManager.Services.Context;
 using PatchManager.Services.PatchActions;
@@ -42,10 +41,13 @@ namespace PatchManager
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("services.json")
                 .AddJsonFile("settings.json")
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
         }
 
@@ -57,11 +59,14 @@ namespace PatchManager
                 AddJsonFormatters(a => a.ContractResolver = new CamelCasePropertyNamesContractResolver()).
                 AddJsonFormatters(a => a.Converters.Add(new StringEnumConverter()));
 
-            var conf = Configuration.Get<ServicesConfiguration>();
+            //services.Configure<ServicesConfiguration>(Configuration.GetSection("Services"));
+            var conf = Configuration.GetValue<ServicesConfiguration>("Services");
+
+            //var conf = Configuration.Get<ServicesConfiguration>();
 
             var builder = new ContainerBuilder();
 
-            builder.RegisterType(typeof(PatchManagerContextService)).As<IPatchManagerContextService>().SingleInstance().WithParameter("settings", Configuration.Get<SettingsConfiguration>());
+            builder.RegisterType(typeof(PatchManagerContextService)).As<IPatchManagerContextService>().SingleInstance().WithParameter("settings", conf);
 
             RegisterCustomService<IPersistenceService>(builder, conf.Persistence);
             RegisterCustomService<IModelService>(builder, conf.Model);
@@ -125,10 +130,10 @@ namespace PatchManager
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseIISPlatformHandler();
-
             app.UseDefaultFiles(new DefaultFilesOptions() { DefaultFileNames = new[] { "Material.html" } });
             app.UseStaticFiles();
+
+            app.UseIdentity();
 
             app.UseMvc(routes =>
             {
@@ -137,8 +142,5 @@ namespace PatchManager
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }
