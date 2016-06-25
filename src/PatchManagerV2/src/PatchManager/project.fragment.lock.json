@@ -29,11 +29,11 @@
         "bin/Debug/PatchManager.Services.dll": {}
       },
       "runtime": {
-        "../packages/Autofac.3.5.2/lib/net40/Autofac.dll": {},
+        "../packages/Autofac.4.0.0-rc2-240/lib/netstandard1.1/Autofac.dll": {},
         "../packages/Gerrit.Api.1.0.23.0/lib/net452/Gerrit.Api.dll": {},
         "../packages/Gerrit.Api.Domain.1.0.23.0/lib/net452/Gerrit.Api.Domain.dll": {},
         "../packages/Microsoft.AspNet.WebApi.Client.5.2.3/lib/net45/System.Net.Http.Formatting.dll": {},
-        "../packages/Newtonsoft.Json.7.0.1/lib/net45/Newtonsoft.Json.dll": {},
+        "../packages/Newtonsoft.Json.8.0.3/lib/net45/Newtonsoft.Json.dll": {},
         "../packages/RestSharp.105.2.3/lib/net452/RestSharp.dll": {},
         "bin/Debug/PatchManager.Services.dll": {}
       }

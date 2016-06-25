@@ -55,24 +55,29 @@ namespace PatchManager
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+
             services.AddMvcCore().
                 AddJsonFormatters(a => a.ContractResolver = new CamelCasePropertyNamesContractResolver()).
                 AddJsonFormatters(a => a.Converters.Add(new StringEnumConverter()));
 
-            //services.Configure<ServicesConfiguration>(Configuration.GetSection("Services"));
-            var conf = Configuration.GetValue<ServicesConfiguration>("Services");
+            // Damned it's ugly, I don't know how the get the configuration another way in that particular method, since IOptions<> is not yet available :(
+            var servicesConfiguration = new ServicesConfiguration();
+            Configuration.GetSection("Services").Bind(servicesConfiguration);
+
+            var settings = new SettingsConfiguration();
+            Configuration.GetSection("Settings").Bind(settings);
 
             //var conf = Configuration.Get<ServicesConfiguration>();
 
             var builder = new ContainerBuilder();
 
-            builder.RegisterType(typeof(PatchManagerContextService)).As<IPatchManagerContextService>().SingleInstance().WithParameter("settings", conf);
+            builder.RegisterType(typeof(PatchManagerContextService)).As<IPatchManagerContextService>().SingleInstance().WithParameter("settings", settings);
 
-            RegisterCustomService<IPersistenceService>(builder, conf.Persistence);
-            RegisterCustomService<IModelService>(builder, conf.Model);
-            RegisterCustomService<IGerritService>(builder, conf.Gerrit);
-            RegisterCustomService<IJiraService>(builder, conf.Jira);
-            RegisterCustomService<IStatusResolverService>(builder, conf.Resolver);
+            RegisterCustomService<IPersistenceService>(builder, servicesConfiguration.Persistence);
+            RegisterCustomService<IModelService>(builder, servicesConfiguration.Model);
+            RegisterCustomService<IGerritService>(builder, servicesConfiguration.Gerrit);
+            RegisterCustomService<IJiraService>(builder, servicesConfiguration.Jira);
+            RegisterCustomService<IStatusResolverService>(builder, servicesConfiguration.Resolver);
 
             RegisterActions(builder);
 
@@ -132,8 +137,6 @@ namespace PatchManager
 
             app.UseDefaultFiles(new DefaultFilesOptions() { DefaultFileNames = new[] { "Material.html" } });
             app.UseStaticFiles();
-
-            app.UseIdentity();
 
             app.UseMvc(routes =>
             {
