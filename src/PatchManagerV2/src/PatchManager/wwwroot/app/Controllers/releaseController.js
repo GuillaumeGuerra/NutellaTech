@@ -191,7 +191,7 @@
                     $scope.resolvedSettings.showTestStatus = false;
                 }
                 else if ($scope.settings.mode === "Merges") {
-                    $scope.resolvedSettings.showRegistrationStatus = true;
+                    $scope.resolvedSettings.showRegistrationStatus = false;
                     $scope.resolvedSettings.showMergeStatus = true;
                     $scope.resolvedSettings.showJiraStatus = true;
                     $scope.resolvedSettings.showTestStatus = false;
