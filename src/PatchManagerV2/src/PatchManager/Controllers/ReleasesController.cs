@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PatchManager.Model.Services;
 using PatchManager.Models;
 using PatchManager.Services.Model;
