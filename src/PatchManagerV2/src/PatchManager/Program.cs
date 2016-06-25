@@ -12,9 +12,9 @@ namespace PatchManager
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
-                .UseKestrel()
+                .UseWebListener()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
+                .UseIISIntegration() // I don't even know this is supposed to do :)
                 .UseStartup<Startup>()
                 .Build();
 

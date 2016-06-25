@@ -10,12 +10,16 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:60000",
       "environmentVariables": {
         "Hosting:Environment": "Development"
       }
     },
-    "web": {
-      "commandName": "web",
+    "SelfHosted": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:60000",
       "environmentVariables": {
         "Hosting:Environment": "Development"
       }

@@ -6,5 +6,6 @@
         public string JiraUrl { get; set; }
         public string GerritUrl { get; set; }
         public string PersistenceDirectoryPath { get; set; }
+        public string[] PatchManagerUrl { get; set; }
     }
 }

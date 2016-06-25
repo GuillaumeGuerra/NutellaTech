@@ -4,6 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,10 +14,12 @@ using PatchManager.Config;
 using PatchManager.Model.Services;
 using PatchManager.Services.Context;
 using PatchManager.Services.PatchActions;
+using System.Linq;
+using Microsoft.Extensions.Options;
 
 namespace PatchManager
 {
-    public class Startup
+    public partial class Startup
     {
         //TODO : add logs
         //TODO : find a way to log all exceptions in a single location
@@ -33,10 +36,6 @@ namespace PatchManager
         //TODO : provide angular intellisense using typescript package
         //TODO : be able to delete a patch
 
-
-        public static IContainer Container { get; private set; }
-        public static IConfigurationRoot Configuration { get; set; }
-
         public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.
@@ -49,101 +48,6 @@ namespace PatchManager
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-        }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            // Add framework services.
-
-            services.AddMvcCore().
-                AddJsonFormatters(a => a.ContractResolver = new CamelCasePropertyNamesContractResolver()).
-                AddJsonFormatters(a => a.Converters.Add(new StringEnumConverter()));
-
-            // Damned it's ugly, I don't know how the get the configuration another way in that particular method, since IOptions<> is not yet available :(
-            var servicesConfiguration = new ServicesConfiguration();
-            Configuration.GetSection("Services").Bind(servicesConfiguration);
-
-            var settings = new SettingsConfiguration();
-            Configuration.GetSection("Settings").Bind(settings);
-
-            //var conf = Configuration.Get<ServicesConfiguration>();
-
-            var builder = new ContainerBuilder();
-
-            builder.RegisterType(typeof(PatchManagerContextService)).As<IPatchManagerContextService>().SingleInstance().WithParameter("settings", settings);
-
-            RegisterCustomService<IPersistenceService>(builder, servicesConfiguration.Persistence);
-            RegisterCustomService<IModelService>(builder, servicesConfiguration.Model);
-            RegisterCustomService<IGerritService>(builder, servicesConfiguration.Gerrit);
-            RegisterCustomService<IJiraService>(builder, servicesConfiguration.Jira);
-            RegisterCustomService<IStatusResolverService>(builder, servicesConfiguration.Resolver);
-
-            RegisterActions(builder);
-
-            builder.Populate(services);
-            Container = builder.Build();
-
-            return Container.Resolve<IServiceProvider>();
-        }
-
-        private void RegisterActions(ContainerBuilder builder)
-        {
-            foreach (var type in typeof(PatchActionAttribute).Assembly.GetTypes())
-            {
-                if (type.GetInterface(typeof(IPatchAction).Name) != null && !type.IsAbstract)
-                {
-                    var attribute = type.GetCustomAttribute<PatchActionAttribute>();
-                    if (attribute == null)
-                        throw new InvalidOperationException(string.Format("Missing GerritAction attribute on type [{0}]", type.Name));
-
-                    builder.RegisterType(type).Named<IPatchAction>(attribute.Name.ToUpper());
-                }
-            }
-        }
-
-        private void RegisterCustomService<TService>(ContainerBuilder builder, SingleServiceConfiguration service)
-        {
-            if (service == null)
-                throw new InvalidOperationException(string.Format("Missing configuration for service [{0}] in services.json file", typeof(TService).Name));
-
-            var type = Type.GetType(service.Type);
-
-            if (type == null)
-                throw new InvalidOperationException(string.Format("Unknown service type [{0}] for interface [{1}]", service.Type, typeof(TService)));
-
-            var registration = builder.RegisterType(type).As<TService>().PropertiesAutowired();
-            if (service.IsSingleton)
-                registration.SingleInstance();
-            else
-                registration.InstancePerDependency();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            if (env.IsDevelopment())
-            {
-                app.UseBrowserLink();
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseDefaultFiles(new DefaultFilesOptions() { DefaultFileNames = new[] { "Material.html" } });
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
         }
     }
 }
