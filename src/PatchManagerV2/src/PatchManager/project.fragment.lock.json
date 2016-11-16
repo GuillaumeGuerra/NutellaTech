@@ -10,6 +10,13 @@
       "runtime": {
         "../packages/Newtonsoft.Json.8.0.3/lib/net45/Newtonsoft.Json.dll": {},
         "bin/Debug/PatchManager.Framework.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/PatchManager.Framework.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
       }
     },
     "PatchManager.Model/1.0.0": {
@@ -20,6 +27,13 @@
       },
       "runtime": {
         "bin/Debug/PatchManager.Model.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/PatchManager.Model.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
       }
     },
     "PatchManager.Services/1.0.0": {
@@ -45,6 +59,13 @@
         "../packages/System.ComponentModel.Primitives.4.0.1-rc2-24027/lib/net45/System.ComponentModel.Primitives.dll": {},
         "../packages/System.ComponentModel.TypeConverter.4.0.1-rc2-24027/lib/net45/System.ComponentModel.TypeConverter.dll": {},
         "bin/Debug/PatchManager.Services.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/PatchManager.Services.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
       }
     }
   }
