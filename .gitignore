@@ -219,3 +219,4 @@ src/XOneBlotter/src/XOneBlotter/node_modules/*
 src/XOneBlotter/src/XOneBlotter/wwwroot/lib
 src/PatchManagerV2/.vs/config/applicationhost.config
 src/PatchManagerV2/.vs/
+.vs/
