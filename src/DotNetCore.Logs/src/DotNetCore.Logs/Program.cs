@@ -16,6 +16,8 @@ namespace DotNetCore.Logs
             var logger = loggerFactory.CreateLogger<Program>();
             logger.LogInformation(
               "This is a test of the emergency broadcast system.");
+
+            Console.Read();
         }
     }
 }
