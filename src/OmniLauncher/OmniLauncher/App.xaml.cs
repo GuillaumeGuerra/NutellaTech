@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using OmniLauncher.Services.IExceptionManager;
 using OmniLauncher.ViewModels;
 
 namespace OmniLauncher
@@ -22,6 +23,15 @@ namespace OmniLauncher
 
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<OmniLauncherViewModel>();
+            SimpleIoc.Default.Register<IExceptionManager, ExceptionManager>();
+
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            ServiceLocator.Current.GetInstance<IExceptionManager>().Show(e.ExceptionObject as Exception);
         }
     }
 }
