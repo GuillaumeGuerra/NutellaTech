@@ -98,7 +98,7 @@ namespace OmniLauncher.Behaviors
                     }
                     catch (Exception exception)
                     {
-                        ServiceLocator.Current.GetInstance<IExceptionManager>().Show(exception);
+                        ServiceLocator.Current.GetInstance<IMessageService>().ShowException(exception);
                     }
                 };
 

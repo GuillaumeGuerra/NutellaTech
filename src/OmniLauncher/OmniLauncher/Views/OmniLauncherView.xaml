@@ -24,7 +24,6 @@
             <i:Interaction.Behaviors>
                 <behaviors:XamRadialMenuBehavior Launchers="{Binding Launchers}" />
             </i:Interaction.Behaviors>
-            <ig:RadialMenuItem Header="RadialMenuItem"/>
         </ig:XamRadialMenu>
         
     </Grid>

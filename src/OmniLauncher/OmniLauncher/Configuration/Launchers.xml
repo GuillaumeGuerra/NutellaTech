@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Configuration Test="rorororo">
   <RootDirectories>
-    <RootDirectory Header="Jar-Jar" Path="D:/Jar-Jar You Stink"/>
-    <RootDirectory Header="Kirk" Path="E:/Star Trek/Kirk_you_suck"/>
+    <RootDirectory Header="MASTER" Path="C:\Users\Kei\Documents\GitHub\NutellaTech\src\OmniLauncher\Sample\Master"/>
+    <RootDirectory Header="PROD" Path="C:\Users\Kei\Documents\GitHub\NutellaTech\src\OmniLauncher\Sample\Prod"/>
   </RootDirectories>
   <GenericTemplate>
     <LinkGroups>
@@ -15,7 +15,7 @@
       </LinkGroup>
       <LinkGroup Header="Launchers">
         <Launchers>
-          <Launcher Header="Rebellion" Command="[ROOT]/Rebels/Yavin/bin/debug/Start rebellion.cmd" />
+          <Launcher Header="DS" Command="[ROOT]/DS.cmd" />
         </Launchers>
       </LinkGroup>
     </LinkGroups>

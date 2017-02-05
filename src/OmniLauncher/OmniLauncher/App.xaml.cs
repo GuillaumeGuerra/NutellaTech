@@ -23,7 +23,7 @@ namespace OmniLauncher
 
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<OmniLauncherViewModel>();
-            SimpleIoc.Default.Register<IExceptionManager, ExceptionManager>();
+            SimpleIoc.Default.Register<IMessageService, MessageService>();
 
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -31,7 +31,7 @@ namespace OmniLauncher
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            ServiceLocator.Current.GetInstance<IExceptionManager>().Show(e.ExceptionObject as Exception);
+            ServiceLocator.Current.GetInstance<IMessageService>().ShowException(e.ExceptionObject as Exception);
         }
     }
 }

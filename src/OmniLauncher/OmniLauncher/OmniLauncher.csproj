@@ -87,8 +87,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Services\IExceptionManager\ExceptionManager.cs" />
-    <Compile Include="Services\IExceptionManager\IExceptionManager.cs" />
+    <Compile Include="Services\MessageService\MessageService.cs" />
+    <Compile Include="Services\MessageService\IMessageService.cs" />
     <Compile Include="Behaviors\XamRadialMenuBehavior.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LauncherConfigurationProcessor.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LauncherLink.cs" />

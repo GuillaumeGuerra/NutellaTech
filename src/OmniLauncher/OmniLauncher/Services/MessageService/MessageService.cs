@@ -3,9 +3,9 @@ using System.Windows;
 
 namespace OmniLauncher.Services.IExceptionManager
 {
-    public class ExceptionManager : IExceptionManager
+    public class MessageService : IMessageService
     {
-        public void Show(Exception exception)
+        public void ShowException(Exception exception)
         {
             MessageBox.Show(exception.Message, "Unhandled exception", MessageBoxButton.OK,
                 MessageBoxImage.Error);
