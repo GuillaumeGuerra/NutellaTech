@@ -10,6 +10,6 @@ namespace OmniLauncher.Services.XmlConfigurationReader
         [XmlArrayItem("RootDirectory")]
         public List<XmlLauncherRootDirectory> RootDirectories { get; set; }
         
-        public XmlLauncherGenericTemplate GenericTemplate { get; set; }
+        public XmlLauncherNode GenericTemplate { get; set; }
     }
 }

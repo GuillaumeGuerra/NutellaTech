@@ -4,10 +4,17 @@ using System.Xml.Serialization;
 namespace OmniLauncher.Services.XmlConfigurationReader
 {
     [XmlRoot("GenericTemplate")]
-    public class XmlLauncherGenericTemplate
+    public class XmlLauncherNode
     {
-        [XmlArray("LinkGroups")]
-        [XmlArrayItem("LinkGroup")]
-        public List<XmlLauncherLinkGroup> LinkGroups { get; set; }
+        [XmlAttribute]
+        public string Header { get; set; }
+
+        [XmlArray("SubGroups")]
+        [XmlArrayItem("Group")]
+        public List<XmlLauncherNode> SubGroups { get; set; }
+
+        [XmlArray("Launchers")]
+        [XmlArrayItem("Launcher")]
+        public List<XmlLauncherLink> Launchers { get; set; }
     }
 }

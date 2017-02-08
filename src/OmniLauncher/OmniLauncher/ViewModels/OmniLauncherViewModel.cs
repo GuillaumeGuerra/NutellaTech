@@ -14,9 +14,9 @@ namespace OmniLauncher.ViewModels
 {
     public class OmniLauncherViewModel : ViewModelBase
     {
-        private Launchers _launchers;
+        private LaunchersNode _launchers;
 
-        public Launchers Launchers
+        public LaunchersNode Launchers
         {
             get { return _launchers; }
             set

@@ -6,37 +6,36 @@ namespace OmniLauncher.Services.LauncherConfigurationProcessor
     {
         private const string RootToken = "[ROOT]";
 
-        public Launchers ProcessConfiguration(XmlLauncherConfiguration configuration)
+        public LaunchersNode ProcessConfiguration(XmlLauncherConfiguration configuration)
         {
-            var launchers = new Launchers();
+            var launchers = new LaunchersNode();
 
             foreach (var root in configuration.RootDirectories)
             {
-                launchers.RootGroups.Add(ProcessRoot(root, configuration.GenericTemplate));
+                launchers.SubGroups.Add(ProcessNode(configuration.GenericTemplate, root, root.Header));
             }
 
             return launchers;
         }
 
-        public LaunchersRootGroup ProcessRoot(XmlLauncherRootDirectory root, XmlLauncherGenericTemplate template)
+        private LaunchersNode ProcessNode(XmlLauncherNode node, XmlLauncherRootDirectory root, string header = null)
         {
-            var result = new LaunchersRootGroup() { Header = root.Header };
+            var result = new LaunchersNode() { Header = header ?? node.Header };
 
-            foreach (var group in template.LinkGroups)
+            if (node.SubGroups != null)
             {
-                result.Groups.Add(ProcessGroup(root, group));
+                foreach (var group in node.SubGroups)
+                {
+                    result.SubGroups.Add(ProcessNode(group, root));
+                }
             }
 
-            return result;
-        }
-
-        public LaunchersGroup ProcessGroup(XmlLauncherRootDirectory root, XmlLauncherLinkGroup group)
-        {
-            var result = new LaunchersGroup() { Header = group.Header };
-
-            foreach (var launcher in group.Launchers)
+            if (node.Launchers != null)
             {
-                result.Launchers.Add(ProcessLauncherLink(root, launcher));
+                foreach (var launcher in node.Launchers)
+                {
+                    result.Launchers.Add(ProcessLauncherLink(root, launcher));
+                }
             }
 
             return result;

@@ -18,7 +18,7 @@ namespace OmniLauncher.Tests
         {
             var behavior = new XamRadialMenuBehavior();
 
-            var actual = behavior.GetRadialMenuItems(nullLaunchers ? null : new Launchers());
+            var actual = behavior.GetMenuItems(nullLaunchers ? null : new LaunchersNode());
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual.Count, Is.EqualTo(0));
         }

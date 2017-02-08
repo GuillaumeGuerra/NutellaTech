@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace OmniLauncher.Services.XmlConfigurationReader
 {
-    public class XmlLauncherLinkGroup
+    public class XmlLauncherNodeXmlLauncherLinkGroup
     {
         [XmlArray("Launchers")]
         [XmlArrayItem("Launcher")]

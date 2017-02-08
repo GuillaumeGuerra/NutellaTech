@@ -18,11 +18,11 @@ namespace OmniLauncher.Tests
             var processor = new LauncherConfigurationProcessor();
             var actual = processor.ProcessConfiguration(GetTemplateConfiguration());
 
-            Assert.That(actual.RootGroups, Is.Not.Null);
-            Assert.That(actual.RootGroups.Count, Is.EqualTo(2));
+            Assert.That(actual.SubGroups, Is.Not.Null);
+            Assert.That(actual.SubGroups.Count, Is.EqualTo(2));
 
-            AssertRootGroupContent(actual.RootGroups[0], "D:/Jar-Jar You Stink", "Jar-Jar");
-            AssertRootGroupContent(actual.RootGroups[1], "E:/Star Trek/Kirk_you_suck", "Kirk");
+            AssertNode(actual.SubGroups[0], "D:/Jar-Jar You Stink", "Jar-Jar");
+            AssertNode(actual.SubGroups[1], "E:/Star Trek/Kirk_you_suck", "Kirk");
         }
 
         [TestCase("root/path/with/slashes", "[ROOT]/end/of/path", "root/path/with/slashes/end/of/path", Description = "Genuine case")]
@@ -44,36 +44,36 @@ namespace OmniLauncher.Tests
             Assert.That(actual.Command, Is.EqualTo(expected));
         }
 
-        private void AssertRootGroupContent(LaunchersRootGroup rootGroup, string rootDirectory, string expectedHeader)
+        private void AssertNode(LaunchersNode rootGroup, string rootDirectory, string expectedHeader)
         {
             Assert.That(rootGroup.Header, Is.EqualTo(expectedHeader));
 
-            Assert.That(rootGroup.Groups, Is.Not.Null);
-            Assert.That(rootGroup.Groups.Count, Is.EqualTo(2));
+            Assert.That(rootGroup.SubGroups, Is.Not.Null);
+            Assert.That(rootGroup.SubGroups.Count, Is.EqualTo(2));
 
-            Assert.That(rootGroup.Groups[0], Is.Not.Null);
-            Assert.That(rootGroup.Groups[0].Header, Is.EqualTo("Solutions"));
+            Assert.That(rootGroup.SubGroups[0], Is.Not.Null);
+            Assert.That(rootGroup.SubGroups[0].Header, Is.EqualTo("Solutions"));
 
-            Assert.That(rootGroup.Groups[0].Launchers, Is.Not.Null);
-            Assert.That(rootGroup.Groups[0].Launchers.Count, Is.EqualTo(3));
+            Assert.That(rootGroup.SubGroups[0].Launchers, Is.Not.Null);
+            Assert.That(rootGroup.SubGroups[0].Launchers.Count, Is.EqualTo(3));
 
-            Assert.That(rootGroup.Groups[0].Launchers[0].Header, Is.EqualTo("Base.sln"));
-            Assert.That(rootGroup.Groups[0].Launchers[0].Command, Is.EqualTo(rootDirectory + "/Rebels/Yavin/base.sln"));
+            Assert.That(rootGroup.SubGroups[0].Launchers[0].Header, Is.EqualTo("Base.sln"));
+            Assert.That(rootGroup.SubGroups[0].Launchers[0].Command, Is.EqualTo(rootDirectory + "/Rebels/Yavin/base.sln"));
 
-            Assert.That(rootGroup.Groups[0].Launchers[1].Header, Is.EqualTo("Padawan.sln"));
-            Assert.That(rootGroup.Groups[0].Launchers[1].Command, Is.EqualTo(rootDirectory + "/Jedis/padawan.sln"));
+            Assert.That(rootGroup.SubGroups[0].Launchers[1].Header, Is.EqualTo("Padawan.sln"));
+            Assert.That(rootGroup.SubGroups[0].Launchers[1].Command, Is.EqualTo(rootDirectory + "/Jedis/padawan.sln"));
 
-            Assert.That(rootGroup.Groups[0].Launchers[2].Header, Is.EqualTo("Stormtrooper.sln"));
-            Assert.That(rootGroup.Groups[0].Launchers[2].Command, Is.EqualTo("C:/Empire/stormtrooper.sln"));
+            Assert.That(rootGroup.SubGroups[0].Launchers[2].Header, Is.EqualTo("Stormtrooper.sln"));
+            Assert.That(rootGroup.SubGroups[0].Launchers[2].Command, Is.EqualTo("C:/Empire/stormtrooper.sln"));
 
-            Assert.That(rootGroup.Groups[1], Is.Not.Null);
-            Assert.That(rootGroup.Groups[1].Header, Is.EqualTo("Launchers"));
+            Assert.That(rootGroup.SubGroups[1], Is.Not.Null);
+            Assert.That(rootGroup.SubGroups[1].Header, Is.EqualTo("Launchers"));
 
-            Assert.That(rootGroup.Groups[1].Launchers, Is.Not.Null);
-            Assert.That(rootGroup.Groups[1].Launchers.Count, Is.EqualTo(1));
+            Assert.That(rootGroup.SubGroups[1].Launchers, Is.Not.Null);
+            Assert.That(rootGroup.SubGroups[1].Launchers.Count, Is.EqualTo(1));
 
-            Assert.That(rootGroup.Groups[1].Launchers[0].Header, Is.EqualTo("Rebellion"));
-            Assert.That(rootGroup.Groups[1].Launchers[0].Command,
+            Assert.That(rootGroup.SubGroups[1].Launchers[0].Header, Is.EqualTo("Rebellion"));
+            Assert.That(rootGroup.SubGroups[1].Launchers[0].Command,
                 Is.EqualTo(rootDirectory + "/Rebels/Yavin/bin/debug/Start rebellion.cmd"));
         }
 
@@ -94,11 +94,11 @@ namespace OmniLauncher.Tests
                         Path = "E:/Star Trek/Kirk_you_suck"
                     }
                 },
-                GenericTemplate = new XmlLauncherGenericTemplate()
+                GenericTemplate = new XmlLauncherNode()
                 {
-                    LinkGroups = new List<XmlLauncherLinkGroup>()
+                    SubGroups = new List<XmlLauncherNode>()
                     {
-                        new XmlLauncherLinkGroup()
+                        new XmlLauncherNode()
                         {
                             Header = "Solutions",
                             Launchers = new List<XmlLauncherLink>()
@@ -120,7 +120,7 @@ namespace OmniLauncher.Tests
                                 }
                             }
                         },
-                        new XmlLauncherLinkGroup()
+                        new XmlLauncherNode()
                         {
                             Header = "Launchers",
                             Launchers = new List<XmlLauncherLink>()

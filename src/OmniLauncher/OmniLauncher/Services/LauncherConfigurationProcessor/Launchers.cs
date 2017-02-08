@@ -4,18 +4,16 @@ using System.Threading.Tasks;
 
 namespace OmniLauncher.Services.LauncherConfigurationProcessor
 {
-    public class Launchers
+    public class LaunchersNode
     {
-        public List<LaunchersRootGroup> RootGroups { get; set; }
+        public List<LaunchersNode> SubGroups { get; set; }
+        public List<LauncherLink> Launchers { get; set; }
+        public string Header { get; set; }
 
-        public Launchers()
+        public LaunchersNode()
         {
-            RootGroups = new List<LaunchersRootGroup>();
-        }
-
-        public static implicit operator Launchers(Task<Launchers> v)
-        {
-            throw new NotImplementedException();
+            SubGroups = new List<LaunchersNode>();
+            Launchers=new List<LauncherLink>();
         }
     }
 }

@@ -20,11 +20,11 @@ namespace OmniLauncher.Behaviors
     public class XamRadialMenuBehavior : Behavior<XamRadialMenu>
     {
         public static readonly DependencyProperty LaunchersProperty =
-            DependencyProperty.Register("Launchers", typeof(Launchers), typeof(XamRadialMenuBehavior), new PropertyMetadata(PropertyChangedCallback));
+            DependencyProperty.Register("Launchers", typeof(LaunchersNode), typeof(XamRadialMenuBehavior), new PropertyMetadata(PropertyChangedCallback));
 
-        public Launchers Launchers
+        public LaunchersNode Launchers
         {
-            get { return (Launchers)GetValue(LaunchersProperty); }
+            get { return (LaunchersNode)GetValue(LaunchersProperty); }
             set { SetValue(LaunchersProperty, value); }
         }
 
@@ -45,67 +45,62 @@ namespace OmniLauncher.Behaviors
             if (AssociatedObject == null)
                 return;
 
-            var items = GetRadialMenuItems(Launchers);
-
             AssociatedObject.Items.Clear();
-            foreach (var item in items)
+            foreach (var item in GetMenuItems(Launchers))
             {
                 AssociatedObject.Items.Add(item);
             }
-
         }
 
-        public IList GetRadialMenuItems(Launchers launchers)
+        public List<RadialMenuItem> GetMenuItems(LaunchersNode launchers)
         {
-            var items = new List<object>();
+            var items = new List<RadialMenuItem>();
 
             if (launchers != null)
             {
-                foreach (var rootGroup in launchers.RootGroups)
+                foreach (var item in launchers.SubGroups)
                 {
-                    items.Add(GetMenuItem(rootGroup));
+                    items.Add(GetNodeMenuItem(item));
                 }
             }
 
             return items;
         }
 
-        private static RadialMenuItem GetMenuItem(LaunchersRootGroup rootGroup)
+        public RadialMenuItem GetNodeMenuItem(LaunchersNode launchers)
         {
-            var item = new RadialMenuItem() { Header = rootGroup.Header };
+            var item = new RadialMenuItem();
+            item.Header = launchers.Header;
 
-            foreach (var group in rootGroup.Groups)
+            foreach (var group in launchers.SubGroups)
             {
-                item.Items.Add(GetMenuItem(@group));
+                item.Items.Add(GetNodeMenuItem(group));
+            }
+            foreach (var launcher in launchers.Launchers)
+            {
+                item.Items.Add(GetLauncherMenuItem(launcher));
             }
 
             return item;
         }
 
-        private static RadialMenuItem GetMenuItem(LaunchersGroup group)
+        private RadialMenuItem GetLauncherMenuItem(LauncherLink launcher)
         {
-            var item = new RadialMenuItem() { Header = @group.Header };
+            var button = new RadialMenuItem() { Header = launcher.Header };
 
-            foreach (var launcher in group.Launchers)
+            button.Click += (s, e) =>
             {
-                var button = new RadialMenuItem() { Header = launcher.Header };
-
-                button.Click += (s, e) =>
+                try
                 {
-                    try
-                    {
-                        Process.Start(launcher.Command);
-                    }
-                    catch (Exception exception)
-                    {
-                        ServiceLocator.Current.GetInstance<IMessageService>().ShowException(exception);
-                    }
-                };
+                    Process.Start(launcher.Command);
+                }
+                catch (Exception exception)
+                {
+                    ServiceLocator.Current.GetInstance<IMessageService>().ShowException(exception);
+                }
+            };
 
-                item.Items.Add(button);
-            }
-
-            return item;
+            return button;
         }
     }
 }
