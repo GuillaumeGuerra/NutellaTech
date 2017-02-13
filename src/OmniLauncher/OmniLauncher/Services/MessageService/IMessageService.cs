@@ -2,7 +2,7 @@ using System;
 
 namespace OmniLauncher.Services.IExceptionManager
 {
-    internal interface IMessageService
+    public interface IMessageService
     {
         void ShowException(Exception exception);
     }

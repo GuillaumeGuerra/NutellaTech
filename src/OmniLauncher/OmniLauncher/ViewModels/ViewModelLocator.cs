@@ -28,21 +28,5 @@ namespace OmniLauncher.ViewModel
                 return ServiceLocator.Current.GetInstance<OmniLauncherViewModel>();
             }
         }
-
-        //public OneDbgMainViewModel OneDbgMain
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<OneDbgMainViewModel>();
-        //    }
-        //}
-
-        //public SettingsViewModel Settings
-        //{
-        //    get
-        //    {
-        //        return ServiceLocator.Current.GetInstance<SettingsViewModel>();
-        //    }
-        //}
     }
 }

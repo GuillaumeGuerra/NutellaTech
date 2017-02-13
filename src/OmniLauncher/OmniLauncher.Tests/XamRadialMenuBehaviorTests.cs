@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Infragistics.Controls.Menus;
 using NUnit.Framework;
@@ -23,7 +24,7 @@ namespace OmniLauncher.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ShouldBuildRecursiveMenuItemsWhenParsingLaunchers()
         {
             var launchers = new LaunchersNode()

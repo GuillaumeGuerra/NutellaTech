@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interactivity;
+using Autofac;
 using Infragistics.Controls.Menus;
-using Infragistics.Windows.Internal;
-using Microsoft.Practices.ServiceLocation;
-using OmniLauncher.Services.IExceptionManager;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
-using OmniLauncher.ViewModels;
+using OmniLauncher.Services.LauncherService;
 
 namespace OmniLauncher.Behaviors
 {
@@ -26,6 +17,13 @@ namespace OmniLauncher.Behaviors
         {
             get { return (LaunchersNode)GetValue(LaunchersProperty); }
             set { SetValue(LaunchersProperty, value); }
+        }
+
+        public ILauncherService LauncherService { get; set; }
+
+        public XamRadialMenuBehavior()
+        {
+            App.Container.InjectProperties(this);
         }
 
         private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
@@ -88,17 +86,7 @@ namespace OmniLauncher.Behaviors
         {
             var button = new RadialMenuItem() { Header = launcher.Header };
 
-            button.Click += (s, e) =>
-            {
-                try
-                {
-                    Process.Start(launcher.Command);
-                }
-                catch (Exception exception)
-                {
-                    ServiceLocator.Current.GetInstance<IMessageService>().ShowException(exception);
-                }
-            };
+            button.Click += (s, e) => LauncherService.Launch(launcher);
 
             return button;
         }
