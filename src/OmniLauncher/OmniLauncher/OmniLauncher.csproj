@@ -111,6 +111,7 @@
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherRootDirectory.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfigurationReader.cs" />
     <Compile Include="ViewModels\OmniLauncherViewModel.cs" />
+    <Compile Include="Framework\STATask.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -177,6 +178,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

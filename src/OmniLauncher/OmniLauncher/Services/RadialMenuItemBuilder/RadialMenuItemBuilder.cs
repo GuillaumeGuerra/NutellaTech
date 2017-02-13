@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Infragistics.Controls.Menus;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
@@ -9,9 +10,9 @@ namespace OmniLauncher.Services.RadialMenuItemBuilder
     {
         public ILauncherService LauncherService { get; set; }
 
-        public ObservableCollection<RadialMenuItem> BuildMenuItems(LaunchersNode launchers)
+        public IEnumerable<RadialMenuItem> BuildMenuItems(LaunchersNode launchers)
         {
-            var items = new ObservableCollection<RadialMenuItem>();
+            var items = new List<RadialMenuItem>();
 
             if (launchers != null)
             {

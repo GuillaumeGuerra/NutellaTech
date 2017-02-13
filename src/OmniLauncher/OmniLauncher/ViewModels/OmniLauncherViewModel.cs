@@ -1,7 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 using Autofac;
+using GalaSoft.MvvmLight.CommandWpf;
 using Infragistics.Controls.Menus;
+using OmniLauncher.Framework;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
 using OmniLauncher.Services.RadialMenuItemBuilder;
 using OmniLauncher.Services.XmlConfigurationReader;
@@ -10,28 +13,52 @@ namespace OmniLauncher.ViewModels
 {
     public class OmniLauncherViewModel : DependencyObject
     {
-        public static readonly DependencyProperty MyPropertyProperty =
-            DependencyProperty.Register("MyProperty", typeof(ObservableCollection<RadialMenuItem>), typeof(OmniLauncherViewModel));
+        public static readonly DependencyProperty LaunchersProperty =
+            DependencyProperty.Register("Launchers", typeof(ObservableCollection<RadialMenuItem>), typeof(OmniLauncherViewModel), new PropertyMetadata(new ObservableCollection<RadialMenuItem>()));
+        public static readonly DependencyProperty IsOpenedProperty =
+            DependencyProperty.Register("IsOpened", typeof(bool), typeof(OmniLauncherViewModel), new PropertyMetadata(false));
 
         public ObservableCollection<RadialMenuItem> Launchers
         {
-            get { return (ObservableCollection<RadialMenuItem>)GetValue(MyPropertyProperty); }
-            set { SetValue(MyPropertyProperty, value); }
+            get { return (ObservableCollection<RadialMenuItem>)GetValue(LaunchersProperty); }
+            set { SetValue(LaunchersProperty, value); }
+        }
+
+        public bool IsOpened
+        {
+            get { return (bool)GetValue(IsOpenedProperty); }
+            set { SetValue(IsOpenedProperty, value); }
         }
 
         public IRadialMenuItemBuilder RadialMenuItemBuilder { get; set; }
 
+        public ICommand ClosedCommand
+        {
+            get { return new RelayCommand(() => Application.Current.Shutdown()); }
+        }
+
+        public ICommand LoadedCommand
+        {
+            get { return new RelayCommand(Loaded); }
+        }
+
         public OmniLauncherViewModel()
         {
             App.Container.InjectProperties(this);
+        }
 
-            //Task.Run(() =>
-            //{
-            //    Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+        private async void Loaded()
+        {
+            var launchersNode = await STATask.Run(() =>
+            {
+                var config = new XmlLauncherConfigurationReader().LoadFile("Configuration/Launchers.xml");
+                return new LauncherConfigurationProcessor().ProcessConfiguration(config);
+            });
 
-            var xmlConfiguration = new XmlLauncherConfigurationReader().LoadFile("Configuration/Launchers.xml");
-            Launchers = RadialMenuItemBuilder.BuildMenuItems(new LauncherConfigurationProcessor().ProcessConfiguration(xmlConfiguration));
-            //});
+            Launchers = new ObservableCollection<RadialMenuItem>(RadialMenuItemBuilder.BuildMenuItems(launchersNode));
+
+            // Now that the radial menu is ready, we can make it visible
+            IsOpened = true;
         }
     }
 }
