@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
-using Autofac.Core;
 using Autofac.Extras.CommonServiceLocator;
-using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
-using OmniLauncher.Behaviors;
 using OmniLauncher.Services.IExceptionManager;
 using OmniLauncher.Services.LauncherService;
+using OmniLauncher.Services.RadialMenuItemBuilder;
 using OmniLauncher.ViewModels;
 
 namespace OmniLauncher
@@ -39,6 +32,7 @@ namespace OmniLauncher
             builder.RegisterType<OmniLauncherViewModel>();
             builder.RegisterType<MessageService>().As<IMessageService>();
             builder.RegisterType<LauncherService>().As<ILauncherService>().PropertiesAutowired();
+            builder.RegisterType<RadialMenuItemBuilder>().As<IRadialMenuItemBuilder>().PropertiesAutowired();
 
             Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));

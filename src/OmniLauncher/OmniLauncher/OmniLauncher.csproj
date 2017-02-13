@@ -97,12 +97,13 @@
     <Compile Include="Services\LauncherService\LauncherService.cs" />
     <Compile Include="Services\MessageService\MessageService.cs" />
     <Compile Include="Services\MessageService\IMessageService.cs" />
-    <Compile Include="Behaviors\XamRadialMenuBehavior.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LauncherConfigurationProcessor.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LauncherLink.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\Launchers.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LaunchersGroup.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LaunchersRootGroup.cs" />
+    <Compile Include="Services\RadialMenuItemBuilder\IRadialMenuItemBuilder.cs" />
+    <Compile Include="Services\RadialMenuItemBuilder\RadialMenuItemBuilder.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfiguration.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherGenericTemplate.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherLink.cs" />

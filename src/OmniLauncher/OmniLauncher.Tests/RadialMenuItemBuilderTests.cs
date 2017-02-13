@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Infragistics.Controls.Menus;
 using NUnit.Framework;
-using OmniLauncher.Behaviors;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.RadialMenuItemBuilder;
 
 namespace OmniLauncher.Tests
 {
     [TestFixture]
-    public class XamRadialMenuBehaviorTests
+    public class RadialMenuItemBuilderTests
     {
         [TestCase(true)]
         [TestCase(false)]
         public void ShouldCreateEmptyListOfItemsWhenBoundToEmptyListOfLaunchers(bool nullLaunchers)
         {
-            var actual = new XamRadialMenuBehavior().GetMenuItems(nullLaunchers ? null : new LaunchersNode());
+            var actual = new RadialMenuItemBuilder().BuildMenuItems(nullLaunchers ? null : new LaunchersNode());
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual.Count, Is.EqualTo(0));
         }
@@ -72,7 +68,7 @@ namespace OmniLauncher.Tests
                     }
                 }
             };
-            var actual = new XamRadialMenuBehavior().GetMenuItems(launchers);
+            var actual = new RadialMenuItemBuilder().BuildMenuItems(launchers);
 
             Assert.That(actual, Has.Count.EqualTo(2));
 

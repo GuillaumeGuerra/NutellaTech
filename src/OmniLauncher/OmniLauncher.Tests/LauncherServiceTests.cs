@@ -52,7 +52,7 @@ namespace OmniLauncher.Tests
             {
                 processes.First().Kill();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // The process may have commited suicide on its own
             }

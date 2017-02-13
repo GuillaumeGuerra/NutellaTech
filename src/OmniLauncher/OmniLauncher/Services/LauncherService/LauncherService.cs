@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Microsoft.Practices.ServiceLocation;
 using OmniLauncher.Services.IExceptionManager;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
 

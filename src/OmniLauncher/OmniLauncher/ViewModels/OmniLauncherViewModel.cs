@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
-using GalaSoft.MvvmLight;
+using Autofac;
+using Infragistics.Controls.Menus;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.RadialMenuItemBuilder;
 using OmniLauncher.Services.XmlConfigurationReader;
 
 namespace OmniLauncher.ViewModels
 {
-    public class OmniLauncherViewModel : ViewModelBase
+    public class OmniLauncherViewModel : DependencyObject
     {
-        private LaunchersNode _launchers;
+        public static readonly DependencyProperty MyPropertyProperty =
+            DependencyProperty.Register("MyProperty", typeof(ObservableCollection<RadialMenuItem>), typeof(OmniLauncherViewModel));
 
-        public LaunchersNode Launchers
+        public ObservableCollection<RadialMenuItem> Launchers
         {
-            get { return _launchers; }
-            set
-            {
-                _launchers = value;
-                RaisePropertyChanged();
-            }
+            get { return (ObservableCollection<RadialMenuItem>)GetValue(MyPropertyProperty); }
+            set { SetValue(MyPropertyProperty, value); }
         }
+
+        public IRadialMenuItemBuilder RadialMenuItemBuilder { get; set; }
 
         public OmniLauncherViewModel()
         {
-            Task.Run(() =>
-            {
-                var xmlConfiguration = new XmlLauncherConfigurationReader().LoadFile("Configuration/Launchers.xml");
-                Launchers = new LauncherConfigurationProcessor().ProcessConfiguration(xmlConfiguration);
-            });
+            App.Container.InjectProperties(this);
+
+            //Task.Run(() =>
+            //{
+            //    Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+
+            var xmlConfiguration = new XmlLauncherConfigurationReader().LoadFile("Configuration/Launchers.xml");
+            Launchers = RadialMenuItemBuilder.BuildMenuItems(new LauncherConfigurationProcessor().ProcessConfiguration(xmlConfiguration));
+            //});
         }
     }
 }
