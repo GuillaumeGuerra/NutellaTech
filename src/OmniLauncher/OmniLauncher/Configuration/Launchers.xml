@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Configuration Test="rorororo">
   <RootDirectories>
-    <RootDirectory Header="MASTER" Path="C:\Users\Kei\Documents\GitHub\NutellaTech\src\OmniLauncher\Sample\Master"/>
-    <RootDirectory Header="PROD" Path="C:\Users\Kei\Documents\GitHub\NutellaTech\src\OmniLauncher\Sample\Prod"/>
+    <RootDirectory Header="MASTER" Path="..\..\..\Sample\Master"/>
+    <RootDirectory Header="PROD" Path="..\..\..\Sample\Prod"/>
   </RootDirectories>
   <GenericTemplate>
     <SubGroups>
@@ -10,7 +10,7 @@
         <Launchers>
           <Launcher Header="Base.sln" Command="[ROOT]/Rebels/Yavin/base.sln" />
           <Launcher Header="Padawan.sln" Command="[ROOT]/Jedis/padawan.sln" />
-          <Launcher Header="Stormtrooper.sln" Command="C:/Empire/stormtrooper.sln" />
+          <Launcher Header="TestSolution.sln" Command="[ROOT]/TestSolution/TestSolution.sln" />
         </Launchers>
       </Group>
       <Group Header="Launchers">
