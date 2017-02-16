@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Castle.Components.DictionaryAdapter;
 using NUnit.Framework;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
 using OmniLauncher.Services.XmlConfigurationReader;
@@ -21,10 +22,14 @@ namespace OmniLauncher.Tests
             AssertNode(actual.SubGroups[1], "E:/Star Trek/Kirk_you_suck", "Kirk");
         }
 
-        [TestCase("root/path/with/slashes", "[ROOT]/end/of/path", "root/path/with/slashes/end/of/path", Description = "Genuine case")]
-        [TestCase("root/path/with/slashes/", "[ROOT]/end/of/path", "root/path/with/slashes/end/of/path", Description = "Extra / after the root")]
-        [TestCase(@"root\path\with\backslashes", @"[ROOT]\end\of\path", @"root\path\with\backslashes\end\of\path", Description = "Genuine case")]
-        [TestCase(@"root\path\with\backslashes\", @"[ROOT]\end\of\path", @"root\path\with\backslashes\end\of\path", Description = @"Extra \ after the root")]
+        [TestCase("root/path/with/slashes", "[ROOT]/end/of/path", "root/path/with/slashes/end/of/path",
+            Description = "Genuine case")]
+        [TestCase("root/path/with/slashes/", "[ROOT]/end/of/path", "root/path/with/slashes/end/of/path",
+            Description = "Extra / after the root")]
+        [TestCase(@"root\path\with\backslashes", @"[ROOT]\end\of\path", @"root\path\with\backslashes\end\of\path",
+            Description = "Genuine case")]
+        [TestCase(@"root\path\with\backslashes\", @"[ROOT]\end\of\path", @"root\path\with\backslashes\end\of\path",
+            Description = @"Extra \ after the root")]
         public void ShouldProcessSlashAndBackSlashWhenReplacingRootToken(string path, string command, string expected)
         {
             var processor = new LauncherConfigurationProcessor();
@@ -32,12 +37,23 @@ namespace OmniLauncher.Tests
             {
                 Path = path
             },
-            new XmlLauncherLink()
-            {
-                Command = command
-            });
+                new XmlLauncherLink()
+                {
+                    Commands = new List<XmlLauncherCommand>()
+                    {
+                        new XmlExecuteCommand()
+                        {
+                            Command = command
+                        },
+                        new XmlXPathReplacerCommand()
+                        {
+                            FilePath = command
+                        }
+                    }
+                });
 
-            Assert.That(actual.Command, Is.EqualTo(expected));
+            Assert.That(((ExecuteCommand)actual.Commands[0]).Command, Is.EqualTo(expected));
+            Assert.That(((XPathReplacerCommand)actual.Commands[1]).FilePath, Is.EqualTo(expected));
         }
 
         private void AssertNode(LaunchersNode rootGroup, string rootDirectory, string expectedHeader)
@@ -51,16 +67,18 @@ namespace OmniLauncher.Tests
             Assert.That(rootGroup.SubGroups[0].Header, Is.EqualTo("Solutions"));
 
             Assert.That(rootGroup.SubGroups[0].Launchers, Is.Not.Null);
-            Assert.That(rootGroup.SubGroups[0].Launchers.Count, Is.EqualTo(3));
+            Assert.That(rootGroup.SubGroups[0].Launchers.Count, Is.EqualTo(2));
 
             Assert.That(rootGroup.SubGroups[0].Launchers[0].Header, Is.EqualTo("Base.sln"));
-            Assert.That(rootGroup.SubGroups[0].Launchers[0].Command, Is.EqualTo(rootDirectory + "/Rebels/Yavin/base.sln"));
+            Assert.That(rootGroup.SubGroups[0].Launchers[0].Commands, Has.Count.EqualTo(2));
+            AssertExecuteCommand(rootGroup.SubGroups[0].Launchers[0].Commands[0], rootDirectory + "/Rebels/Yavin/base.sln");
+            Assert.That(rootGroup.SubGroups[0].Launchers[0].Commands[1], Is.InstanceOf<XPathReplacerCommand>());
+            Assert.That(((XPathReplacerCommand)rootGroup.SubGroups[0].Launchers[0].Commands[1]).FilePath, Is.EqualTo(rootDirectory + "/assembly.dll.config"));
+            Assert.That(((XPathReplacerCommand)rootGroup.SubGroups[0].Launchers[0].Commands[1]).XPath, Is.EqualTo("configuration/appSettings[@name='who's the best jedi ?']"));
+            Assert.That(((XPathReplacerCommand)rootGroup.SubGroups[0].Launchers[0].Commands[1]).Value, Is.EqualTo("yoda"));
 
             Assert.That(rootGroup.SubGroups[0].Launchers[1].Header, Is.EqualTo("Padawan.sln"));
-            Assert.That(rootGroup.SubGroups[0].Launchers[1].Command, Is.EqualTo(rootDirectory + "/Jedis/padawan.sln"));
-
-            Assert.That(rootGroup.SubGroups[0].Launchers[2].Header, Is.EqualTo("Stormtrooper.sln"));
-            Assert.That(rootGroup.SubGroups[0].Launchers[2].Command, Is.EqualTo("C:/Empire/stormtrooper.sln"));
+            AssertExecuteCommand(rootGroup.SubGroups[0].Launchers[1].Commands[0], rootDirectory + "/Jedis/padawan.sln");
 
             Assert.That(rootGroup.SubGroups[1], Is.Not.Null);
             Assert.That(rootGroup.SubGroups[1].Header, Is.EqualTo("Launchers"));
@@ -69,8 +87,7 @@ namespace OmniLauncher.Tests
             Assert.That(rootGroup.SubGroups[1].Launchers.Count, Is.EqualTo(1));
 
             Assert.That(rootGroup.SubGroups[1].Launchers[0].Header, Is.EqualTo("Rebellion"));
-            Assert.That(rootGroup.SubGroups[1].Launchers[0].Command,
-                Is.EqualTo(rootDirectory + "/Rebels/Yavin/bin/debug/Start rebellion.cmd"));
+            AssertExecuteCommand(rootGroup.SubGroups[1].Launchers[0].Commands[0], rootDirectory + "/Rebels/Yavin/bin/debug/Start rebellion.cmd");
         }
 
         private XmlLauncherConfiguration GetTemplateConfiguration()
@@ -102,17 +119,30 @@ namespace OmniLauncher.Tests
                                 new XmlLauncherLink()
                                 {
                                     Header = "Base.sln",
-                                    Command = "[ROOT]/Rebels/Yavin/base.sln"
+                                    Commands = new List<XmlLauncherCommand>()
+                                    {
+                                        new XmlExecuteCommand()
+                                        {
+                                            Command = "[ROOT]/Rebels/Yavin/base.sln"
+                                        },
+                                        new XmlXPathReplacerCommand()
+                                        {
+                                            FilePath = "[ROOT]/assembly.dll.config",
+                                            XPath = "configuration/appSettings[@name='who's the best jedi ?']",
+                                            Value = "yoda"
+                                        }
+                                    }
                                 },
                                 new XmlLauncherLink()
                                 {
                                     Header = "Padawan.sln",
-                                    Command = "[ROOT]/Jedis/padawan.sln"
-                                },
-                                new XmlLauncherLink()
-                                {
-                                    Header = "Stormtrooper.sln",
-                                    Command = "C:/Empire/stormtrooper.sln"
+                                    Commands = new List<XmlLauncherCommand>()
+                                    {
+                                        new XmlExecuteCommand()
+                                        {
+                                            Command = "[ROOT]/Jedis/padawan.sln"
+                                        }
+                                    }
                                 }
                             }
                         },
@@ -124,7 +154,13 @@ namespace OmniLauncher.Tests
                                 new XmlLauncherLink()
                                 {
                                     Header = "Rebellion",
-                                    Command = "[ROOT]/Rebels/Yavin/bin/debug/Start rebellion.cmd"
+                                    Commands = new List<XmlLauncherCommand>()
+                                    {
+                                        new XmlExecuteCommand()
+                                        {
+                                            Command = "[ROOT]/Rebels/Yavin/bin/debug/Start rebellion.cmd"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -132,6 +168,13 @@ namespace OmniLauncher.Tests
                 }
             };
             return configuration;
+        }
+
+        private void AssertExecuteCommand(LauncherCommand launcher, string command)
+        {
+            Assert.That(launcher, Is.InstanceOf<ExecuteCommand>());
+            var execute = launcher as ExecuteCommand;
+            Assert.That(execute.Command, Is.EqualTo(command));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Infragistics.Controls.Menus;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace OmniLauncher.Tests
         {
             var actual = new RadialMenuItemBuilder().BuildMenuItems(nullLaunchers ? null : new LaunchersNode());
             Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.Count, Is.EqualTo(0));
+            Assert.That(actual.Count(), Is.EqualTo(0));
         }
 
         [Test]
@@ -34,8 +35,7 @@ namespace OmniLauncher.Tests
                         {
                             new LauncherLink()
                             {
-                                Header = "Button1",
-                                Command = "Command1"
+                                Header = "Button1"
                             }
                         },
                         SubGroups = new List<LaunchersNode>()
@@ -47,8 +47,7 @@ namespace OmniLauncher.Tests
                                 {
                                     new LauncherLink()
                                     {
-                                        Header = "Button1-1",
-                                        Command = "Command1-1"
+                                        Header = "Button1-1"
                                     }
                                 }
                             }
@@ -61,14 +60,13 @@ namespace OmniLauncher.Tests
                         {
                             new LauncherLink()
                             {
-                                Header = "Button2",
-                                Command = "Command2"
+                                Header = "Button2"
                             }
                         }
                     }
                 }
             };
-            var actual = new RadialMenuItemBuilder().BuildMenuItems(launchers);
+            var actual = new RadialMenuItemBuilder().BuildMenuItems(launchers).ToList();
 
             Assert.That(actual, Has.Count.EqualTo(2));
 

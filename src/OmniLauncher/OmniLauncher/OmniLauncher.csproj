@@ -93,8 +93,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\CommandLauncher\ExecuteCommandLauncher.cs" />
+    <Compile Include="Services\CommandLauncher\ICommandLauncher.cs" />
     <Compile Include="Services\LauncherService\ILauncherService.cs" />
     <Compile Include="Services\LauncherService\LauncherService.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\ExecuteCommand.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\LauncherCommand.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\XPathReplacerCommand.cs" />
     <Compile Include="Services\MessageService\MessageService.cs" />
     <Compile Include="Services\MessageService\IMessageService.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LauncherConfigurationProcessor.cs" />
@@ -104,12 +109,15 @@
     <Compile Include="Services\LauncherConfigurationProcessor\LaunchersRootGroup.cs" />
     <Compile Include="Services\RadialMenuItemBuilder\IRadialMenuItemBuilder.cs" />
     <Compile Include="Services\RadialMenuItemBuilder\RadialMenuItemBuilder.cs" />
+    <Compile Include="Services\XmlConfigurationReader\XmlExecuteCommand.cs" />
+    <Compile Include="Services\XmlConfigurationReader\XmlLauncherCommand.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfiguration.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherGenericTemplate.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherLink.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherLinkGroup.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherRootDirectory.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfigurationReader.cs" />
+    <Compile Include="Services\XmlConfigurationReader\XmlXPathReplacerCommand.cs" />
     <Compile Include="ViewModels\OmniLauncherViewModel.cs" />
     <Compile Include="Framework\STATask.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />

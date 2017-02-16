@@ -1,19 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
+using Autofac;
 using Moq;
 using NUnit.Framework;
-using OmniLauncher.Services.IExceptionManager;
+using OmniLauncher.Services.CommandLauncher;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
 using OmniLauncher.Services.LauncherService;
+using OmniLauncher.Services.MessageService;
+using OmniLauncher.Services.RadialMenuItemBuilder;
+using OmniLauncher.ViewModels;
+using IContainer = Autofac.IContainer;
 
 namespace OmniLauncher.Tests
 {
     [TestFixture]
     public class LauncherServiceTests
     {
+        private IContainer _originalContainer;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _originalContainer = App.Container;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (App.Container != null)
+                App.Container.Dispose();
+
+            App.Container = _originalContainer;
+        }
+
         [Test]
         public void ShouldCatchExceptionAndShowErrorWhenLaunchFails()
         {
@@ -23,41 +43,101 @@ namespace OmniLauncher.Tests
                 .Verifiable();
 
             var launcherService = new LauncherService() { MessageService = message.Object };
-            launcherService.Launch(new LauncherLink() { Command = "What/Is/This/Fucking/Command" });
+            launcherService.Launch(new LauncherLink()
+            {
+                Commands = new List<LauncherCommand>()
+                {
+                    new ExecuteCommand() {Command = "What/Is/This/Fucking/Command"}
+                }
+            });
 
             message.VerifyAll();
         }
 
         [Test]
-        public void ShouldLaunchConsoleAppWhenCommandIsValid()
+        public void ShouldFindPluginForEachCommandGivenInTheLauncher()
         {
-            // Strict, and no expectation, since the service shouldn't be called as no exception is expected
+            var executeCommand = new ExecuteCommand();
+            var xpathCommand = new XPathReplacerCommand();
+
+            var executeMock = new Mock<ICommandLauncher>(MockBehavior.Strict);
+            executeMock.Setup(mock => mock.Execute(It.IsIn(executeCommand))).Verifiable();
+            executeMock.Setup(mock => mock.CanProcess(It.IsAny<LauncherCommand>())).Returns<LauncherCommand>(c => ReferenceEquals(c, executeCommand)).Verifiable();
+
+            var xpathMock = new Mock<ICommandLauncher>(MockBehavior.Strict);
+            xpathMock.Setup(mock => mock.Execute(It.IsIn(xpathCommand))).Verifiable();
+            xpathMock.Setup(mock => mock.CanProcess(It.IsAny<LauncherCommand>())).Returns<LauncherCommand>(c => ReferenceEquals(c, xpathCommand)).Verifiable();
+
+            var otherPluginMock = new Mock<ICommandLauncher>(MockBehavior.Strict);
+            otherPluginMock.Setup(mock => mock.CanProcess(It.IsAny<LauncherCommand>())).Returns(false).Verifiable();
+
+            var builder = new ContainerBuilder();
+
+            // NB : we register this plugin first, to ensure at least one plugin refuses all given commands
+            builder.RegisterInstance(otherPluginMock.Object).As<ICommandLauncher>();
+            builder.RegisterInstance(executeMock.Object).As<ICommandLauncher>();
+            builder.RegisterInstance(xpathMock.Object).As<ICommandLauncher>();
+
+            App.Container = builder.Build();
+
+            new LauncherService().Launch(new LauncherLink()
+            {
+                Commands = new List<LauncherCommand>() { executeCommand, xpathCommand }
+            });
+
+            executeMock.VerifyAll();
+            xpathMock.VerifyAll();
+            otherPluginMock.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldRaiseProperExceptionWhenNoPluginCanBeFoundForAParticularCommand()
+        {
+            var builder = new ContainerBuilder();
+            // No registration at all, so obviously the service won't find any matching plugin
+            App.Container = builder.Build();
+
             var message = new Mock<IMessageService>(MockBehavior.Strict);
+            message
+                .Setup(mock => mock.ShowException(It.IsAny<NotSupportedException>()))
+                .Verifiable();
 
             var launcherService = new LauncherService() { MessageService = message.Object };
-
-            // So far, no process should be running
-            Assert.That(Process.GetProcessesByName("TestConsoleApplication"), Has.Length.EqualTo(0));
-
-            launcherService.Launch(new LauncherLink() { Command = "TestConsoleApplication.exe" });
-
-            // Wait for a few milliseconds, to ensure the process had time to start
-            Thread.Sleep(1000);
-
-            var processes = Process.GetProcessesByName("TestConsoleApplication");
-            Assert.That(processes, Has.Length.EqualTo(1));
-
-            // Now we try to kill the process, no need to keep it alive
-            try
+            launcherService.Launch(new LauncherLink()
             {
-                processes.First().Kill();
-            }
-            catch (Exception)
-            {
-                // The process may have commited suicide on its own
-            }
+                Commands = new List<LauncherCommand>()
+                {
+                    new ExecuteCommand()
+                }
+            });
+        }
 
-            message.VerifyAll();
+        [Test]
+        public void ShouldRaiseProperExceptionWhenAPluginFailsToExecuteAParticularCommand()
+        {
+            var executeMock = new Mock<ICommandLauncher>(MockBehavior.Strict);
+            executeMock.Setup(mock => mock.Execute(It.IsAny<LauncherCommand>())).Throws(new Exception("Big badabig boom")).Verifiable();
+            executeMock.Setup(mock => mock.CanProcess(It.IsAny<LauncherCommand>())).Returns(true).Verifiable();
+
+            var builder = new ContainerBuilder();
+
+            builder.RegisterInstance(executeMock.Object).As<ICommandLauncher>();
+
+            App.Container = builder.Build();
+
+            var message = new Mock<IMessageService>(MockBehavior.Strict);
+            message
+                .Setup(mock => mock.ShowException(It.Is<Exception>(e => e.Message == "Big badabig boom"))) // The fifth element, leeloo I love you ...
+                .Verifiable();
+
+            var launcherService = new LauncherService() { MessageService = message.Object };
+            launcherService.Launch(new LauncherLink()
+            {
+                Commands = new List<LauncherCommand>()
+                {
+                    new ExecuteCommand()
+                }
+            });
         }
     }
 }

@@ -1,11 +1,10 @@
+using System.Collections.Generic;
 using OmniLauncher.Services.XmlConfigurationReader;
 
 namespace OmniLauncher.Services.LauncherConfigurationProcessor
 {
     public class LauncherConfigurationProcessor
     {
-        private const string RootToken = "[ROOT]";
-
         public LaunchersNode ProcessConfiguration(XmlLauncherConfiguration configuration)
         {
             var launchers = new LaunchersNode();
@@ -41,17 +40,25 @@ namespace OmniLauncher.Services.LauncherConfigurationProcessor
             return result;
         }
 
-        public LauncherLink ProcessLauncherLink(XmlLauncherRootDirectory root, XmlLauncherLink launcher)
+        public LauncherLink ProcessLauncherLink(XmlLauncherRootDirectory root, XmlLauncherLink xmlLauncher)
         {
             var resolvedRootPath = root.Path;
             if (root.Path.EndsWith("/") || root.Path.EndsWith(@"\"))
                 resolvedRootPath = resolvedRootPath.Substring(0, resolvedRootPath.Length - 1);
 
-            return new LauncherLink()
+            var launcher = new LauncherLink()
             {
-                Header = launcher.Header,
-                Command = launcher.Command.Replace(RootToken, resolvedRootPath)
+                Header = xmlLauncher.Header,
+                Commands = new List<LauncherCommand>()
+                //Command = launcher.Command.Replace(RootToken, resolvedRootPath)
             };
+
+            foreach (var command in xmlLauncher.Commands)
+            {
+                launcher.Commands.Add(command.ToCommand(resolvedRootPath));
+            }
+
+            return launcher;
         }
     }
 }

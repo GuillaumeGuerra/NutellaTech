@@ -1,6 +1,6 @@
 using System;
 
-namespace OmniLauncher.Services.IExceptionManager
+namespace OmniLauncher.Services.MessageService
 {
     public interface IMessageService
     {

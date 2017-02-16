@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+using System.Windows.Documents;
+
 namespace OmniLauncher.Services.LauncherConfigurationProcessor
 {
     public class LauncherLink
     {
         public string Header { get; set; }
-        public string Command { get; set; }
+        public List<LauncherCommand> Commands { get; set; }
     }
 }

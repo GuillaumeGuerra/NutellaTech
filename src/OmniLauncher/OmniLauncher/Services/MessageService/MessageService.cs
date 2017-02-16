@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 
-namespace OmniLauncher.Services.IExceptionManager
+namespace OmniLauncher.Services.MessageService
 {
     public class MessageService : IMessageService
     {

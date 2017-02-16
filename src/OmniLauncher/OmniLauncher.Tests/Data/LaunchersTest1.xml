@@ -11,26 +11,46 @@
           <!--No sub group here-->
         </SubGroups>
         <Launchers>
-          <Launcher Header="Base.sln" Command="[ROOT]/Rebels/Yavin/base.sln" />
-          <Launcher Header="Padawan.sln" Command="[ROOT]/Jedis/padawan.sln" />
-          <Launcher Header="Stormtrooper.sln" Command="C:/Empire/stormtrooper.sln" />
+          <Launcher Header="Base.sln">
+            <Commands>
+              <Execute Command="[ROOT]/Rebels/Yavin/base.sln" />
+              <XPath FilePath="[ROOT]/assembly.dll.config" XPath="configuration/appSettings[@name='who's the best jedi ?']" Value="yoda" />
+            </Commands>
+          </Launcher>
+          <Launcher Header="Padawan.sln">
+            <Commands>
+              <Execute Command="[ROOT]/Jedis/padawan.sln" />
+            </Commands>
+          </Launcher>
         </Launchers>
       </Group>
       <Group Header="Launchers">
         <SubGroups>
           <Group Header="Big ass launchers">
             <Launchers>
-              <Launcher Header="Jar-Jar you stink" Command="Kick Jar-Jar.ps1"/>
+              <Launcher Header="Jar-Jar you stink">
+                <Commands>
+                  <Execute Command="Kick Jar-Jar.ps1" />
+                </Commands>
+              </Launcher>
             </Launchers>
           </Group>
         </SubGroups>
         <Launchers>
-          <Launcher Header="Rebellion" Command="[ROOT]/Rebels/Yavin/bin/debug/Start rebellion.cmd" />
+          <Launcher Header="Rebellion">
+            <Commands>
+              <Execute Command="[ROOT]/Rebels/Yavin/bin/debug/Start rebellion.cmd" />
+            </Commands>
+          </Launcher>
         </Launchers>
       </Group>
     </SubGroups>
     <Launchers>
-      <Launcher Header="Empire" Command="[ROOT]/Rebels/DeathStar/Fire.cmd" />
+      <Launcher Header="Empire">
+        <Commands>
+          <Execute Command="[ROOT]/Rebels/DeathStar/Fire.cmd" />
+        </Commands>
+      </Launcher>
     </Launchers>
   </GenericTemplate>
 </Configuration>

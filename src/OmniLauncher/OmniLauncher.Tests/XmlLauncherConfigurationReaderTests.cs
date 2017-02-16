@@ -26,7 +26,7 @@ namespace OmniLauncher.Tests
             Assert.That(actual.GenericTemplate.Launchers, Is.Not.Null);
             Assert.That(actual.GenericTemplate.Launchers, Has.Count.EqualTo(1));
 
-            AssertLauncher("Empire", "[ROOT]/Rebels/DeathStar/Fire.cmd", actual.GenericTemplate.Launchers[0]);
+            AssertSingleCommandLauncher("Empire", "[ROOT]/Rebels/DeathStar/Fire.cmd", actual.GenericTemplate.Launchers[0]);
 
             Assert.That(actual.GenericTemplate.SubGroups, Is.Not.Null);
             Assert.That(actual.GenericTemplate.SubGroups, Has.Count.EqualTo(2));
@@ -35,11 +35,18 @@ namespace OmniLauncher.Tests
             Assert.That(firstGroup.Header, Is.EqualTo("Solutions"));
 
             Assert.That(firstGroup.Launchers, Is.Not.Null);
-            Assert.That(firstGroup.Launchers, Has.Count.EqualTo(3));
+            Assert.That(firstGroup.Launchers, Has.Count.EqualTo(2));
 
-            AssertLauncher("Base.sln", "[ROOT]/Rebels/Yavin/base.sln", firstGroup.Launchers[0]);
-            AssertLauncher("Padawan.sln", "[ROOT]/Jedis/padawan.sln", firstGroup.Launchers[1]);
-            AssertLauncher("Stormtrooper.sln", "C:/Empire/stormtrooper.sln", firstGroup.Launchers[2]);
+            Assert.That(firstGroup.Launchers[0], Is.Not.Null);
+            Assert.That(firstGroup.Launchers[0].Header, Is.EqualTo("Base.sln"));
+            Assert.That(firstGroup.Launchers[0].Commands, Has.Count.EqualTo(2));
+            // First, the Execute command
+            Assert.That(((XmlExecuteCommand)firstGroup.Launchers[0].Commands[0]).Command, Is.EqualTo("[ROOT]/Rebels/Yavin/base.sln"));
+            // And then comes the XPath replacer
+            Assert.That(((XmlXPathReplacerCommand)firstGroup.Launchers[0].Commands[1]).XPath, Is.EqualTo("configuration/appSettings[@name='who's the best jedi ?']"));
+            Assert.That(((XmlXPathReplacerCommand)firstGroup.Launchers[0].Commands[1]).Value, Is.EqualTo("yoda"));
+
+            AssertSingleCommandLauncher("Padawan.sln", "[ROOT]/Jedis/padawan.sln", firstGroup.Launchers[1]);
 
             Assert.That(firstGroup.SubGroups, Is.Not.Null);
             Assert.That(firstGroup.SubGroups, Has.Count.EqualTo(0));
@@ -49,7 +56,7 @@ namespace OmniLauncher.Tests
 
             Assert.That(secondGroup.Launchers, Is.Not.Null);
             Assert.That(secondGroup.Launchers, Has.Count.EqualTo(1));
-            AssertLauncher("Rebellion", "[ROOT]/Rebels/Yavin/bin/debug/Start rebellion.cmd", secondGroup.Launchers[0]);
+            AssertSingleCommandLauncher("Rebellion", "[ROOT]/Rebels/Yavin/bin/debug/Start rebellion.cmd", secondGroup.Launchers[0]);
 
             Assert.That(secondGroup.SubGroups, Is.Not.Null);
             Assert.That(secondGroup.SubGroups, Has.Count.EqualTo(1));
@@ -58,14 +65,15 @@ namespace OmniLauncher.Tests
             Assert.That(subGroup.Header, Is.EqualTo("Big ass launchers"));
 
             Assert.That(subGroup.Launchers, Has.Count.EqualTo(1));
-            AssertLauncher("Jar-Jar you stink", "Kick Jar-Jar.ps1", subGroup.Launchers[0]);
+            AssertSingleCommandLauncher("Jar-Jar you stink", "Kick Jar-Jar.ps1", subGroup.Launchers[0]);
         }
 
-        private void AssertLauncher(string header, string command, XmlLauncherLink launcher)
+        private void AssertSingleCommandLauncher(string header, string command, XmlLauncherLink launcher)
         {
             Assert.That(launcher, Is.Not.Null);
             Assert.That(launcher.Header, Is.EqualTo(header));
-            Assert.That(launcher.Command, Is.EqualTo(command));
+            Assert.That(launcher.Commands, Has.Count.EqualTo(1));
+            Assert.That(((XmlExecuteCommand)launcher.Commands[0]).Command, Is.EqualTo(command));
         }
 
         [Test]

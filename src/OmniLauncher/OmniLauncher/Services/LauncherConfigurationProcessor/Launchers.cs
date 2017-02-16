@@ -11,7 +11,7 @@ namespace OmniLauncher.Services.LauncherConfigurationProcessor
         public LaunchersNode()
         {
             SubGroups = new List<LaunchersNode>();
-            Launchers=new List<LauncherLink>();
+            Launchers = new List<LauncherLink>();
         }
     }
 }

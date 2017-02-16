@@ -34,7 +34,7 @@ namespace OmniLauncher.ViewModels
 
         public ICommand ClosedCommand
         {
-            get { return new RelayCommand(() => Application.Current.Shutdown()); }
+            get { return new RelayCommand(Closed); }
         }
 
         public ICommand LoadedCommand
@@ -59,6 +59,11 @@ namespace OmniLauncher.ViewModels
 
             // Now that the radial menu is ready, we can make it visible
             IsOpened = true;
+        }
+
+        private void Closed()
+        {
+            Application.Current.Shutdown();
         }
     }
 }

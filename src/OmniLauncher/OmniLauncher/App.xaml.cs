@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using Microsoft.Practices.ServiceLocation;
-using OmniLauncher.Services.IExceptionManager;
 using OmniLauncher.Services.LauncherService;
+using OmniLauncher.Services.MessageService;
 using OmniLauncher.Services.RadialMenuItemBuilder;
 using OmniLauncher.ViewModels;
 
@@ -29,10 +30,8 @@ namespace OmniLauncher
         public static void ConfigureDependencyInjection()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<OmniLauncherViewModel>();
-            builder.RegisterType<MessageService>().As<IMessageService>();
-            builder.RegisterType<LauncherService>().As<ILauncherService>().PropertiesAutowired();
-            builder.RegisterType<RadialMenuItemBuilder>().As<IRadialMenuItemBuilder>().PropertiesAutowired();
+
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).PropertiesAutowired().AsImplementedInterfaces().AsSelf();
 
             Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
