@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Autofac;
+using OmniLauncher.Framework;
 using OmniLauncher.Services.CommandLauncher;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
 using OmniLauncher.Services.MessageService;
@@ -17,7 +18,7 @@ namespace OmniLauncher.Services.LauncherService
         {
             try
             {
-                var plugins = App.Container.Resolve<IEnumerable<ICommandLauncher>>();
+                var plugins = App.Container.GetImplementations<ICommandLauncher>();
 
                 foreach (var command in launcher.Commands)
                 {

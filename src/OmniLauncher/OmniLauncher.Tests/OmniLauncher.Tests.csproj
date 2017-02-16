@@ -88,8 +88,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInitialize.cs" />
+    <Compile Include="CommandLauncher\BaseCommandLauncherTests.cs" />
     <Compile Include="CommandLauncher\CommonCommandLauncherTests.cs" />
     <Compile Include="CommandLauncher\ExecuteCommandLauncherTests.cs" />
+    <Compile Include="CommandLauncher\XPathReplacerLauncherTests.cs" />
+    <Compile Include="Framework\TemporaryDirectory.cs" />
     <Compile Include="LauncherConfigurationProcessorTests.cs" />
     <Compile Include="LauncherServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -111,6 +114,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Data\OmniLauncher.Tests.dll.expected.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\OmniLauncher.Tests.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

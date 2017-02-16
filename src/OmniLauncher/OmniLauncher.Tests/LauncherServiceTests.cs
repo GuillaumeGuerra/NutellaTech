@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using Autofac;
 using Moq;
 using NUnit.Framework;
+using OmniLauncher.Framework;
 using OmniLauncher.Services.CommandLauncher;
 using OmniLauncher.Services.LauncherConfigurationProcessor;
 using OmniLauncher.Services.LauncherService;
 using OmniLauncher.Services.MessageService;
 using OmniLauncher.Services.RadialMenuItemBuilder;
+using OmniLauncher.Tests.CommandLauncher;
 using OmniLauncher.ViewModels;
 using IContainer = Autofac.IContainer;
 
@@ -28,7 +32,8 @@ namespace OmniLauncher.Tests
         [TearDown]
         public void TearDown()
         {
-            if (App.Container != null)
+            // If the container was overriden, we'll dispose it before reverting to the original one
+            if (App.Container != null && !ReferenceEquals(App.Container, _originalContainer))
                 App.Container.Dispose();
 
             App.Container = _originalContainer;
@@ -138,6 +143,28 @@ namespace OmniLauncher.Tests
                     new ExecuteCommand()
                 }
             });
+        }
+
+        [Test]
+        public void AllCommandLauncherPluginsShouldHaveADedicatedTestClass()
+        {
+            var testedTypes =
+                Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(
+                        t =>
+                            t.BaseType != null &&
+                            t.BaseType.IsGenericType &&
+                            t.BaseType.GetGenericTypeDefinition() == typeof(CommonCommandLauncherTests<,>))
+                            .Select(t => t.BaseType.GetGenericArguments()[0])
+                    .ToList();
+
+            foreach (var plugin in App.Container.GetImplementations<ICommandLauncher>())
+            {
+                var pluginType = plugin.GetType();
+                if (testedTypes.All(t => t != pluginType))
+                    Assert.Fail($"Missing test class for ICommandLauncher type [{pluginType.FullName}]");
+            }
         }
     }
 }

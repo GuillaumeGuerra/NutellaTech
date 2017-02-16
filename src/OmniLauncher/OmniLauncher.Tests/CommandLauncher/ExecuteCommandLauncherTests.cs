@@ -18,21 +18,10 @@ namespace OmniLauncher.Tests.CommandLauncher
         [Test]
         public void ShouldLaunchConsoleAppWhenCommandIsValid()
         {
-            // Strict, and no expectation, since the service shouldn't be called as no exception is expected
-            var message = new Mock<IMessageService>(MockBehavior.Strict);
-
-            var launcherService = new LauncherService() { MessageService = message.Object };
-
             // So far, no process should be running
             Assert.That(Process.GetProcessesByName("TestConsoleApplication"), Has.Length.EqualTo(0));
 
-            launcherService.Launch(new LauncherLink()
-            {
-                Commands = new List<LauncherCommand>()
-                {
-                    new ExecuteCommand() {Command = "TestConsoleApplication.exe"}
-                }
-            });
+            new ExecuteCommandLauncher().Execute(new ExecuteCommand() { Command = "TestConsoleApplication.exe" });
 
             // Wait for a few milliseconds, to ensure the process had time to start
             Thread.Sleep(1000);
@@ -49,8 +38,6 @@ namespace OmniLauncher.Tests.CommandLauncher
             {
                 // The process may have commited suicide on its own
             }
-
-            message.VerifyAll();
         }
     }
 }

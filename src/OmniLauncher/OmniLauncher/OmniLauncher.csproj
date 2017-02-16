@@ -93,8 +93,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Framework\DependencyInjectionExtensions.cs" />
+    <Compile Include="Services\CommandLauncher\BaseCommandLauncher.cs" />
     <Compile Include="Services\CommandLauncher\ExecuteCommandLauncher.cs" />
     <Compile Include="Services\CommandLauncher\ICommandLauncher.cs" />
+    <Compile Include="Services\CommandLauncher\XPathReplacerLauncher.cs" />
     <Compile Include="Services\LauncherService\ILauncherService.cs" />
     <Compile Include="Services\LauncherService\LauncherService.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\ExecuteCommand.cs" />
