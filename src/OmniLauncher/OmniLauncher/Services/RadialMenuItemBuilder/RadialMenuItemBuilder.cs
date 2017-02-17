@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Infragistics.Controls.Menus;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 using OmniLauncher.Services.LauncherService;
 
 namespace OmniLauncher.Services.RadialMenuItemBuilder

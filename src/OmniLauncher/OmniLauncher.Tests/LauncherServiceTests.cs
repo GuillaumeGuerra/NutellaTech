@@ -8,11 +8,12 @@ using Moq;
 using NUnit.Framework;
 using OmniLauncher.Framework;
 using OmniLauncher.Services.CommandLauncher;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 using OmniLauncher.Services.LauncherService;
 using OmniLauncher.Services.MessageService;
 using OmniLauncher.Services.RadialMenuItemBuilder;
 using OmniLauncher.Tests.CommandLauncher;
+using OmniLauncher.Tests.Framework;
 using OmniLauncher.ViewModels;
 using IContainer = Autofac.IContainer;
 
@@ -21,22 +22,18 @@ namespace OmniLauncher.Tests
     [TestFixture]
     public class LauncherServiceTests
     {
-        private IContainer _originalContainer;
+        private ContainerOverrider _overrider;
 
         [SetUp]
         public void SetUp()
         {
-            _originalContainer = App.Container;
+            _overrider = new ContainerOverrider();
         }
 
         [TearDown]
         public void TearDown()
         {
-            // If the container was overriden, we'll dispose it before reverting to the original one
-            if (App.Container != null && !ReferenceEquals(App.Container, _originalContainer))
-                App.Container.Dispose();
-
-            App.Container = _originalContainer;
+            _overrider.Dispose();
         }
 
         [Test]

@@ -6,7 +6,6 @@ using System.Threading;
 using Moq;
 using NUnit.Framework;
 using OmniLauncher.Services.CommandLauncher;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
 using OmniLauncher.Services.LauncherService;
 using OmniLauncher.Services.MessageService;
 

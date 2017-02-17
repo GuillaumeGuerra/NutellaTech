@@ -99,31 +99,33 @@
     <Compile Include="Services\CommandLauncher\FileCopier.cs" />
     <Compile Include="Services\CommandLauncher\ICommandLauncher.cs" />
     <Compile Include="Services\CommandLauncher\XPathReplacer.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\FileCopierCommand.cs" />
+    <Compile Include="Services\ConfigurationLoader\ConfigurationLoader.cs" />
+    <Compile Include="Services\ConfigurationLoader\IConfigurationLoader.cs" />
+    <Compile Include="Services\ConfigurationLoader\ILauncherConfigurationProcessor.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\IXmlLauncherConfigurationReader.cs" />
+    <Compile Include="Services\ConfigurationLoader\FileCopierCommand.cs" />
     <Compile Include="Services\LauncherService\ILauncherService.cs" />
     <Compile Include="Services\LauncherService\LauncherService.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\ExecuteCommand.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\LauncherCommand.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\XPathReplacerCommand.cs" />
+    <Compile Include="Services\CommandLauncher\ExecuteCommand.cs" />
+    <Compile Include="Services\ConfigurationLoader\LauncherCommand.cs" />
+    <Compile Include="Services\ConfigurationLoader\XPathReplacerCommand.cs" />
     <Compile Include="Services\MessageService\MessageService.cs" />
     <Compile Include="Services\MessageService\IMessageService.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\LauncherConfigurationProcessor.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\LauncherLink.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\Launchers.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlLauncherConfigurationProcessor.cs" />
+    <Compile Include="Services\ConfigurationLoader\LauncherLink.cs" />
+    <Compile Include="Services\ConfigurationLoader\LaunchersNode.cs" />
     <Compile Include="Services\RadialMenuItemBuilder\IRadialMenuItemBuilder.cs" />
     <Compile Include="Services\RadialMenuItemBuilder\RadialMenuItemBuilder.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlExecuteCommand.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlFileCopierCommand.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlLauncherCommand.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfiguration.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlLauncherGenericTemplate.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlLauncherLink.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlLauncherLinkGroup.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlLauncherRootDirectory.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfigurationReader.cs" />
-    <Compile Include="Services\XmlConfigurationReader\XmlXPathReplacerCommand.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlExecuteCommand.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlFileCopierCommand.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlLauncherCommand.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlLauncherConfiguration.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlLauncherGenericTemplate.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlLauncherLink.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlLauncherRootDirectory.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlLauncherConfigurationReader.cs" />
+    <Compile Include="Services\ConfigurationLoader\Xml\XmlXPathReplacerCommand.cs" />
     <Compile Include="ViewModels\OmniLauncherViewModel.cs" />
-    <Compile Include="Framework\STATask.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -190,7 +192,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Configuration\Launchers2.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

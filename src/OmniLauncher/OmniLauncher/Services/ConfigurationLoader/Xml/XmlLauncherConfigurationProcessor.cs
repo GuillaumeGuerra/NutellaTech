@@ -1,17 +1,24 @@
 using System.Collections.Generic;
-using OmniLauncher.Services.XmlConfigurationReader;
+using System.IO;
 
-namespace OmniLauncher.Services.LauncherConfigurationProcessor
+namespace OmniLauncher.Services.ConfigurationLoader.Xml
 {
-    public class LauncherConfigurationProcessor
+    public class XmlLauncherConfigurationProcessor : ILauncherConfigurationProcessor
     {
-        public LaunchersNode ProcessConfiguration(XmlLauncherConfiguration configuration)
+        public IXmlLauncherConfigurationReader ConfigurationReader { get; set; }
+
+        public bool CanProcess(string path)
+        {
+            return Path.GetExtension(path) == ".xml";
+        }
+
+        public LaunchersNode Load(string path)
         {
             var launchers = new LaunchersNode();
 
-            foreach (var root in configuration.RootDirectories)
+            foreach (var root in ConfigurationReader.LoadFile(path).RootDirectories)
             {
-                launchers.SubGroups.Add(ProcessNode(configuration.GenericTemplate, root, root.Header));
+                launchers.SubGroups.Add(ProcessNode(ConfigurationReader.LoadFile(path).GenericTemplate, root, root.Header));
             }
 
             return launchers;
@@ -50,7 +57,6 @@ namespace OmniLauncher.Services.LauncherConfigurationProcessor
             {
                 Header = xmlLauncher.Header,
                 Commands = new List<LauncherCommand>()
-                //Command = launcher.Command.Replace(RootToken, resolvedRootPath)
             };
 
             foreach (var command in xmlLauncher.Commands)

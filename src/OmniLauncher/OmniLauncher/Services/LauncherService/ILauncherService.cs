@@ -1,4 +1,4 @@
-﻿using OmniLauncher.Services.LauncherConfigurationProcessor;
+﻿using OmniLauncher.Services.ConfigurationLoader;
 
 namespace OmniLauncher.Services.LauncherService
 {

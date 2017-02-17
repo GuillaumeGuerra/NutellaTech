@@ -2,9 +2,9 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace OmniLauncher.Services.XmlConfigurationReader
+namespace OmniLauncher.Services.ConfigurationLoader.Xml
 {
-    public class XmlLauncherConfigurationReader
+    public class XmlLauncherConfigurationReader : IXmlLauncherConfigurationReader
     {
         public XmlLauncherConfiguration LoadFile(string filePath)
         {

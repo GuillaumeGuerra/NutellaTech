@@ -5,7 +5,7 @@ using System.Linq;
 using Autofac;
 using OmniLauncher.Framework;
 using OmniLauncher.Services.CommandLauncher;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 using OmniLauncher.Services.MessageService;
 
 namespace OmniLauncher.Services.LauncherService

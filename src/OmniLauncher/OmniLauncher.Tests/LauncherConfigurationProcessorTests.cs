@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
+using Moq;
 using NUnit.Framework;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
-using OmniLauncher.Services.XmlConfigurationReader;
+using OmniLauncher.Services.CommandLauncher;
+using OmniLauncher.Services.ConfigurationLoader;
+using OmniLauncher.Services.ConfigurationLoader.Xml;
 
 namespace OmniLauncher.Tests
 {
@@ -12,8 +14,11 @@ namespace OmniLauncher.Tests
         [Test]
         public void ShouldReplaceRootTokenWithRootDirectory()
         {
-            var processor = new LauncherConfigurationProcessor();
-            var actual = processor.ProcessConfiguration(GetTemplateConfiguration());
+            var reader = new Mock<IXmlLauncherConfigurationReader>(MockBehavior.Strict);
+            reader.Setup(mock => mock.LoadFile("")).Returns(GetTemplateConfiguration()).Verifiable();
+
+            var processor = new XmlLauncherConfigurationProcessor() { ConfigurationReader = reader.Object };
+            var actual = processor.Load("");
 
             Assert.That(actual.SubGroups, Is.Not.Null);
             Assert.That(actual.SubGroups.Count, Is.EqualTo(2));
@@ -32,7 +37,7 @@ namespace OmniLauncher.Tests
             Description = @"Extra \ after the root")]
         public void ShouldProcessSlashAndBackSlashWhenReplacingRootToken(string path, string command, string expected)
         {
-            var processor = new LauncherConfigurationProcessor();
+            var processor = new XmlLauncherConfigurationProcessor();
             var actual = processor.ProcessLauncherLink(new XmlLauncherRootDirectory()
             {
                 Path = path
@@ -54,6 +59,14 @@ namespace OmniLauncher.Tests
 
             Assert.That(((ExecuteCommand)actual.Commands[0]).Command, Is.EqualTo(expected));
             Assert.That(((XPathReplacerCommand)actual.Commands[1]).FilePath, Is.EqualTo(expected));
+        }
+
+        [TestCase("test.xml", true)]
+        [TestCase("test.json", false)]
+        [TestCase("meskouyan.ski", false)]
+        public void ShouldOnlyProcessXmlFiles(string path, bool shouldProcess)
+        {
+            Assert.That(new XmlLauncherConfigurationProcessor().CanProcess(path), Is.EqualTo(shouldProcess));
         }
 
         private void AssertNode(LaunchersNode rootGroup, string rootDirectory, string expectedHeader)

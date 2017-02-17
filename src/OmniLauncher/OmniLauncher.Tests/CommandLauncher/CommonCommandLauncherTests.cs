@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using OmniLauncher.Services.CommandLauncher;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 
 namespace OmniLauncher.Tests.CommandLauncher
 {

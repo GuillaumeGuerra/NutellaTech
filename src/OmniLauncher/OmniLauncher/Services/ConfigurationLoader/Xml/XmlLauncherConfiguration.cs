@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace OmniLauncher.Services.XmlConfigurationReader
+namespace OmniLauncher.Services.ConfigurationLoader.Xml
 {
     [XmlRoot("Configuration")]
     public class XmlLauncherConfiguration

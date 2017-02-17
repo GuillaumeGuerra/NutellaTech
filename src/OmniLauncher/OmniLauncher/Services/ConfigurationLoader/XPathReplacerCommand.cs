@@ -1,4 +1,4 @@
-namespace OmniLauncher.Services.LauncherConfigurationProcessor
+namespace OmniLauncher.Services.ConfigurationLoader
 {
     public class XPathReplacerCommand : LauncherCommand
     {

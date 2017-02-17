@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using NUnit.Framework;
 using OmniLauncher.Framework;
-using OmniLauncher.Services.XmlConfigurationReader;
+using OmniLauncher.Services.ConfigurationLoader.Xml;
 
 namespace OmniLauncher.Tests
 {
@@ -46,7 +46,7 @@ namespace OmniLauncher.Tests
             // First, the Execute command
             Assert.That(((XmlExecuteCommand)firstGroup.Launchers[0].Commands[0]).Command, Is.EqualTo("[ROOT]/Rebels/Yavin/base.sln"));
             AssertXmlXPathReplacerCommand("[ROOT]/assembly.dll.config", "configuration/appSettings[@name='who's the best jedi ?']", "yoda", firstGroup.Launchers[0].Commands[1]);
-            AssertXmlFileReplacerCommand("[ROOT]/somewhere/assembly.dll.config", "[ROOT]/somewhere else/assembly.dll.config", firstGroup.Launchers[0].Commands[2]);
+            AssertXmlFileCopierCommand("[ROOT]/somewhere/assembly.dll.config", "[ROOT]/somewhere else/assembly.dll.config", firstGroup.Launchers[0].Commands[2]);
 
             AssertSingleCommandLauncher("Padawan.sln", "[ROOT]/Jedis/padawan.sln", firstGroup.Launchers[1]);
 
@@ -112,7 +112,7 @@ namespace OmniLauncher.Tests
             Assert.That(xpathCommand.FilePath, Is.EqualTo(filePath));
         }
 
-        private void AssertXmlFileReplacerCommand(string sourceFilePath, string targetFilePath, XmlLauncherCommand command)
+        private void AssertXmlFileCopierCommand(string sourceFilePath, string targetFilePath, XmlLauncherCommand command)
         {
             var xpathCommand = (XmlFileCopierCommand)command;
 

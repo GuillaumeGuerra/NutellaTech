@@ -1,13 +1,14 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Infragistics.Controls.Menus;
 using OmniLauncher.Framework;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 using OmniLauncher.Services.RadialMenuItemBuilder;
-using OmniLauncher.Services.XmlConfigurationReader;
 
 namespace OmniLauncher.ViewModels
 {
@@ -32,6 +33,8 @@ namespace OmniLauncher.ViewModels
 
         public IRadialMenuItemBuilder RadialMenuItemBuilder { get; set; }
 
+        public IConfigurationLoader ConfigurationLoader { get; set; }
+
         public ICommand ClosedCommand
         {
             get { return new RelayCommand(Closed); }
@@ -49,13 +52,9 @@ namespace OmniLauncher.ViewModels
 
         private async void Loaded()
         {
-            var launchersNode = await STATask.Run(() =>
-            {
-                var config = new XmlLauncherConfigurationReader().LoadFile("Configuration/Launchers.xml");
-                return new LauncherConfigurationProcessor().ProcessConfiguration(config);
-            });
+            var launchersNodes = await Task.Run(() => ConfigurationLoader.LoadConfiguration("Configuration"));
 
-            Launchers = new ObservableCollection<RadialMenuItem>(RadialMenuItemBuilder.BuildMenuItems(launchersNode));
+            Launchers = new ObservableCollection<RadialMenuItem>(launchersNodes.Select(l => RadialMenuItemBuilder.BuildMenuItems(l)).SelectMany(t => t));
 
             // Now that the radial menu is ready, we can make it visible
             IsOpened = true;

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using Infragistics.Controls.Menus;
 using NUnit.Framework;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 using OmniLauncher.Services.RadialMenuItemBuilder;
 
 namespace OmniLauncher.Tests

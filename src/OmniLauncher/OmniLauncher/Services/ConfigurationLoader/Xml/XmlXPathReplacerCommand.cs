@@ -1,7 +1,6 @@
 ﻿using System.Xml.Serialization;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
 
-namespace OmniLauncher.Services.XmlConfigurationReader
+namespace OmniLauncher.Services.ConfigurationLoader.Xml
 {
     public class XmlXPathReplacerCommand : XmlLauncherCommand
     {

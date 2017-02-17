@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using OmniLauncher.Services.CommandLauncher;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 using OmniLauncher.Services.LauncherService;
 using OmniLauncher.Services.MessageService;
 using OmniLauncher.Tests.Framework;

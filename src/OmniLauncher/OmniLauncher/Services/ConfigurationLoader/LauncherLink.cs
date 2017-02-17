@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Windows.Documents;
 
-namespace OmniLauncher.Services.LauncherConfigurationProcessor
+namespace OmniLauncher.Services.ConfigurationLoader
 {
     public class LauncherLink
     {

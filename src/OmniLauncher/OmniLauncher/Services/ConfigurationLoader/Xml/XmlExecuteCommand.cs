@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.CommandLauncher;
 
-namespace OmniLauncher.Services.XmlConfigurationReader
+namespace OmniLauncher.Services.ConfigurationLoader.Xml
 {
     public class XmlExecuteCommand : XmlLauncherCommand
     {

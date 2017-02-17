@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
 
 namespace OmniLauncher.Services.CommandLauncher
 {

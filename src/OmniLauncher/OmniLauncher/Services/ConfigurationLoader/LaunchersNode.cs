@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OmniLauncher.Services.LauncherConfigurationProcessor
+namespace OmniLauncher.Services.ConfigurationLoader
 {
     public class LaunchersNode
     {

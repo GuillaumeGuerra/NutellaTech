@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace OmniLauncher.Services.XmlConfigurationReader
+namespace OmniLauncher.Services.ConfigurationLoader.Xml
 {
     public class XmlLauncherRootDirectory
     {

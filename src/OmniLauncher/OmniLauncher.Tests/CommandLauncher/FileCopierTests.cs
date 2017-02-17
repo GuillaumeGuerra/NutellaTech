@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 using OmniLauncher.Services.CommandLauncher;
-using OmniLauncher.Services.LauncherConfigurationProcessor;
+using OmniLauncher.Services.ConfigurationLoader;
 using OmniLauncher.Tests.Framework;
 
 namespace OmniLauncher.Tests.CommandLauncher
@@ -27,7 +27,16 @@ namespace OmniLauncher.Tests.CommandLauncher
                 Assert.That(File.Exists($"{directory.Location}/OmniLauncher.Tests.dll.config"), Is.True);
 
                 // And it should be strictly identical to the source file
-                Assert.That(File.ReadAllText("Data/OmniLauncher.Tests.dll.config"), Is.EqualTo(File.ReadAllText($"{directory.Location}/OmniLauncher.Tests.dll.config")));
+                Assert.That(File.ReadAllText("Data/OmniLauncher.Tests.dll.config"),
+                    Is.EqualTo(File.ReadAllText($"{directory.Location}/OmniLauncher.Tests.dll.config")));
+
+                // Also, it should not fail in case the file already exists
+                Assert.That(() => new FileCopier().Execute(new FileCopierCommand()
+                    {
+                        SourceFilePath = "Data/OmniLauncher.Tests.dll.config",
+                        TargetFilePath = $"{directory.Location}/OmniLauncher.Tests.dll.config"
+                    }), Throws.Nothing
+                );
             }
         }
 
