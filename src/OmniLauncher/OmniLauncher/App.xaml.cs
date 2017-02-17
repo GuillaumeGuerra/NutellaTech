@@ -16,7 +16,7 @@ namespace OmniLauncher
     /// </summary>
     public partial class App : Application
     {
-        public static IContainer Container { get; set; }
+        public static IContainer Container { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {

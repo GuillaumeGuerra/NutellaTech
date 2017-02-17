@@ -95,6 +95,7 @@
     <Compile Include="CommandLauncher\XPathReplacerTests.cs" />
     <Compile Include="ConfigurationLoaderTests\ConfigurationLoaderTests.cs" />
     <Compile Include="Framework\ContainerOverrider.cs" />
+    <Compile Include="Framework\ContainerOverriderTests.cs" />
     <Compile Include="Framework\TemporaryDirectory.cs" />
     <Compile Include="LauncherConfigurationProcessorTests.cs" />
     <Compile Include="LauncherServiceTests.cs" />

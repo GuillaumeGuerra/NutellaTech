@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Autofac;
 
 namespace OmniLauncher.Tests.Framework
@@ -11,9 +13,16 @@ namespace OmniLauncher.Tests.Framework
     {
         private IContainer _originalContainer;
 
-        public ContainerOverrider()
+        private ContainerOverrider(IContainer container)
         {
             _originalContainer = App.Container;
+
+            SetContainer(container);
+        }
+
+        public static IDisposable Override(IContainer container)
+        {
+            return new ContainerOverrider(container);
         }
 
         public void Dispose()
@@ -22,7 +31,12 @@ namespace OmniLauncher.Tests.Framework
             if (App.Container != null && !ReferenceEquals(App.Container, _originalContainer))
                 App.Container.Dispose();
 
-            App.Container = _originalContainer;
+            SetContainer(_originalContainer);
+        }
+
+        private void SetContainer(IContainer container)
+        {
+            typeof(App).GetProperty("Container", BindingFlags.Static | BindingFlags.Public).SetValue(null, container);
         }
     }
 }

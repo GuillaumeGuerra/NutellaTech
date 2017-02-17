@@ -22,38 +22,23 @@ namespace OmniLauncher.Tests
     [TestFixture]
     public class LauncherServiceTests
     {
-        private ContainerOverrider _overrider;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _overrider = new ContainerOverrider();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _overrider.Dispose();
-        }
-
         [Test]
         public void ShouldCatchExceptionAndShowErrorWhenLaunchFails()
         {
             var message = new Mock<IMessageService>(MockBehavior.Strict);
             message
-                .Setup(mock => mock.ShowException(It.IsAny<Win32Exception>()))
+                .Setup(mock => mock.ShowException(It.Is<Exception>(e => e.Message == "Big badabig boom")))
                 .Verifiable();
 
-            var launcherService = new LauncherService() { MessageService = message.Object };
-            launcherService.Launch(new LauncherLink()
-            {
-                Commands = new List<LauncherCommand>()
-                {
-                    new ExecuteCommand() {Command = "What/Is/This/Fucking/Command"}
-                }
-            });
+            var plugin = new Mock<ICommandLauncher>(MockBehavior.Strict);
+            plugin.Setup(mock => mock.CanProcess(It.IsAny<LauncherCommand>())).Returns(true).Verifiable();
+            plugin.Setup(mock => mock.Execute(It.IsAny<LauncherCommand>())).Throws(new Exception("Big badabig boom")).Verifiable();
+
+            var launcherService = new LauncherService() { MessageService = message.Object, AllCommandLaunchers = new[] { plugin.Object } };
+            launcherService.Launch(new LauncherLink() { Commands = new List<LauncherCommand>() { new ExecuteCommand() } });
 
             message.VerifyAll();
+            plugin.VerifyAll();
         }
 
         [Test]
@@ -73,16 +58,9 @@ namespace OmniLauncher.Tests
             var otherPluginMock = new Mock<ICommandLauncher>(MockBehavior.Strict);
             otherPluginMock.Setup(mock => mock.CanProcess(It.IsAny<LauncherCommand>())).Returns(false).Verifiable();
 
-            var builder = new ContainerBuilder();
-
-            // NB : we register this plugin first, to ensure at least one plugin refuses all given commands
-            builder.RegisterInstance(otherPluginMock.Object).As<ICommandLauncher>();
-            builder.RegisterInstance(executeMock.Object).As<ICommandLauncher>();
-            builder.RegisterInstance(xpathMock.Object).As<ICommandLauncher>();
-
-            App.Container = builder.Build();
-
-            new LauncherService().Launch(new LauncherLink()
+            // NB : we register otherPluginMock first, to ensure at least one plugin refuses all given commands
+            var launcher = new LauncherService() { AllCommandLaunchers = new[] { otherPluginMock.Object, executeMock.Object, xpathMock.Object } };
+            launcher.Launch(new LauncherLink()
             {
                 Commands = new List<LauncherCommand>() { executeCommand, xpathCommand }
             });
@@ -95,16 +73,13 @@ namespace OmniLauncher.Tests
         [Test]
         public void ShouldRaiseProperExceptionWhenNoPluginCanBeFoundForAParticularCommand()
         {
-            var builder = new ContainerBuilder();
-            // No registration at all, so obviously the service won't find any matching plugin
-            App.Container = builder.Build();
-
             var message = new Mock<IMessageService>(MockBehavior.Strict);
             message
                 .Setup(mock => mock.ShowException(It.IsAny<NotSupportedException>()))
                 .Verifiable();
 
-            var launcherService = new LauncherService() { MessageService = message.Object };
+            // No command launcher plugins at all, so obviously the service won't find any matching plugin
+            var launcherService = new LauncherService() { MessageService = message.Object, AllCommandLaunchers = new ICommandLauncher[0] };
             launcherService.Launch(new LauncherLink()
             {
                 Commands = new List<LauncherCommand>()
@@ -121,18 +96,12 @@ namespace OmniLauncher.Tests
             executeMock.Setup(mock => mock.Execute(It.IsAny<LauncherCommand>())).Throws(new Exception("Big badabig boom")).Verifiable();
             executeMock.Setup(mock => mock.CanProcess(It.IsAny<LauncherCommand>())).Returns(true).Verifiable();
 
-            var builder = new ContainerBuilder();
-
-            builder.RegisterInstance(executeMock.Object).As<ICommandLauncher>();
-
-            App.Container = builder.Build();
-
             var message = new Mock<IMessageService>(MockBehavior.Strict);
             message
                 .Setup(mock => mock.ShowException(It.Is<Exception>(e => e.Message == "Big badabig boom"))) // The fifth element, leeloo I love you ...
                 .Verifiable();
 
-            var launcherService = new LauncherService() { MessageService = message.Object };
+            var launcherService = new LauncherService() { MessageService = message.Object, AllCommandLaunchers = new[] { executeMock.Object } };
             launcherService.Launch(new LauncherLink()
             {
                 Commands = new List<LauncherCommand>()

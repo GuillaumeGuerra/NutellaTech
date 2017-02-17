@@ -18,20 +18,6 @@ namespace OmniLauncher.Tests.ConfigurationLoaderTests
     [TestFixture]
     public class ConfigurationLoaderTests
     {
-        private ContainerOverrider _overrider;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _overrider = new ContainerOverrider();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _overrider.Dispose();
-        }
-
         [Test]
         public void ShouldReadAllFilesLocatedInTheConfigurationDirectoryWithTheRightPlugin()
         {
@@ -58,15 +44,8 @@ namespace OmniLauncher.Tests.ConfigurationLoaderTests
                     .Verifiable();
                 jsonLoader.Setup(mock => mock.Load($"{directory.Location}\\file2.json")).Returns(secondNode).Verifiable();
 
-                var builder = new ContainerBuilder();
-
-                // NB : we register this plugin first, to ensure at least one plugin refuses all given commands
-                builder.RegisterInstance(xmlLoader.Object).As<ILauncherConfigurationProcessor>();
-                builder.RegisterInstance(jsonLoader.Object).As<ILauncherConfigurationProcessor>();
-
-                App.Container = builder.Build();
-
-                var launchers = new ConfigurationLoader().LoadConfiguration(directory.Location).ToList();
+                var loader = new ConfigurationLoader() { AllConfigurationProcessors = new[] { xmlLoader.Object, jsonLoader.Object } };
+                var launchers = loader.LoadConfiguration(directory.Location).ToList();
 
                 Assert.That(launchers, Has.Count.EqualTo(2));
                 Assert.That(launchers[0], Is.SameAs(firstNode));

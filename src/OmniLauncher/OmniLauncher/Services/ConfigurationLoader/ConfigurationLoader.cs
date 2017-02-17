@@ -9,13 +9,13 @@ namespace OmniLauncher.Services.ConfigurationLoader
 {
     public class ConfigurationLoader : IConfigurationLoader
     {
+        public IEnumerable<ILauncherConfigurationProcessor> AllConfigurationProcessors { get; set; }
+
         public IEnumerable<LaunchersNode> LoadConfiguration(string path)
         {
-            var plugins = App.Container.GetImplementations<ILauncherConfigurationProcessor>();
-
             foreach (var file in Directory.GetFiles(path, "*.*", SearchOption.AllDirectories))
             {
-                var plugin = plugins.FirstOrDefault(p => p.CanProcess(file));
+                var plugin = AllConfigurationProcessors.FirstOrDefault(p => p.CanProcess(file));
 
                 if (plugin != null)
                     yield return plugin.Load(file);

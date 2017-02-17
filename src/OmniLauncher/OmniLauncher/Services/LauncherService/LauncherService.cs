@@ -14,15 +14,15 @@ namespace OmniLauncher.Services.LauncherService
     {
         public IMessageService MessageService { get; set; }
 
+        public IEnumerable<ICommandLauncher> AllCommandLaunchers { get; set; }
+
         public void Launch(LauncherLink launcher)
         {
             try
             {
-                var plugins = App.Container.GetImplementations<ICommandLauncher>();
-
                 foreach (var command in launcher.Commands)
                 {
-                    var plugin = plugins.FirstOrDefault(p => p.CanProcess(command));
+                    var plugin = AllCommandLaunchers.FirstOrDefault(p => p.CanProcess(command));
                     if (plugin == null)
                         throw new NotSupportedException($"Unable to find a CommandLauncher plugin for the type {command.GetType().FullName}");
 
