@@ -29,6 +29,8 @@
         <Launchers>
           <Launcher Header="Launch DS">
             <Commands>
+              <File SourceFilePath="[ROOT]/test.dll.config" TargetFilePath="../debug/test.dll.config" />
+              <XPath FilePath="test.dll.config" XPath="configuration/appSettings/add[@key='sizeOfMyAss']/@value" Value="not that big actually" />
               <Execute Command="[ROOT]/DS.cmd" />
             </Commands>
           </Launcher>

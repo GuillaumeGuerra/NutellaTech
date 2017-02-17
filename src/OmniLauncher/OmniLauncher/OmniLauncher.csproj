@@ -96,8 +96,10 @@
     <Compile Include="Framework\DependencyInjectionExtensions.cs" />
     <Compile Include="Services\CommandLauncher\BaseCommandLauncher.cs" />
     <Compile Include="Services\CommandLauncher\ExecuteCommandLauncher.cs" />
+    <Compile Include="Services\CommandLauncher\FileCopier.cs" />
     <Compile Include="Services\CommandLauncher\ICommandLauncher.cs" />
-    <Compile Include="Services\CommandLauncher\XPathReplacerLauncher.cs" />
+    <Compile Include="Services\CommandLauncher\XPathReplacer.cs" />
+    <Compile Include="Services\LauncherConfigurationProcessor\FileCopierCommand.cs" />
     <Compile Include="Services\LauncherService\ILauncherService.cs" />
     <Compile Include="Services\LauncherService\LauncherService.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\ExecuteCommand.cs" />
@@ -108,11 +110,10 @@
     <Compile Include="Services\LauncherConfigurationProcessor\LauncherConfigurationProcessor.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\LauncherLink.cs" />
     <Compile Include="Services\LauncherConfigurationProcessor\Launchers.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\LaunchersGroup.cs" />
-    <Compile Include="Services\LauncherConfigurationProcessor\LaunchersRootGroup.cs" />
     <Compile Include="Services\RadialMenuItemBuilder\IRadialMenuItemBuilder.cs" />
     <Compile Include="Services\RadialMenuItemBuilder\RadialMenuItemBuilder.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlExecuteCommand.cs" />
+    <Compile Include="Services\XmlConfigurationReader\XmlFileCopierCommand.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherCommand.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherConfiguration.cs" />
     <Compile Include="Services\XmlConfigurationReader\XmlLauncherGenericTemplate.cs" />

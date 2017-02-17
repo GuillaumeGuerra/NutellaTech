@@ -91,7 +91,8 @@
     <Compile Include="CommandLauncher\BaseCommandLauncherTests.cs" />
     <Compile Include="CommandLauncher\CommonCommandLauncherTests.cs" />
     <Compile Include="CommandLauncher\ExecuteCommandLauncherTests.cs" />
-    <Compile Include="CommandLauncher\XPathReplacerLauncherTests.cs" />
+    <Compile Include="CommandLauncher\FileCopierTests.cs" />
+    <Compile Include="CommandLauncher\XPathReplacerTests.cs" />
     <Compile Include="Framework\TemporaryDirectory.cs" />
     <Compile Include="LauncherConfigurationProcessorTests.cs" />
     <Compile Include="LauncherServiceTests.cs" />

@@ -7,7 +7,7 @@ using OmniLauncher.Services.LauncherConfigurationProcessor;
 
 namespace OmniLauncher.Services.CommandLauncher
 {
-    public class XPathReplacerLauncher : BaseCommandLauncher<XPathReplacerCommand>
+    public class XPathReplacer : BaseCommandLauncher<XPathReplacerCommand>
     {
         protected override void DoExecute(XPathReplacerCommand command)
         {

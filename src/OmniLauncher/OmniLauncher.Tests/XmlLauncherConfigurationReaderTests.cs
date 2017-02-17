@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Xml.Serialization;
 using NUnit.Framework;
+using OmniLauncher.Framework;
 using OmniLauncher.Services.XmlConfigurationReader;
 
 namespace OmniLauncher.Tests
@@ -39,12 +42,11 @@ namespace OmniLauncher.Tests
 
             Assert.That(firstGroup.Launchers[0], Is.Not.Null);
             Assert.That(firstGroup.Launchers[0].Header, Is.EqualTo("Base.sln"));
-            Assert.That(firstGroup.Launchers[0].Commands, Has.Count.EqualTo(2));
+            Assert.That(firstGroup.Launchers[0].Commands, Has.Count.EqualTo(3));
             // First, the Execute command
             Assert.That(((XmlExecuteCommand)firstGroup.Launchers[0].Commands[0]).Command, Is.EqualTo("[ROOT]/Rebels/Yavin/base.sln"));
-            // And then comes the XPath replacer
-            Assert.That(((XmlXPathReplacerCommand)firstGroup.Launchers[0].Commands[1]).XPath, Is.EqualTo("configuration/appSettings[@name='who's the best jedi ?']"));
-            Assert.That(((XmlXPathReplacerCommand)firstGroup.Launchers[0].Commands[1]).Value, Is.EqualTo("yoda"));
+            AssertXmlXPathReplacerCommand("[ROOT]/assembly.dll.config", "configuration/appSettings[@name='who's the best jedi ?']", "yoda", firstGroup.Launchers[0].Commands[1]);
+            AssertXmlFileReplacerCommand("[ROOT]/somewhere/assembly.dll.config", "[ROOT]/somewhere else/assembly.dll.config", firstGroup.Launchers[0].Commands[2]);
 
             AssertSingleCommandLauncher("Padawan.sln", "[ROOT]/Jedis/padawan.sln", firstGroup.Launchers[1]);
 
@@ -68,6 +70,31 @@ namespace OmniLauncher.Tests
             AssertSingleCommandLauncher("Jar-Jar you stink", "Kick Jar-Jar.ps1", subGroup.Launchers[0]);
         }
 
+        [Test]
+        public void ShouldThrowWhenFilePathIsUnknown()
+        {
+            var service = new XmlLauncherConfigurationReader();
+            Assert.That(() => service.LoadFile("E:/unknown_path"), Throws.Exception.TypeOf<InvalidOperationException>().And.Message.EqualTo("Unknow file path [E:/unknown_path]"));
+        }
+
+        [Test]
+        public void AllTypeOfCommandsShouldBeReferencedInXmlLauncherLinkClass()
+        {
+            var commands =
+                typeof(XmlLauncherCommand).Assembly.GetTypes()
+                    .Where(t => t.BaseType != null && t.BaseType == typeof(XmlLauncherCommand))
+                    .ToList();
+
+            var attributes =
+                typeof(XmlLauncherLink).GetProperty("Commands")
+                    .GetCustomAttributes(typeof(XmlArrayItemAttribute), false).Cast<XmlArrayItemAttribute>().Select(a => a.Type).ToList();
+
+            foreach (var command in commands)
+            {
+                Assert.That(attributes, Contains.Item(command),$"Missing XmlArrayAttribute for type [{command.FullName}] in XmlLauncherLink class");
+            }
+        }
+
         private void AssertSingleCommandLauncher(string header, string command, XmlLauncherLink launcher)
         {
             Assert.That(launcher, Is.Not.Null);
@@ -76,11 +103,21 @@ namespace OmniLauncher.Tests
             Assert.That(((XmlExecuteCommand)launcher.Commands[0]).Command, Is.EqualTo(command));
         }
 
-        [Test]
-        public void ShouldThrowWhenFilePathIsUnknown()
+        private void AssertXmlXPathReplacerCommand(string filePath, string xpath, string value, XmlLauncherCommand command)
         {
-            var service = new XmlLauncherConfigurationReader();
-            Assert.That(() => service.LoadFile("E:/unknown_path"), Throws.Exception.TypeOf<InvalidOperationException>().And.Message.EqualTo("Unknow file path [E:/unknown_path]"));
+            var xpathCommand = (XmlXPathReplacerCommand)command;
+
+            Assert.That(xpathCommand.XPath, Is.EqualTo(xpath));
+            Assert.That(xpathCommand.Value, Is.EqualTo(value));
+            Assert.That(xpathCommand.FilePath, Is.EqualTo(filePath));
+        }
+
+        private void AssertXmlFileReplacerCommand(string sourceFilePath, string targetFilePath, XmlLauncherCommand command)
+        {
+            var xpathCommand = (XmlFileCopierCommand)command;
+
+            Assert.That(xpathCommand.SourceFilePath, Is.EqualTo(sourceFilePath));
+            Assert.That(xpathCommand.TargetFilePath, Is.EqualTo(targetFilePath));
         }
     }
 }

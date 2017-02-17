@@ -10,7 +10,7 @@ using OmniLauncher.Tests.Framework;
 namespace OmniLauncher.Tests.CommandLauncher
 {
     [TestFixture]
-    public class XPathReplacerLauncherTests : CommonCommandLauncherTests<XPathReplacerLauncher, XPathReplacerCommand>
+    public class XPathReplacerTests : CommonCommandLauncherTests<XPathReplacer, XPathReplacerCommand>
     {
         [Test]
         public void ShouldReplaceXmlNodeWhenFileAndXPathAreValid()
@@ -20,7 +20,7 @@ namespace OmniLauncher.Tests.CommandLauncher
                 // First, we'll copy the reference file into the temporary directory
                 File.Copy("Data/OmniLauncher.Tests.dll.config", $"{directory.Location}/OmniLauncher.Tests.dll.config");
 
-                new XPathReplacerLauncher().Execute(new XPathReplacerCommand()
+                new XPathReplacer().Execute(new XPathReplacerCommand()
                 {
                     FilePath = $"{directory.Location}/OmniLauncher.Tests.dll.config",
                     XPath = @"configuration/appSettings/add[@key=""sizeOfMyAss""]/@value",
@@ -38,7 +38,7 @@ namespace OmniLauncher.Tests.CommandLauncher
         [Test]
         public void ShouldThrowWhenFileToEditCanNotBeFound()
         {
-            Assert.That(() => new XPathReplacerLauncher().Execute(new XPathReplacerCommand() { FilePath = "//john/doe" }), 
+            Assert.That(() => new XPathReplacer().Execute(new XPathReplacerCommand() { FilePath = "//john/doe" }), 
                 Throws.Exception.InstanceOf<FileNotFoundException>().With.Message.EqualTo("Unable to find file [//john/doe] for xpath replacement"));
         }
     }

@@ -70,12 +70,17 @@ namespace OmniLauncher.Tests
             Assert.That(rootGroup.SubGroups[0].Launchers.Count, Is.EqualTo(2));
 
             Assert.That(rootGroup.SubGroups[0].Launchers[0].Header, Is.EqualTo("Base.sln"));
-            Assert.That(rootGroup.SubGroups[0].Launchers[0].Commands, Has.Count.EqualTo(2));
+            Assert.That(rootGroup.SubGroups[0].Launchers[0].Commands, Has.Count.EqualTo(3));
             AssertExecuteCommand(rootGroup.SubGroups[0].Launchers[0].Commands[0], rootDirectory + "/Rebels/Yavin/base.sln");
+
             Assert.That(rootGroup.SubGroups[0].Launchers[0].Commands[1], Is.InstanceOf<XPathReplacerCommand>());
             Assert.That(((XPathReplacerCommand)rootGroup.SubGroups[0].Launchers[0].Commands[1]).FilePath, Is.EqualTo(rootDirectory + "/assembly.dll.config"));
             Assert.That(((XPathReplacerCommand)rootGroup.SubGroups[0].Launchers[0].Commands[1]).XPath, Is.EqualTo("configuration/appSettings[@name='who's the best jedi ?']"));
             Assert.That(((XPathReplacerCommand)rootGroup.SubGroups[0].Launchers[0].Commands[1]).Value, Is.EqualTo("yoda"));
+
+            Assert.That(rootGroup.SubGroups[0].Launchers[0].Commands[2], Is.InstanceOf<FileCopierCommand>());
+            Assert.That(((FileCopierCommand)rootGroup.SubGroups[0].Launchers[0].Commands[2]).SourceFilePath, Is.EqualTo(rootDirectory + "/somewhere/assembly.dll.config"));
+            Assert.That(((FileCopierCommand)rootGroup.SubGroups[0].Launchers[0].Commands[2]).TargetFilePath, Is.EqualTo(rootDirectory + "/somewhere else/assembly.dll.config"));
 
             Assert.That(rootGroup.SubGroups[0].Launchers[1].Header, Is.EqualTo("Padawan.sln"));
             AssertExecuteCommand(rootGroup.SubGroups[0].Launchers[1].Commands[0], rootDirectory + "/Jedis/padawan.sln");
@@ -130,6 +135,11 @@ namespace OmniLauncher.Tests
                                             FilePath = "[ROOT]/assembly.dll.config",
                                             XPath = "configuration/appSettings[@name='who's the best jedi ?']",
                                             Value = "yoda"
+                                        },
+                                        new XmlFileCopierCommand()
+                                        {
+                                            SourceFilePath = "[ROOT]/somewhere/assembly.dll.config",
+                                            TargetFilePath = "[ROOT]/somewhere else/assembly.dll.config"
                                         }
                                     }
                                 },

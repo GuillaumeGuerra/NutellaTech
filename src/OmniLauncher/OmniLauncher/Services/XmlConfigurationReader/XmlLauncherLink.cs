@@ -11,6 +11,7 @@ namespace OmniLauncher.Services.XmlConfigurationReader
         [XmlArray("Commands")]
         [XmlArrayItem("Execute", typeof(XmlExecuteCommand))]
         [XmlArrayItem("XPath", typeof(XmlXPathReplacerCommand))]
+        [XmlArrayItem("File", typeof(XmlFileCopierCommand))]
         public List<XmlLauncherCommand> Commands { get; set; }
     }
 }
